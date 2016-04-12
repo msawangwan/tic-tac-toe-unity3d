@@ -10,6 +10,7 @@ public enum PlayerID {
 
 public class GameManager : MonoBehaviour {
     private Board gameboard;
+    private UIManager ui;
     private Player player;
     private Player cpu;
     private List<Player> playerList;
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour {
 
     private void Initialise() {
         gameboard = FindObjectOfType<Board>( );
+        ui = FindObjectOfType<UIManager>( );
         player = FindObjectOfType<PlayerHuman>( );
         cpu = FindObjectOfType<PlayerComputer>( );
 

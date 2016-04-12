@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UIManager : MonoBehaviour {
-
+public class MainMenu : MonoBehaviour {
+    
 }
