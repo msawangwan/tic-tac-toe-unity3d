@@ -2,24 +2,31 @@
 using System.Collections;
 
 public class Main : MonoBehaviour {
-    GameManager game;
-    StateManager state;
     Board board;
+    StateManager state;
+    GameManager game;
+    UIManager ui;
 
 	void Start () {
         GetReferences( );
-        RunSetUp( );     
+        RunSetUp( );
     }
 
     void GetReferences() {
-        board = FindObjectOfType<Board>( );
-        game = FindObjectOfType<GameManager>( );
-        state = FindObjectOfType<StateManager>( );
+        board = FindObjectOfType<Board> ( );
+        state = FindObjectOfType<StateManager> ( );
+        game = FindObjectOfType<GameManager> ( );
+        ui = FindObjectOfType<UIManager> ( );
+
     }
 
     void RunSetUp() {
         board.SetupBoard( );
+
+        state.StartStateManager ( );
         game.StartGameManager( );
+        ui.StartUIManager ( );
+
         MainCamera.SetCameraPosition( );
     }
 }

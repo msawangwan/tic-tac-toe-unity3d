@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PauseGame : MonoBehaviour {
+public class UI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

@@ -9,44 +9,48 @@ public enum PlayerID {
 }
 
 public class GameManager : MonoBehaviour {
-    private struct States {
-        public StartGame startgame;
-        public PlayGame playgame;
-        public EndGame endgame;
+    private StateManager statemanager;
+    private State currentState;
 
-        public void GetReferences() {
-            startgame = FindObjectOfType<GameManager>( ).GetComponent<StartGame>( ) as StartGame;
-            playgame = FindObjectOfType<GameManager>( ).GetComponent<PlayGame>( ) as PlayGame;
-            endgame = FindObjectOfType<GameManager>( ).GetComponent<EndGame>( ) as EndGame;
-        }
-    }
-
-    private Board gameboard;
     private UIManager ui;
+    private Board board;
+
+    private PlayerID currentPlayer;
     private Player player;
     private Player player_cpu;
-    private States gamestates;
     private List<Player> playerList;
-    private PlayerID currentPlayersTurn;
-    private bool isGameOver = false;
 
-    public State currentState;
+    private bool isPlayersReset = false;
+    private bool isGameOver = true;
 
     public void StartGameManager( ) {
         GetReferences( );
         RunSetUp( );
     }
 
+    public void SetState(State newState) {
+        currentState = newState;
+    }
+
+    public bool ResetPlayers() {
+        if( isPlayersReset == false ) {       // no game currently active
+            InitialisePlayersForNewRound ( );
+            return true;                      // return true if successful
+        } else {
+            return false;
+        }
+    }
+
     public bool MakeMove( Tile selectedTile, PlayerID playerID ) {
         if (!isGameOver) {
-            currentPlayersTurn = playerID;
+            currentPlayer = playerID;
             Vector2 selectedTilePosition = selectedTile.ReturnTilePosition();
-            if (gameboard.MoveTable.ContainsKey( selectedTilePosition )) {
-                if (gameboard.MoveTable[selectedTilePosition] == true) {
-                    gameboard.MoveTable[selectedTilePosition] = false;
-                    selectedTile.MarkTileAsSelected( currentPlayersTurn );
-                    CheckWinCondition( currentPlayersTurn, selectedTilePosition );
-                    FinishPlayerTurn( currentPlayersTurn );
+            if (board.MoveTable.ContainsKey( selectedTilePosition )) {
+                if (board.MoveTable[selectedTilePosition] == true) {
+                    board.MoveTable[selectedTilePosition] = false;
+                    selectedTile.MarkTileAsSelected( currentPlayer );
+                    CheckWinCondition( currentPlayer, selectedTilePosition );
+                    FinishPlayerTurn( currentPlayer );
                     return true;
                 }
             }
@@ -57,42 +61,45 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Update() {
-        if(!isGameOver) {
-            Debug.Log( "[GAME MANAGER] Current player's turn is " + currentPlayersTurn );
-        }
+        //Debug.Log ( "[GAME MANAGER] Current gamestate: " + currentState.GetType ( ) );
     }
 
     private void GetReferences() {
-        gameboard = FindObjectOfType<Board>( );
+        board = FindObjectOfType<Board>( );
         ui = FindObjectOfType<UIManager>( );
+        statemanager = FindObjectOfType<StateManager> ( );
         player = FindObjectOfType<PlayerHuman>( );
         player_cpu = FindObjectOfType<PlayerComputer>( );
     }
 
     private void RunSetUp ( ) {
-        currentState = gamestates.startgame;
-        //ReinitialisePlayersForNewRound( );
+        InitialGameState ( );
     }
 
-    private void ReinitialisePlayersForNewRound() {
+    private void InitialGameState() {
+        currentState = statemanager.SetInitialGameState ( );
+        currentState.UpdateState ( );
+    }
+
+    private void InitialisePlayersForNewRound() {
         playerList = new List<Player>( );
         playerList.Clear( );
         playerList.Add(player);
         playerList.Add(player_cpu);
-        
-        // randomly choose player to move first
-        currentPlayersTurn = ChooseStartingPlayerRandom( );
+        print ( "TEST: " + playerList.Count );
+        currentPlayer = ChooseStartingPlayerRandom( );   // randomly choose player to move first
 
-        // assign ID (do this somewhere else?) & notify each
-        // player of who is starting first
-        for ( int i = 0; i < playerList.Count; i++ ) {
+        
+        for ( int i = 0; i < playerList.Count; i++ ) {   // assign ID (do this somewhere else?) & notify each player of who is starting first
             if ( Enum.IsDefined(typeof(PlayerID), i) ) {
                 playerList[i].playerID = (PlayerID) i;
-                playerList[i].SetInitialTurn(currentPlayersTurn);
+                playerList[i].SetInitialTurn(currentPlayer);
             } else {
                 Debug.Log("[GAME MANAGER] Not a valid player ID");
             }
         }
+
+        isPlayersReset = true;
     }
 
     private PlayerID ChooseStartingPlayerRandom() {
@@ -127,3 +134,4 @@ public class GameManager : MonoBehaviour {
         }
     }
 }
+

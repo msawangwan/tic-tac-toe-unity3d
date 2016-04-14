@@ -3,16 +3,19 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class UIManager : MonoBehaviour {
+    private StateManager statemanager;
+    private State currentState;
+
     private GameManager gamemanager;
     private GameObject mainMenu;
     private Button newGame;
     private Button settings;
 
-    private void Start() {
-        InitialiseDependencies( );
+    public void StartUIManager() {
+        GetReferences( );
     }
 
-    private void InitialiseDependencies() {
+    private void GetReferences() {
         gamemanager = FindObjectOfType<GameManager>( );
         mainMenu = GameObject.FindGameObjectWithTag( UITags.mainMenu );
     }
