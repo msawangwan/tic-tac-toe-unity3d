@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Main : MonoBehaviour {
     GameManager game;
+    StateManager state;
     Board board;
 
 	void Start () {
@@ -13,6 +14,7 @@ public class Main : MonoBehaviour {
     void GetReferences() {
         board = FindObjectOfType<Board>( );
         game = FindObjectOfType<GameManager>( );
+        state = FindObjectOfType<StateManager>( );
     }
 
     void RunSetUp() {
