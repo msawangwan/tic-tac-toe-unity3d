@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -86,9 +87,12 @@ public class GameManager : MonoBehaviour {
         playerList.Clear( );
         playerList.Add(player);
         playerList.Add(player_cpu);
-        print ( "TEST: " + playerList.Count );
-        currentPlayer = ChooseStartingPlayerRandom( );   // randomly choose player to move first
 
+        foreach(Player p in playerList.Where(ply => ply.isTurn == false)) {
+            Debug.Log(p.name);
+        }
+
+        currentPlayer = ChooseStartingPlayerRandom( );   // randomly choose player to move first
         
         for ( int i = 0; i < playerList.Count; i++ ) {   // assign ID (do this somewhere else?) & notify each player of who is starting first
             if ( Enum.IsDefined(typeof(PlayerID), i) ) {

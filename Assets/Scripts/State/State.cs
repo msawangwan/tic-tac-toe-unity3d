@@ -16,12 +16,6 @@ public abstract class State : MonoBehaviour {
 
     protected virtual void Start() {
         InitialiseState ( );
-
-        //float updateInterval = .5f;
-        //while(true) {
-        //    UpdateState ( );
-        //    yield return new WaitForSeconds ( updateInterval );
-       // }
     }
 
     // maybe protected???
