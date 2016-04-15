@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class Main : MonoBehaviour {
+    private GameEngine engine;
     Board board;
-    StateManager state;
     GameManager game;
     UIManager ui;
 
@@ -13,17 +13,21 @@ public class Main : MonoBehaviour {
     }
 
     void GetReferences() {
+        // start the gameEngine
+        print ( "first" );
+        EngineState initialState = FindObjectOfType<States> ( ).GetComponent<StateInitialiseScene> ( ); // manually get the first state
+        engine = FindObjectOfType<GameEngine> ( );
+        engine.Init ( );
+        engine.ChangeState ( initialState );
+
         board = FindObjectOfType<Board> ( );
-        state = FindObjectOfType<StateManager> ( );
         game = FindObjectOfType<GameManager> ( );
         ui = FindObjectOfType<UIManager> ( );
-
     }
 
     void RunSetUp() {
         board.SetupBoard( );
 
-        state.StartStateManager ( );
         game.StartGameManager( );
         ui.StartUIManager ( );
 

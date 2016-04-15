@@ -34,6 +34,11 @@ public class Board : MonoBehaviour {
         }
     }
 
+    public void SetupBoard ( ) {
+        InitialiseContainers ( );
+        CalculateCoordinates ( );
+        InstantaiteTiles ( );
+    }
     private void InitialiseContainers() {
         TileCoordinates = new Vector2[gridWidth * gridHeight];
         TileTable = new Dictionary<Vector2, Tile>( );
@@ -59,11 +64,5 @@ public class Board : MonoBehaviour {
             TileTable.Add( TileCoordinates[i], tile as Tile );
             MoveTable.Add( TileCoordinates[i], true );
         }
-    }
-
-    public void SetupBoard( ) {
-        InitialiseContainers( );
-        CalculateCoordinates( );
-        InstantaiteTiles( );
     }
 }

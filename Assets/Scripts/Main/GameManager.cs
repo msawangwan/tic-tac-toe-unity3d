@@ -10,9 +10,6 @@ public enum PlayerID {
 }
 
 public class GameManager : MonoBehaviour {
-    private StateManager statemanager;
-    private State currentState;
-
     private UIManager ui;
     private Board board;
 
@@ -27,10 +24,6 @@ public class GameManager : MonoBehaviour {
     public void StartGameManager( ) {
         GetReferences( );
         RunSetUp( );
-    }
-
-    public void SetState(State newState) {
-        currentState = newState;
     }
 
     public bool ResetPlayers() {
@@ -68,7 +61,6 @@ public class GameManager : MonoBehaviour {
     private void GetReferences() {
         board = FindObjectOfType<Board>( );
         ui = FindObjectOfType<UIManager>( );
-        statemanager = FindObjectOfType<StateManager> ( );
         player = FindObjectOfType<PlayerHuman>( );
         player_cpu = FindObjectOfType<PlayerComputer>( );
     }
@@ -78,8 +70,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private void InitialGameState() {
-        currentState = statemanager.SetInitialGameState ( );
-        currentState.UpdateState ( );
+
     }
 
     private void InitialisePlayersForNewRound() {

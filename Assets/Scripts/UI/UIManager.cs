@@ -3,9 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class UIManager : MonoBehaviour {
-    private StateManager statemanager;
-    private State currentState;
-
     private GameManager gamemanager;
     private GameObject mainMenu;
     private Button newGame;
