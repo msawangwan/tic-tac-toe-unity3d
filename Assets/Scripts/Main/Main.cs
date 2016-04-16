@@ -17,7 +17,7 @@ public class Main : MonoBehaviour {
         print ( "first" );
         EngineState initialState = FindObjectOfType<States> ( ).GetComponent<StateInitialiseScene> ( ); // manually get the first state
         engine = FindObjectOfType<GameEngine> ( );
-        engine.Init ( );
+        engine.Init ( engine );
         engine.ChangeState ( initialState );
 
         board = FindObjectOfType<Board> ( );

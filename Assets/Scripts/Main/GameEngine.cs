@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,8 +15,9 @@ public class GameEngine : MonoBehaviour {
         UpdateEngine ( );
     }
 
-    public void Init() {
-        engine = GetComponent<GameEngine> ( );    
+    public void Init<T>(T initEngine) where T : GameEngine {
+        engine = initEngine;
+        Assert.IsFalse(engine == null);
     }
 
     public void Cleanup() {}
