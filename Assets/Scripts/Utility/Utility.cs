@@ -15,7 +15,7 @@ public class Utility {
         timer_isTimer = true;
     }
 
-    public bool RunTimer(float interval = 0) {                    // call in any update or while loop
+    public bool Timer(float interval = 0) {                       // call in any update or while loop
         if ( timer_isTimer == false ) {
             this.timer_tickInterval = interval;
         } 
@@ -24,7 +24,7 @@ public class Utility {
 
         timer_elapsedSinceLastTick += Time.deltaTime;
         if(timer_elapsedSinceLastTick > timer_tickInterval) {
-            Debug.Log ( "[UTILITY] Timer: Tick" + timer_tickCount + " (" + "gametime " + Time.time + ")" );
+            Debug.Log ( "[Utility][Timer] Tick " + timer_tickCount + " (" + "gametime " + Time.time + ")" );
             timer_elapsedSinceLastTick = 0;
             ++timer_tickCount;
             return true;

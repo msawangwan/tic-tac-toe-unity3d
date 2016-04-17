@@ -21,12 +21,12 @@ public class MainMenuState : IState {
     }
 
     public void EnterState() {
-        Debug.Log ( "[MainMenuState][EnterState] Entering new state ... " );
+        Debug.Log ( "[MainMenuState][EnterState] Entering state ... " );
         mainMenu.SetActive ( true );
     }
 
     public void ExecuteState () {
-        Debug.Log ( "[MainMenuState][ExecuteState] Executing State ... " );
+        Debug.Log ( "[MainMenuState][ExecuteState] Executing state ... " );
     }
 
     public event Action<StateBeginExitEvent> StartStateTransition;

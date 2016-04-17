@@ -19,23 +19,26 @@ public class LoadApplicationState :  IState {
         Debug.Log ( "[LoadApplicationState][EnterState] Entering state ... " );
     }
 
-    public void ExecuteState() {       
-        stopwatch.RunTimer ( ); // do a little counting
-        currentStopwatchTick = stopwatch.timer_tickCount;
-        if ( currentStopwatchTick > loadTime ) {
-            HandleOnApplicationLoadComplete ( );
-        }
+    public void ExecuteState() {
+        if ( isInitialised == false ) {
+            stopwatch.Timer ( ); // do a little counting
+            currentStopwatchTick = stopwatch.timer_tickCount;
+            if ( currentStopwatchTick > loadTime ) {
+                isInitialised = true;
+                HandleOnApplicationLoadComplete ( );
+            }
+        }   
     }
 
     public event Action<StateBeginExitEvent> StartStateTransition;
 
     private void HandleOnApplicationLoadComplete() {
         IState nextState = new MainMenuState();
-        Debug.Log ( "next state " + nextState.GetType ( ) );
+        Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Next state: " + nextState.GetType ( ) );
         IStateTransition transition = new ExitLoadingTransition();
-        Debug.Log ( "transition " + transition.GetType ( ) );
+        Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Transition: " + transition.GetType ( ) );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
-        Debug.Log ( "exitEvent " + exitEvent.GetType ( ) );
+        Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] ExitEvent: " + exitEvent.GetType ( ) );
         // yield wait for end of frame??
         StartStateTransition ( exitEvent );
     }
