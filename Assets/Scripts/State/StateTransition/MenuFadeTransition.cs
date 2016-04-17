@@ -1,10 +1,21 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
-public class UI : MonoBehaviour {
-    IEnumerator FadeMenu ( GameObject menuToFade ) {
-        Debug.Log ( "[UI][FadeMenu] Fading menu! " );
+public class MenuFadeTransition : IStateTransition {
+    GameObject menuToFade;
+
+    public MenuFadeTransition() { }
+
+    public MenuFadeTransition(GameObject menu) {
+        menuToFade = menu;
+    }
+
+    public IEnumerable Enter () {
+        yield return null;
+    }
+
+    public IEnumerable Exit (  ) {
+        Debug.Log ( "[MenuFadeTransition][Exit] Fading menu ... " );
 
         GameObject fullScreenMenu = menuToFade;
         CanvasGroup menuAlpha = fullScreenMenu.GetComponent<CanvasGroup>();
@@ -14,7 +25,7 @@ public class UI : MonoBehaviour {
             menuAlpha.alpha -= Time.deltaTime * fadeMultiplier;
             yield return null;
         }
-        
+
         fullScreenMenu.SetActive ( false );
         menuAlpha.alpha = 1f;
     }

@@ -65,13 +65,7 @@ public class GameManager : MonoBehaviour {
         player_cpu = FindObjectOfType<PlayerComputer>( );
     }
 
-    private void RunSetUp ( ) {
-        InitialGameState ( );
-    }
-
-    private void InitialGameState() {
-
-    }
+    private void RunSetUp ( ) {}
 
     private void InitialisePlayersForNewRound() {
         playerList = new List<Player>( );

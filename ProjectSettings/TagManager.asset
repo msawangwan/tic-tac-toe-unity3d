@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - ui_mainmenu
+  - ui_Canvas_UI
+  - ui_Panel_MainMenu
+  - ui_Btn_StartNewGame
   layers:
   - Default
   - TransparentFX

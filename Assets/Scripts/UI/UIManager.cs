@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour {
 
     private void GetReferences() {
         gamemanager = FindObjectOfType<GameManager>( );
-        mainMenu = GameObject.FindGameObjectWithTag( UITags.mainMenu );
+        mainMenu = GameObject.FindGameObjectWithTag( UITags.mainMenuPanel );
     }
 
     public void NewGame() {
