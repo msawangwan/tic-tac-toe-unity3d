@@ -2,11 +2,17 @@
 using System.Collections;
 
 public class MenuFadeTransition : IStateTransition {
-    GameObject menuToFade;
+    private GameObject menuToFade;
 
-    public MenuFadeTransition() { }
+    public bool hasTriggered { get; private set; }
+    public bool hasCompleted { get; private set; }
+
+    public MenuFadeTransition() {
+        InitBools ( );
+    }
 
     public MenuFadeTransition(GameObject menu) {
+        InitBools ( );
         menuToFade = menu;
     }
 
@@ -17,6 +23,7 @@ public class MenuFadeTransition : IStateTransition {
     public IEnumerable Exit (  ) {
         Debug.Log ( "[MenuFadeTransition][Exit] Fading menu ... " );
 
+        hasTriggered = true;
         GameObject fullScreenMenu = menuToFade;
         CanvasGroup menuAlpha = fullScreenMenu.GetComponent<CanvasGroup>();
         float fadeMultiplier = .5f;
@@ -28,5 +35,11 @@ public class MenuFadeTransition : IStateTransition {
 
         fullScreenMenu.SetActive ( false );
         menuAlpha.alpha = 1f;
+        hasCompleted = true;
+    }
+
+    private void InitBools() {
+        hasTriggered = false;
+        hasCompleted = false;
     }
 }

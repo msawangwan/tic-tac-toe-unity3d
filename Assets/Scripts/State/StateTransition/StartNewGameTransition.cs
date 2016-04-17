@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ExitLoadingTransition : IStateTransition {
+public class StartNewGameTransition : IStateTransition {
     public bool hasTriggered { get; private set; }
     public bool hasCompleted { get; private set; }
-    public ExitLoadingTransition() {
+    public StartNewGameTransition ( ) {
         InitBools ( );
     }
 

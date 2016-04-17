@@ -11,13 +11,15 @@ public class MainMenuState : IState {
     private Button btnNewGame;
     private Button btnGameSettings;
 
+    public bool isStateExecuting { get; private set; }
+    public bool isStateExit { get; private set; }
+
     public MainMenuState() {
+        isStateExecuting = true;
         uiCanvas = MonoBehaviour.FindObjectOfType<Canvas> ( );
         mainMenu = MonoBehaviour.Instantiate ( Resources.Load ( ResourcePath.mainMenu ) ) as GameObject;
-        btnNewGame = mainMenu.GetComponentInChildren<ButtonStartNewGame> ( ).GetComponent<Button>();
-        btnNewGame.onClick.AddListener ( HandleOnButtonNewGame );
-        MonoBehaviour.print ( "did i get the button? " + btnNewGame.name );
         mainMenu.transform.SetParent ( uiCanvas.transform , false );
+        MapButtons ( );
     }
 
     public void EnterState() {
@@ -31,12 +33,20 @@ public class MainMenuState : IState {
 
     public event Action<StateBeginExitEvent> StartStateTransition;
 
-    private void MapButtons ( ) { // may or may not need to use this
+    private void MapButtons ( ) {
         if ( mainMenu == null ) return;
         else {
-            mainMenuButtons = ( Button[] ) mainMenu.GetComponents ( typeof ( Button ) );
+            mainMenuButtons = mainMenu.GetComponentsInChildren<Button> ( true );
+            foreach ( Button btn in mainMenuButtons ) {
+                if (btn.CompareTag(UITags.startNewGameBtn)) { // btn - start a new game
+                    btnNewGame = btn.GetComponent<Button> ( );
+                    btnNewGame.onClick.RemoveAllListeners ( );
+                    btnNewGame.onClick.AddListener ( HandleOnButtonNewGame );
+                }
+            }
         }
     }
+
     private void HandleOnButtonNewGame() {
         IState nextState = new PlayState();
         IStateTransition transition = new MenuFadeTransition ( mainMenu );

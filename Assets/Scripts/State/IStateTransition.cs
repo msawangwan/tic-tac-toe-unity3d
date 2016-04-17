@@ -2,6 +2,10 @@
 using System.Collections;
 
 public interface IStateTransition {
-    IEnumerable Exit ( );
+    // make setters private
+    bool hasTriggered { get; }
+    bool hasCompleted { get; }
+
     IEnumerable Enter ( );
+    IEnumerable Exit ( );
 }
