@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Moves : MonoBehaviour {   
-    const int rowSize = Board.gridWidth;
-    const int colSize = Board.gridHeight;
+    const int rowSize = 3;
+    const int colSize = 3;
     int[] rows;
     int[] cols;
     int diag0;

@@ -10,8 +10,7 @@ public enum PlayerID {
 }
 
 public class GameManager : MonoBehaviour {
-    private UIManager ui;
-    private Board board;
+    //private Board board;
 
     private PlayerID currentPlayer;
     private Player player;
@@ -22,7 +21,7 @@ public class GameManager : MonoBehaviour {
     private bool isGameOver = true;
 
     public void StartGameManager( ) {
-        GetReferences( );
+        //GetReferences( );
         RunSetUp( );
     }
 
@@ -35,35 +34,31 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public bool MakeMove( Tile selectedTile, PlayerID playerID ) {
-        if (!isGameOver) {
-            currentPlayer = playerID;
-            Vector2 selectedTilePosition = selectedTile.ReturnTilePosition();
-            if (board.MoveTable.ContainsKey( selectedTilePosition )) {
-                if (board.MoveTable[selectedTilePosition] == true) {
-                    board.MoveTable[selectedTilePosition] = false;
-                    selectedTile.MarkTileAsSelected( currentPlayer );
-                    CheckWinCondition( currentPlayer, selectedTilePosition );
-                    FinishPlayerTurn( currentPlayer );
-                    return true;
-                }
-            }
-        } else {
-            Debug.Log( "[GAME MANAGER] Game is over ... " );
-        }
-        return false;
-    }
+    //public bool MakeMove( Tile selectedTile, PlayerID playerID ) {
+        //if (!isGameOver) {
+            //currentPlayer = playerID;
+            //Vector2 selectedTilePosition = selectedTile.ReturnTilePosition();
+            //if (board.MoveTable.ContainsKey( selectedTilePosition )) {
+                //if (board.MoveTable[selectedTilePosition] == true) {
+                    //board.MoveTable[selectedTilePosition] = false;
+                    //selectedTile.MarkTileAsSelected( currentPlayer );
+                    //CheckWinCondition( currentPlayer, selectedTilePosition );
+                    //FinishPlayerTurn( currentPlayer );
+                    //return true;
+                //}
+            //}
+        //} else {
+            //Debug.Log( "[GAME MANAGER] Game is over ... " );
+        //}
+        //return false;
+    //}
 
-    private void Update() {
-        //Debug.Log ( "[GAME MANAGER] Current gamestate: " + currentState.GetType ( ) );
-    }
-
-    private void GetReferences() {
-        board = FindObjectOfType<Board>( );
-        ui = FindObjectOfType<UIManager>( );
-        player = FindObjectOfType<PlayerHuman>( );
-        player_cpu = FindObjectOfType<PlayerComputer>( );
-    }
+    //private void GetReferences() {
+        //board = FindObjectOfType<Board>( );
+        //ui = FindObjectOfType<UIManager>( );
+        //player = FindObjectOfType<PlayerHuman>( );
+        //player_cpu = FindObjectOfType<PlayerComputer>( );
+    //}
 
     private void RunSetUp ( ) {}
 

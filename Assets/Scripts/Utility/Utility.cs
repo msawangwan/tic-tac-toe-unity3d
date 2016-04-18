@@ -2,7 +2,7 @@
 using UnityEngine.Assertions;
 
 public class Utility {
-    private bool timer_isTimer = false;                                 // sets to true if this class is instantiated via the constructor with an 'interval' parameter
+    private bool timer_isTimer = false;                           // sets to true if this class is instantiated via the constructor with an 'interval' parameter
     public float timer_tickInterval { get; private set; }         // duration between ticks
     public float timer_tickCount { get; private set; }            // number of ticks so far
     public float timer_elapsedSinceLastTick { get; private set; } // if this value is > than tickInterval, reset to 0
@@ -10,7 +10,7 @@ public class Utility {
 
     public Utility() { }
 
-    public Utility(float interval) {
+    public Utility(float interval) {                              // call this constructor to initialise a timer
         timer_tickInterval = interval;
         timer_isTimer = true;
     }

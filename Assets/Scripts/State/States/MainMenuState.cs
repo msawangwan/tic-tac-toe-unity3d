@@ -38,7 +38,7 @@ public class MainMenuState : IState {
         else {
             mainMenuButtons = mainMenu.GetComponentsInChildren<Button> ( true );
             foreach ( Button btn in mainMenuButtons ) {
-                if (btn.CompareTag(UITags.startNewGameBtn)) { // btn - start a new game
+                if (btn.CompareTag(TagsUI.startNewGameBtn)) { // btn - start a new game
                     btnNewGame = btn.GetComponent<Button> ( );
                     btnNewGame.onClick.RemoveAllListeners ( );
                     btnNewGame.onClick.AddListener ( HandleOnButtonNewGame );
@@ -48,9 +48,10 @@ public class MainMenuState : IState {
     }
 
     private void HandleOnButtonNewGame() {
-        IState nextState = new PlayState();
+        float loadingTime = 1.8f;
+        IState nextState = new LoadNewGameState( loadingTime );
         IStateTransition transition = new MenuFadeTransition ( mainMenu );
-        StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
+        StateBeginExitEvent exitEvent = new StateBeginExitEvent( nextState, transition );
         StartStateTransition( exitEvent );
     }
 }

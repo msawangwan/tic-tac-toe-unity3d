@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public abstract class Player : MonoBehaviour, IPlayer {   
     protected GameManager gamemanager;
-    protected Board gameboard;
+    //protected Board gameboard;
     protected Moves moveCounter;
 
     public PlayerID playerID { get; set; }
@@ -12,7 +12,7 @@ public abstract class Player : MonoBehaviour, IPlayer {
 
     protected virtual void Awake( ) {
         gamemanager = FindObjectOfType<GameManager>( );
-        gameboard = FindObjectOfType<Board>( );
+        //gameboard = FindObjectOfType<Board>( );
         moveCounter = GetComponent<Moves>( );
     }
 
@@ -20,11 +20,11 @@ public abstract class Player : MonoBehaviour, IPlayer {
         if (!isTurn) {
             return;
         } else {
-            MakeAMove<Tile>( );
+            //MakeAMove<Tile>( );
         }
     }
 
-    protected abstract void MakeAMove<T>( ) where T : Component;
+    //protected abstract void MakeAMove<T>( ) where T : Component;
 
     public virtual bool UpdateMoveTable(Vector2 move) {
         moveCounter.IncrementMove( move );

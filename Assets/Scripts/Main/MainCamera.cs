@@ -13,7 +13,7 @@ public class MainCamera : MonoBehaviour {
             // extract values from references
             float boardMidpointx = board.BoardCenterPoint.x;
             float boardMidpointy = board.BoardCenterPoint.y;
-            float boardHeight = Board.gridHeight;
+            float boardHeight = board.Height;
             //float uiCanvasHeight = uiCanvas.sizeDelta.y;
             //float uiImageHeight = uiImage.sizeDelta.y;
             // calculate positions

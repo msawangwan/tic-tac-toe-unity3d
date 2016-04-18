@@ -7,6 +7,9 @@ TagManager:
   - ui_Canvas_UI
   - ui_Panel_MainMenu
   - ui_Btn_StartNewGame
+  - manager_game
+  - manager_player
+  - manager_board
   layers:
   - Default
   - TransparentFX

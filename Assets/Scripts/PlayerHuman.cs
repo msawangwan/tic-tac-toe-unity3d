@@ -10,17 +10,17 @@ public class PlayerHuman : Player {
         base.Update( );
     }
 
-    protected override void MakeAMove<T>( ) {
-        if (Input.GetMouseButtonDown( 0 )) {
-            if (isTurn) {
-                T hitComponent = HitComponent<T>() as T;
-                if (hitComponent != null && hitComponent is Tile) {
-                    Tile selectedTile = hitComponent as Tile;
-                    gamemanager.MakeMove( selectedTile, playerID );
-                }
-            }
-        }
-    }
+    //protected override void MakeAMove<T>( ) {
+        //if (Input.GetMouseButtonDown( 0 )) {
+            //if (isTurn) {
+                //T hitComponent = HitComponent<T>() as T;
+                //if (hitComponent != null && hitComponent is Tile) {
+                    //Tile selectedTile = hitComponent as Tile;
+                    //gamemanager.MakeMove( selectedTile, playerID );
+                //}
+            //}
+        //}
+    //}
 
     // returns a selected component
     private T HitComponent<T>( ) where T : Component {

@@ -39,13 +39,10 @@ public class LoadApplicationState :  IState {
     public event Action<StateBeginExitEvent> StartStateTransition;
 
     private void HandleOnApplicationLoadComplete() {
+        Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Exiting state." );
         IState nextState = new MainMenuState();
-        Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Next state: " + nextState.GetType ( ) );
         IStateTransition transition = new ExitLoadingTransition();
-        Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Transition: " + transition.GetType ( ) );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
-        Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] ExitEvent: " + exitEvent.GetType ( ) );
-        // yield wait for end of frame??
         StartStateTransition ( exitEvent );
     }
 }
