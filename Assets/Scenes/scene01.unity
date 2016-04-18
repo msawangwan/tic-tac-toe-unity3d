@@ -126,58 +126,6 @@ Transform:
   - {fileID: 1673044376}
   m_Father: {fileID: 0}
   m_RootOrder: 3
---- !u!1 &500376015
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 500376016}
-  - 114: {fileID: 500376017}
-  - 114: {fileID: 500376018}
-  m_Layer: 0
-  m_Name: Player1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &500376016
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 500376015}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1673044376}
-  m_RootOrder: 0
---- !u!114 &500376017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 500376015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a332b9cc808079e4db55653309f34a0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTurn: 0
---- !u!114 &500376018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 500376015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67fdce63e0d00cf4e8e03bcf6febd071, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &503618445
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,6 +631,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1673044376}
+  - 114: {fileID: 1673044377}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: manager_player
@@ -699,11 +648,20 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 500376016}
-  - {fileID: 2028431667}
+  m_Children: []
   m_Father: {fileID: 36421961}
   m_RootOrder: 1
+--- !u!114 &1673044377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1673044375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08bfd617f8960a84389e0fff1724e990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1875336752
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,57 +815,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de3b901a80c39a3448bb8e345070b781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &2028431666
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 2028431667}
-  - 114: {fileID: 2028431668}
-  - 114: {fileID: 2028431669}
-  m_Layer: 0
-  m_Name: Player2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2028431667
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2028431666}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1673044376}
-  m_RootOrder: 1
---- !u!114 &2028431668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2028431666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3770e7102902eca4b9a3017bca36f7b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTurn: 0
---- !u!114 &2028431669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2028431666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67fdce63e0d00cf4e8e03bcf6febd071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

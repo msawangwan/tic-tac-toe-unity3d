@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
-public class PlayState : MonoBehaviour {
+public class PlayState : IState {
+    public bool isStateExecuting { get; private set; }
+    public bool isStateExit { get; private set; }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public PlayState() {
+        isStateExecuting = true;
+    }
+
+    public void EnterState ( ) {
+        Logger.DebugToConsole ( "PlayState" , "EnterState" , "Entering state ... " );
+    }
+
+    public void ExecuteState ( ) {
+        Logger.DebugToConsole ( "PlayState" , "ExecuteState" , "Entering state ... " );
+    }
+
+    public event Action<StateBeginExitEvent> StartStateTransition;
 }

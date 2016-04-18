@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 
 public class LoadApplicationState :  IState {
-    private float loadTime = 0;
+    private float loadTicks = 0;
     private float currentStopwatchTick = 0;
     private Utility stopwatch;
 
@@ -15,7 +15,7 @@ public class LoadApplicationState :  IState {
 
     public LoadApplicationState() {
         isStateExecuting = true;
-        loadTime = 3f;
+        loadTicks = 1.5f;
         float interval = 1.2f;
         stopwatch = new Utility ( interval );
     }
@@ -28,7 +28,7 @@ public class LoadApplicationState :  IState {
         if ( isInitialised == false ) {
             stopwatch.Timer ( ); // do a little counting
             currentStopwatchTick = stopwatch.timer_tickCount;
-            if ( currentStopwatchTick > loadTime ) {
+            if ( currentStopwatchTick > loadTicks ) {
                 isInitialised = true;
                 isStateExecuting = false; ;
                 HandleOnApplicationLoadComplete ( );

@@ -9,8 +9,8 @@ public class Board : MonoBehaviour {
     private BoardManager manager;
     private BoardInitialiser boardUtility;
 
-    private Dictionary<Vector2, Tile> tileTable;
-    private Vector2[] tileCoordinates;
+    public Vector2[] TileCoordinates { get; set; }
+    public Dictionary<Vector2, Tile> TileTable { get; set; }
 
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -30,10 +30,10 @@ public class Board : MonoBehaviour {
 
         boardUtility = new BoardInitialiser ( Width, Height );
 
-        tileCoordinates = boardUtility.GetGridCoordinates ( );
+        TileCoordinates = boardUtility.GetGridCoordinates ( );
         BoardCenterPoint = boardUtility.GameboardCenterPoint;
 
-        tileTable = boardUtility.DrawBoard ( gameObject, tileCoordinates );
+        TileTable = boardUtility.DrawBoard ( gameObject, TileCoordinates );
 
         isBoardActive = boardObject.activeInHierarchy;
     }

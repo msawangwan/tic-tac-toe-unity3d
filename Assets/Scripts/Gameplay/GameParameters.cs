@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ButtonStartNewGame : MonoBehaviour {
+public class GameParameters : MonoBehaviour {
 
 }

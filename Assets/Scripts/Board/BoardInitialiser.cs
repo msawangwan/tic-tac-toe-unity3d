@@ -67,7 +67,6 @@ public class BoardInitialiser {
 
                 tilePrefab.transform.SetParent ( boardObject.transform );
                 tileTable.Add ( tileCoordinates[i] , tile as Tile );
-                //legalMoveTable.Add ( tileCoordinates[i] , true ); // <-- might not need
             }
             isDrawn = true;
         }

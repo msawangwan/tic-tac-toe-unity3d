@@ -15,7 +15,7 @@ public class LoadNewGameState : IState {
 
     public LoadNewGameState( float loadTime ) {
         isStateExecuting = true;
-        delayTimer = new Utility ( 2.2f );
+        delayTimer = new Utility ( 1.7f );
         numTicksToDelay = loadTime;
         numDelayTicks = 0;
 
@@ -23,11 +23,15 @@ public class LoadNewGameState : IState {
     }
 
     public void EnterState ( ) {
-        Debug.Log ( "[LoadNewGameState][EnterState] Entering state ... " );
+        Logger.DebugToConsole ( "LoadNewGameState" , "EnterState" , "Entering state ... " );
     }
 
     public void ExecuteState ( ) {
-        Debug.Log ( "[LoadNewGameState][ExecuteState] Executing ... " );
+        Logger.DebugToConsole ( "LoadNewGameState" , "ExecuteState" , "Executing ... " );
+        if ( hasGameLoaded == true ) {
+            isStateExecuting = false;
+            HandleOnNewGameLoadComplete ( );
+        }
 
         if ( delayTimer != null ) {
             delayTimer.Timer ( );
@@ -35,12 +39,20 @@ public class LoadNewGameState : IState {
         }
                 
         if (numDelayTicks > numTicksToDelay && hasGameLoaded == false) {
-            Debug.Log ( "[LoadNewGameState][ExecuteState] Starting new round ... " );
+            Logger.DebugToConsole ( "LoadNewGameState" , "ExecuteState" , "Starting new round ..." );
             GameRound newRound = new GameRound();
             delayTimer = null;
             hasGameLoaded = true;
-        }       
+        }
     }
 
     public event Action<StateBeginExitEvent> StartStateTransition;
+
+    private void HandleOnNewGameLoadComplete ( ) {
+        Logger.DebugToConsole ( "LoadNewGameState" , "HandleOnNewGameLoadComplete" , "Exiting state." );
+        IState nextState = new PlayState();
+        IStateTransition transition = new ExitLoadingTransition();
+        StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
+        StartStateTransition ( exitEvent );
+    }
 }
