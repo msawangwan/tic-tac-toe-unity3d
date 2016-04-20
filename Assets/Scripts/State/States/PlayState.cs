@@ -6,8 +6,11 @@ public class PlayState : IState {
     public bool isStateExecuting { get; private set; }
     public bool isStateExit { get; private set; }
 
+    private bool gameWonOrQuit;
+
     public PlayState() {
         isStateExecuting = true;
+        gameWonOrQuit = false;
     }
 
     public void EnterState ( ) {
