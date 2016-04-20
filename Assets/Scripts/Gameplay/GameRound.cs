@@ -2,21 +2,25 @@
 using System.Collections;
 
 public class GameRound {
-    private GameObject boardObject;
-
     private GameManager gameManager;
-
-    private Board board;
+    private PlayerManager playerManager;
     private BoardManager boardManager;
 
+    private GameObject boardObject;
+    private Board board;
+
     private PlayerInitialiser playerInitialiser;
+    private GameTurn turns;
 
     private int boardWidth;
     private int boardHeight;
 
-    public GameRound() {
+    public bool roundOver { get; private set; }
+
+    public GameRound( PlayerInitialiser newPlayers, GameTurn newTurns ) {
         gameManager = MonoBehaviour.FindObjectOfType<GameManager> ( );
         boardManager = MonoBehaviour.FindObjectOfType<BoardManager> ( );
+        playerManager = MonoBehaviour.FindObjectOfType<PlayerManager> ( );
 
         boardObject = MonoBehaviour.Instantiate ( Resources.Load<GameObject> ( ResourcePath.board ) as GameObject );
         boardObject.transform.SetParent ( boardManager.transform );
@@ -27,10 +31,15 @@ public class GameRound {
         board = boardObject.GetComponent<Board> ( );
         board.CreateBoard ( boardObject, board, boardManager , boardWidth , boardHeight );
 
-        playerInitialiser = new PlayerInitialiser ( );
+        playerInitialiser = newPlayers;
+        turns = newTurns;
 
-        gameManager.SetGameParams ( board , playerInitialiser.GetPlayers ( ), playerInitialiser.RandomizeStartingPlayer ( ) );
+        turns.InitialiseTurns ( playerInitialiser.GetPlayers ( ) , playerInitialiser.GetRandomPlayerByID ( ) );
 
         MainCamera.SetCameraPosition ( );
+    }
+
+    public void StartNewRound() {
+        //TODO
     }
 }

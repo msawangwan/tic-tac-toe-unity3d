@@ -2,19 +2,49 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Player : MonoBehaviour, IPlayer {   
-    protected GameManager gamemanager;
+public abstract class Player : MonoBehaviour, IPlayer {
     protected Board gameboard;
-    protected Moves moveCounter;
+    protected GameTurn turns;
+    protected Moves moves;
 
-    public PlayerID playerID { get; set; }
+    public PlayerID playerID { get; private set; }
     public bool isAI = false;
     public bool isTurn = false;
 
+    // called by GameRound
+    public void InitPlayer(GameTurn turns, PlayerID id) {
+        this.turns = turns;
+        playerID = id;
+    }
+
+    // called by TurnMaker
+    public void SetInitialTurn ( PlayerID startingPlayer ) {
+        if ( startingPlayer == playerID ) {
+            isTurn = true;
+        } else {
+            isTurn = false;
+        }
+    }
+
+    public virtual bool MakeMove ( Vector2 move ) {
+        moves.IncrementMove ( move );
+        bool win = moves.CheckForThree( );
+        return win;
+    }
+
+
+    public virtual void StartTurn ( ) {
+        if ( !isTurn )
+            isTurn = true;
+    }
+
+    public virtual void EndTurn ( ) {
+        if ( isTurn )
+            isTurn = false;
+    }
     protected virtual void Awake( ) {
-        gamemanager = FindObjectOfType<GameManager>( );
         gameboard = FindObjectOfType<Board>( );
-        moveCounter = GetComponent<Moves>( );
+        moves = GetComponent<Moves>( );
     }
 
     protected virtual void Update() {
@@ -27,29 +57,4 @@ public abstract class Player : MonoBehaviour, IPlayer {
     }
 
     protected abstract void MakeAMove<T>( ) where T : Component;
-
-    public virtual bool UpdateMoveTable(Vector2 move) {
-        moveCounter.IncrementMove( move );
-        bool win = moveCounter.CheckForThree( );
-        return win;
-    }
-
-    // at the start of a round, this is called for all players -- only called once perround
-    public virtual void SetInitialTurn( PlayerID startingPlayer ) {
-        if (startingPlayer == playerID) {
-            isTurn = true;
-        } else {
-            isTurn = false;
-        }
-    }
-
-    public virtual void StartTurn( ) {
-        if (!isTurn)
-            isTurn = true;
-    }
-
-    public virtual void EndTurn() {
-        if (isTurn)
-            isTurn = false;
-    }
 }

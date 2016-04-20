@@ -3,6 +3,11 @@ using System;
 using System.Collections;
 
 public class LoadNewGameState : IState {
+    private GameRound newRound;
+    private GameTurn newTurns;
+
+    private PlayerInitialiser newPlayers;
+
     private Utility delayTimer;
 
     private float numTicksToDelay;
@@ -40,7 +45,9 @@ public class LoadNewGameState : IState {
                 
         if (numDelayTicks > numTicksToDelay && hasGameLoaded == false) {
             Logger.DebugToConsole ( "LoadNewGameState" , "ExecuteState" , "Starting new round ..." );
-            GameRound newRound = new GameRound();
+            newPlayers = new PlayerInitialiser ( );
+            newTurns = new GameTurn ( );
+            newRound = new GameRound ( );
             delayTimer = null;
             hasGameLoaded = true;
         }
@@ -50,7 +57,7 @@ public class LoadNewGameState : IState {
 
     private void HandleOnNewGameLoadComplete ( ) {
         Logger.DebugToConsole ( "LoadNewGameState" , "HandleOnNewGameLoadComplete" , "Exiting state." );
-        IState nextState = new PlayState();
+        IState nextState = new PlayState( newRound );
         IStateTransition transition = new ExitLoadingTransition();
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
         StartStateTransition ( exitEvent );

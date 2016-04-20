@@ -14,12 +14,16 @@ public class PlayerInitialiser {
 
     private PlayerID playerToAct;
 
-    private PlayerManager manager;
+    private PlayerManager playerManager;
     private List<Player> players;
     private Player player1;
     private Player player2;
 
-    public PlayerInitialiser() {        
+    private GameTurn turnMaker;
+
+    public PlayerInitialiser( PlayerManager manager, GameTurn turns ) {
+        playerManager = manager;
+        turnMaker = turns;
         InstantiatePlayers ( );
     }
 
@@ -27,19 +31,17 @@ public class PlayerInitialiser {
         return players;
     }
 
-    public PlayerID RandomizeStartingPlayer ( ) {
+    public PlayerID GetRandomPlayerByID ( ) {
         int coinFlip = UnityEngine.Random.Range( 0, 2 );
         return ( PlayerID ) coinFlip; ;
     }
 
     private void InstantiatePlayers() {
-        manager = MonoBehaviour.FindObjectOfType<PlayerManager> ( );
-
         playerObj1 = MonoBehaviour.Instantiate<GameObject> ( Resources.Load ( ResourcePath.playerHuman ) as GameObject );
         playerObj2 = MonoBehaviour.Instantiate<GameObject> ( Resources.Load ( ResourcePath.playerAI ) as GameObject );
 
-        playerObj1.transform.SetParent ( manager.transform );
-        playerObj2.transform.SetParent ( manager.transform );
+        playerObj1.transform.SetParent ( playerManager.transform );
+        playerObj2.transform.SetParent ( playerManager.transform );
 
         players = new List<Player> ( );
         players.Clear ( );
@@ -47,8 +49,8 @@ public class PlayerInitialiser {
         player1 = playerObj1.GetComponent<PlayerHuman> ( ) as Player;
         player2 = playerObj2.GetComponent<PlayerComputer> ( ) as Player;
 
-        player1.playerID = 0;
-        player2.playerID = ( PlayerID ) 1;
+        player1.InitPlayer ( turnMaker, 0 );
+        player2.InitPlayer ( turnMaker, ( PlayerID ) 1 );
 
         players.Add ( player1 );
         players.Add ( player2 );

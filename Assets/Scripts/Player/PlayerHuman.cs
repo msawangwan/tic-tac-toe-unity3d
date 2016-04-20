@@ -17,7 +17,7 @@ public class PlayerHuman : Player {
                 if (hitComponent != null && hitComponent is Tile) {
                     Tile selectedTile = hitComponent as Tile;
                     if (selectedTile.isAValidMove == true) {
-                        gamemanager.MakeMove ( selectedTile , playerID );
+                        turns.ExecuteTurn ( selectedTile , playerID );
                     }
                 }
             }

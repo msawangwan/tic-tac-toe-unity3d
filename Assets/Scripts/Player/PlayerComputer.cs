@@ -16,7 +16,7 @@ public class PlayerComputer : Player {
             if ( gameboard.TileTable.ContainsKey ( move ) ) {
                 Tile selectedTile = gameboard.TileTable[move];
                 if ( selectedTile.isAValidMove == true ) {
-                    gamemanager.MakeMove ( selectedTile , playerID );
+                    turns.ExecuteTurn ( selectedTile , playerID );
                     break;
                 } else {
                     continue;

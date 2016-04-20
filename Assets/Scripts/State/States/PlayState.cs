@@ -3,12 +3,14 @@ using System;
 using System.Collections;
 
 public class PlayState : IState {
+    private GameRound round;
+
     public bool isStateExecuting { get; private set; }
     public bool isStateExit { get; private set; }
 
     private bool gameWonOrQuit;
 
-    public PlayState() {
+    public PlayState( GameRound currentRound ) {
         isStateExecuting = true;
         gameWonOrQuit = false;
     }
@@ -22,4 +24,12 @@ public class PlayState : IState {
     }
 
     public event Action<StateBeginExitEvent> StartStateTransition;
+
+    private void HandleOnTerminatePlay ( ) {
+        Debug.Log ( "[HandleOnTerminatePlay][HandleOnApplicationLoadComplete] Exiting state." );
+        IState nextState = new EndOfGameState();
+        IStateTransition transition = new LoadingTransition();
+        StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
+        StartStateTransition ( exitEvent );
+    }
 }

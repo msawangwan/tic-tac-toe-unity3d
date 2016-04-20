@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
-public class EndOfGameState : MonoBehaviour {
+public class EndOfGameState : IState {
+    public bool isStateExecuting { get; private set; } // sets to 'true' in constructor
+    public bool isStateExit { get; private set; }      // sets to 'false' in constructor
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void EnterState ( ) { }
+    public void ExecuteState ( ) { }
+
+    public event Action<StateBeginExitEvent> StartStateTransition;
 }
