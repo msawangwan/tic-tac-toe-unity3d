@@ -3,48 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 
 public abstract class Player : MonoBehaviour, IPlayer {
+    // TODO: duplicate statemachine to make a playerstatemachine
     protected Board gameboard;
-    protected GameTurn turns;
-    protected Moves moves;
+
+    protected PlayerTurnController turn;
+    protected PlayerMoveTable moves;
+
+    protected bool hasMadeMove;
 
     public PlayerID playerID { get; private set; }
-    public bool isAI = false;
-    public bool isTurn = false;
 
-    // called by GameRound
-    public void InitPlayer(GameTurn turns, PlayerID id) {
-        this.turns = turns;
+    public bool isAI { get; private set; }
+    public bool isTurn { get; private set; }
+
+    public void InitPlayer(Board newBoard, PlayerID id) {
+        gameboard = newBoard;
         playerID = id;
+
+        turn = new PlayerTurnController ( gameboard , this );
+        moves = new PlayerMoveTable();
+
+        isTurn = false;
     }
 
-    // called by TurnMaker
-    public void SetInitialTurn ( PlayerID startingPlayer ) {
-        if ( startingPlayer == playerID ) {
-            isTurn = true;
-        } else {
-            isTurn = false;
-        }
+    public void MoveFirst (bool isTurnFirst) {
+        isTurn = isTurnFirst;
+        hasMadeMove = !isTurn;
+        Debug.Log ( gameObject.name + " moves first" );
     }
 
-    public virtual bool MakeMove ( Vector2 move ) {
+    // TODO: use action or interface to signal a turn change!!
+    public virtual void TakeTurn ( bool turnTaken ) {
+        Debug.Log ( gameObject.name + " takes a turn" );
+        isTurn = turnTaken;
+    }
+
+    public virtual bool UpdateMoveTable ( Vector2 move ) {
         moves.IncrementMove ( move );
-        bool win = moves.CheckForThree( );
+        bool win = moves.CheckForTicTacToe( );
         return win;
-    }
-
-
-    public virtual void StartTurn ( ) {
-        if ( !isTurn )
-            isTurn = true;
-    }
-
-    public virtual void EndTurn ( ) {
-        if ( isTurn )
-            isTurn = false;
-    }
-    protected virtual void Awake( ) {
-        gameboard = FindObjectOfType<Board>( );
-        moves = GetComponent<Moves>( );
     }
 
     protected virtual void Update() {
@@ -52,9 +49,9 @@ public abstract class Player : MonoBehaviour, IPlayer {
         if (!isTurn) {
             return;
         } else {
-            MakeAMove<Tile>( );
+            AttemptMove<Tile>( );
         }
     }
 
-    protected abstract void MakeAMove<T>( ) where T : Component;
+    protected abstract void AttemptMove<T>( ) where T : Component;
 }

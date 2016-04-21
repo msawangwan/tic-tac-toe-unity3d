@@ -9,7 +9,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 448632}
   - 114: {fileID: 11429814}
-  - 114: {fileID: 11420738}
   m_Layer: 0
   m_Name: PlayerHuman
   m_TagString: Untagged
@@ -29,17 +28,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11420738
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 183562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67fdce63e0d00cf4e8e03bcf6febd071, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11429814
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -51,7 +39,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a332b9cc808079e4db55653309f34a0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTurn: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

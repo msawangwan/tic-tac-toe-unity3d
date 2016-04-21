@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Moves : MonoBehaviour {   
+public class PlayerMoveTable {   
     const int rowSize = 3;
     const int colSize = 3;
     int[] rows;
@@ -11,7 +11,7 @@ public class Moves : MonoBehaviour {
     int diag1;
     bool playerWon = false;
 
-    private void Start() {
+    public PlayerMoveTable() {
         rows = new int[rowSize * colSize];
         cols = new int[rowSize * colSize];
     }
@@ -41,7 +41,7 @@ public class Moves : MonoBehaviour {
             playerWon = true;
     }
 
-    public bool CheckForThree() {
+    public bool CheckForTicTacToe() {
         return playerWon;
     }
 }

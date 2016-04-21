@@ -2,22 +2,20 @@
 using System.Collections;
 
 public class PlayerHuman : Player {
-    protected override void Awake( ) {
-        base.Awake( );
-    }
-
     protected override void Update( ) {
         base.Update( );
     }
 
-    protected override void MakeAMove<T>( ) {
-        if (Input.GetMouseButtonDown( 0 )) {
-            if (isTurn) {
-                T hitComponent = HitComponent<T>() as T;
-                if (hitComponent != null && hitComponent is Tile) {
-                    Tile selectedTile = hitComponent as Tile;
-                    if (selectedTile.isAValidMove == true) {
-                        turns.ExecuteTurn ( selectedTile , playerID );
+    protected override void AttemptMove<T>( ) {
+        if ( hasMadeMove == false ) {
+            if ( Input.GetMouseButtonDown ( 0 ) ) {
+                if ( isTurn ) {
+                    T hitComponent = HitComponent<T>() as T;
+                    if ( hitComponent != null && hitComponent is Tile ) {
+                        Tile selectedTile = hitComponent as Tile;
+                        if ( selectedTile.isAValidMove == true ) {
+                            hasMadeMove = turn.ExecuteTurn ( selectedTile );
+                        }
                     }
                 }
             }

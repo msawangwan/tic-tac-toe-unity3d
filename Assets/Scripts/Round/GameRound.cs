@@ -10,14 +10,17 @@ public class GameRound {
     private Board board;
 
     private PlayerInitialiser playerInitialiser;
-    private GameTurn turns;
 
     private int boardWidth;
     private int boardHeight;
 
     public bool roundOver { get; private set; }
 
-    public GameRound( PlayerInitialiser newPlayers, GameTurn newTurns ) {
+    public static GameRound StartNewRound ( ) {
+        return new GameRound ( );
+    }
+
+    private GameRound( ) {
         gameManager = MonoBehaviour.FindObjectOfType<GameManager> ( );
         boardManager = MonoBehaviour.FindObjectOfType<BoardManager> ( );
         playerManager = MonoBehaviour.FindObjectOfType<PlayerManager> ( );
@@ -31,15 +34,8 @@ public class GameRound {
         board = boardObject.GetComponent<Board> ( );
         board.CreateBoard ( boardObject, board, boardManager , boardWidth , boardHeight );
 
-        playerInitialiser = newPlayers;
-        turns = newTurns;
-
-        turns.InitialiseTurns ( playerInitialiser.GetPlayers ( ) , playerInitialiser.GetRandomPlayerByID ( ) );
+        playerInitialiser = new PlayerInitialiser( playerManager, board );
 
         MainCamera.SetCameraPosition ( );
-    }
-
-    public void StartNewRound() {
-        //TODO
     }
 }

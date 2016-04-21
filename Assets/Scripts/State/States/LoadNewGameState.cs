@@ -4,9 +4,6 @@ using System.Collections;
 
 public class LoadNewGameState : IState {
     private GameRound newRound;
-    private GameTurn newTurns;
-
-    private PlayerInitialiser newPlayers;
 
     private Utility delayTimer;
 
@@ -45,9 +42,7 @@ public class LoadNewGameState : IState {
                 
         if (numDelayTicks > numTicksToDelay && hasGameLoaded == false) {
             Logger.DebugToConsole ( "LoadNewGameState" , "ExecuteState" , "Starting new round ..." );
-            newPlayers = new PlayerInitialiser ( );
-            newTurns = new GameTurn ( );
-            newRound = new GameRound ( );
+            newRound = GameRound.StartNewRound ( );
             delayTimer = null;
             hasGameLoaded = true;
         }

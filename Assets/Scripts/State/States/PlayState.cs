@@ -20,7 +20,7 @@ public class PlayState : IState {
     }
 
     public void ExecuteState ( ) {
-        Logger.DebugToConsole ( "PlayState" , "ExecuteState" , "Entering state ... " );
+        Logger.DebugToConsole ( "PlayState" , "ExecuteState" , "Executing state ... " );
     }
 
     public event Action<StateBeginExitEvent> StartStateTransition;
