@@ -2,6 +2,6 @@
 using System.Collections;
 
 public interface IStateMachine {
-    bool isStateMachineExecuting { get; }
+    bool isExecuting { get; }
     void InitStateMachine ( IState initialState );
 }

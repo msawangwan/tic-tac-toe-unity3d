@@ -6,25 +6,25 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
     private IStateTransition transition;
     private IState state;
     private IState nextState;  
-    private IState InternalState {
+    private IState internalState {
         set {
             state = value;
-            state.StartStateTransition += HandleStateExit;
+            state.StartStateTransition += HandleStateExit; // add listener
             state.EnterState ( );
         }
     }
 
-    public bool isStateMachineExecuting { get; private set; }
+    public bool isExecuting { get; private set; }
 
     // use as constructor
     public void InitStateMachine ( IState initialState ) {
-        isStateMachineExecuting = true;
+        isExecuting = true;      
+        internalState = initialState;
         Debug.Log ( "[StateMachine][InitStateMachine] State Machine Initialised. " );
-        InternalState = initialState;
         // TODO: add a state.EndEnter();
     }
 
-    // fires event and gets values for next state
+    // fires event and notifies any listeners
     public void HandleStateExit ( StateBeginExitEvent exitStateEvent ) {
         Debug.Log ( "[StateMachine][HandleStateExit] Exit Event Fired. " );
         nextState = exitStateEvent.NextState;
@@ -32,11 +32,11 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
     }
 
     private void Update ( ) {
-        if ( isStateMachineExecuting ) {
+        if ( isExecuting ) {
             Assert.IsFalse ( state == null , "[StateMachine][Update] State Machine has no state!" );
             Debug.Log ( "[StateMachine][Update] Current State: " + state.GetType ( ) );
 
-            if ( transition == null && state.isStateExecuting ) {
+            if ( transition == null && state.IsStateExecuting ) {
                 Debug.Log ( "[StateMachine][Update] Executing state ... " );
                 state.ExecuteState ( );
                 return;
@@ -46,7 +46,7 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
 
             if ( nextState == null ) { // if no next state, then we've quit the application
                 Debug.Log ( "[StateMachine][Update] Application terminating ... " );             
-                isStateMachineExecuting = false; // TODO: add a app should quit in a more elegant manner
+                isExecuting = false; // TODO: add a app should quit in a more elegant manner
             }
 
             if ( transition != null ) {
@@ -62,7 +62,7 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
 
             // TODO: add a state.EndExit()
 
-            InternalState = nextState;
+            internalState = nextState;
             nextState = null;
 
             // TODO: add a run enter transition

@@ -12,11 +12,11 @@ public class LoadNewGameState : IState {
 
     private bool hasGameLoaded = false;
 
-    public bool isStateExecuting { get; private set; }
-    public bool isStateExit { get; private set; }
+    public bool IsStateExecuting { get; private set; }
+    public bool IsStateExit { get; private set; }
 
     public LoadNewGameState( float loadTime ) {
-        isStateExecuting = true;
+        IsStateExecuting = true;
         delayTimer = new Utility ( 1.7f );
         numTicksToDelay = loadTime;
         numDelayTicks = 0;
@@ -31,7 +31,7 @@ public class LoadNewGameState : IState {
     public void ExecuteState ( ) {
         Logger.DebugToConsole ( "LoadNewGameState" , "ExecuteState" , "Executing ... " );
         if ( hasGameLoaded == true ) {
-            isStateExecuting = false;
+            IsStateExecuting = false;
             HandleOnNewGameLoadComplete ( );
         }
 

@@ -10,11 +10,11 @@ public class LoadApplicationState :  IState {
 
     private bool isInitialised = false;
 
-    public bool isStateExecuting { get; private set; }
-    public bool isStateExit { get; private set; }
+    public bool IsStateExecuting { get; private set; }
+    public bool IsStateExit { get; private set; }
 
     public LoadApplicationState() {
-        isStateExecuting = true;
+        IsStateExecuting = true;
         loadTicks = 1.5f;
         float interval = 1.2f;
         stopwatch = new Utility ( interval );
@@ -30,7 +30,7 @@ public class LoadApplicationState :  IState {
             currentStopwatchTick = stopwatch.timer_tickCount;
             if ( currentStopwatchTick > loadTicks ) {
                 isInitialised = true;
-                isStateExecuting = false; ;
+                IsStateExecuting = false; ;
                 HandleOnApplicationLoadComplete ( );
             }
         }   

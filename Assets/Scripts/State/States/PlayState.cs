@@ -5,13 +5,13 @@ using System.Collections;
 public class PlayState : IState {
     private GameRound round;
 
-    public bool isStateExecuting { get; private set; }
-    public bool isStateExit { get; private set; }
+    public bool IsStateExecuting { get; private set; }
+    public bool IsStateExit { get; private set; }
 
     private bool gameWonOrQuit;
 
     public PlayState( GameRound currentRound ) {
-        isStateExecuting = true;
+        IsStateExecuting = true;
         gameWonOrQuit = false;
     }
 

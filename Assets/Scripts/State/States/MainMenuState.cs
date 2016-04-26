@@ -11,11 +11,11 @@ public class MainMenuState : IState {
     private Button btnNewGame;
     private Button btnGameSettings;
 
-    public bool isStateExecuting { get; private set; }
-    public bool isStateExit { get; private set; }
+    public bool IsStateExecuting { get; private set; }
+    public bool IsStateExit { get; private set; }
 
     public MainMenuState() {
-        isStateExecuting = true;
+        IsStateExecuting = true;
         uiCanvas = MonoBehaviour.FindObjectOfType<Canvas> ( );
         mainMenu = MonoBehaviour.Instantiate ( Resources.Load ( ResourcePath.mainMenu ) ) as GameObject;
         mainMenu.transform.SetParent ( uiCanvas.transform , false );

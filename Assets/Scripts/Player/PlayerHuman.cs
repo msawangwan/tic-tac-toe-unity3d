@@ -1,25 +1,43 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
-public class PlayerHuman : Player {
-    protected override void Update( ) {
-        base.Update( );
-    }
+public class PlayerHuman : Player, IPlayer {
+    public bool IsTurnActive { get; private set; }
 
-    protected override void AttemptMove<T>( ) {
-        if ( hasMadeMove == false ) {
-            if ( Input.GetMouseButtonDown ( 0 ) ) {
-                if ( isTurn ) {
-                    T hitComponent = HitComponent<T>() as T;
-                    if ( hitComponent != null && hitComponent is Tile ) {
-                        Tile selectedTile = hitComponent as Tile;
-                        if ( selectedTile.isAValidMove == true ) {
-                            hasMadeMove = turn.ExecuteTurn ( selectedTile );
-                        }
+    protected override bool AttemptMove<T>( ) {
+        if ( Input.GetMouseButtonDown ( 0 ) ) {
+            if ( isTurn ) {
+                T hitComponent = HitComponent<T>() as T;
+                if ( hitComponent != null && hitComponent is Tile ) {
+                    Tile selectedTile = hitComponent as Tile;
+                    if ( selectedTile.isAValidMove == true ) {
+                        IsTurnActive = turn.ExecuteTurn ( selectedTile );
                     }
                 }
             }
         }
+    }
+
+    public void EnterTurn ( ) {
+        IsTurnActive = true;
+    }
+
+    public void TakeTurn ( ) {
+        AttemptMove<Tile> ( );
+    }
+
+    public void ExitTurn ( ) {
+        IsTurnActive = false;
+    }
+
+    public event Action<PlayerTurnExitEvent> ExitTurnEvent;
+    
+    private void OnTurnEnd() {
+        Logger.DebugToConsole ( "PlayerHuman" , "OnTurnEnd" , "Ending turn." );
+        IPlayer nextPlayer = FindObjectOfType<PlayerComputer>();
+        PlayerTurnExitEvent endTurnEvent = new PlayerTurnExitEvent( nextPlayer );
+        ExitTurnEvent ( endTurnEvent );
     }
 
     // returns a selected component

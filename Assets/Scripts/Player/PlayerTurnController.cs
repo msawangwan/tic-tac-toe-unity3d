@@ -28,8 +28,7 @@ public class PlayerTurnController {
                 if ( selectedTile.isAValidMove == true ) {
                     Debug.Log ( "[PlayerTurnController][ExecuteTurn] Found a move." );
                     selectedTile.MarkTileAsSelected ( playerByID );
-                    isRoundOver = player.UpdateMoveTable ( selectedTilePosition );
-                    player.TakeTurn ( false );
+                    isRoundOver = player.ExecuteMove ( selectedTilePosition );
                     return true;
                 }
             }

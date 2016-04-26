@@ -55,9 +55,9 @@ public class PlayerInitialiser {
     private void RandomizeStartingPlayer ( ) {
         int coinFlip = UnityEngine.Random.Range( 0, 2 );
 
-        if ( coinFlip == 0 )
-            player1.MoveFirst ( true );
-        else
-            player2.MoveFirst ( true );
+        //if ( coinFlip == 0 )
+            //player1.MoveFirst ( true );
+        //else
+            //player2.MoveFirst ( true );
     }
 }
