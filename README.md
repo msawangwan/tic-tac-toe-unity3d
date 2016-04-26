@@ -19,7 +19,8 @@ good design habits.
 
 The project is in a state of constant flux.
 
-My intention is for the *master* branch to always be stable, yet
-it is also always behind. So if you're interested, view the other branches
-to see the latest iteration.
+My intention is for the *master* branch to always be stable, yet 
+this doesn't appear to be working as planned. Instead it is usually 
+behind. So if you're interested, view the other branches to see 
+the more current iterations.
 
