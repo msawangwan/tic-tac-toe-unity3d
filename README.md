@@ -1,7 +1,7 @@
 tic-tac-toe (wip)
 =
 
-An simple (yet, complicated) implementation using the Unity3D framework
+implementated using the Unity3D framework
 -
 
 **Goal**
