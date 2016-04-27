@@ -6,7 +6,7 @@ implementated using the Unity3D framework
 
 **Goal**
 
-- *To learn and study the principles of SOLID and OOD/OOP*
+- *To learn, experiement and practice the principles of SOLID and OOD/OOP*
 - *Further understanding of graphs by implementing A(star) pathfinding algorithm for AI*
 
 **About**
