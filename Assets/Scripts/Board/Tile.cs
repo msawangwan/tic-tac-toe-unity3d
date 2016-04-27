@@ -15,9 +15,9 @@ public class Tile : MonoBehaviour, ITile {
         isAValidMove = true;
     }
 
-    public void MarkTileAsSelected ( PlayerID player ) {
+    public void MarkTileAsSelected ( int playerByID ) {
         Color playerColor;
-        if ( player == 0 ) {
+        if ( playerByID == 0 ) {
             playerColor = Color.red;
         } else {
             playerColor = Color.blue;

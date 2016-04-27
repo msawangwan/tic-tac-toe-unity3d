@@ -617,7 +617,7 @@ GameObject:
   - 4: {fileID: 1673044376}
   - 114: {fileID: 1673044377}
   m_Layer: 0
-  m_Name: PlayerManager
+  m_Name: PlayerContainer
   m_TagString: manager_player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

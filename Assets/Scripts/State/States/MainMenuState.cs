@@ -12,7 +12,6 @@ public class MainMenuState : IState {
     private Button btnGameSettings;
 
     public bool IsStateExecuting { get; private set; }
-    public bool IsStateExit { get; private set; }
 
     public MainMenuState() {
         IsStateExecuting = true;

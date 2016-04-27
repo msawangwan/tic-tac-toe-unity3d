@@ -11,7 +11,6 @@ public class LoadApplicationState :  IState {
     private bool isInitialised = false;
 
     public bool IsStateExecuting { get; private set; }
-    public bool IsStateExit { get; private set; }
 
     public LoadApplicationState() {
         IsStateExecuting = true;
@@ -42,7 +41,7 @@ public class LoadApplicationState :  IState {
     private void HandleOnApplicationLoadComplete() {
         Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Exiting state." );
         IState nextState = new MainMenuState();
-        IStateTransition transition = new ExitLoadingTransition();
+        IStateTransition transition = new LoadingTransition();
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
         StartStateTransition ( exitEvent );
     }

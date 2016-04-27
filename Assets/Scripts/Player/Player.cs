@@ -3,24 +3,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum PlayerID {
-    player1 = 0,
-    player2 = 1,
-}
-
 public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     protected Board gameBoard;
 
     protected PlayerMoveTable moveTable;
     protected PlayerTurnExitEvent endTurnEvent; // instantiated in child classes
 
-    public PlayerID PlayerByID { get; private set; }
+    public int PlayerByID { get; private set; }
 
     public bool IsTurnActive { get; private set; }
     public bool IsWinner { get; private set; }
 
     // use as constructor
-    public void InitPlayer(Board newGameBoard, PlayerID newPlayerByID) {
+    public void InitPlayer(Board newGameBoard, int newPlayerByID) {
         gameBoard = newGameBoard;
         PlayerByID = newPlayerByID;
 
@@ -30,18 +25,19 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         moveTable = new PlayerMoveTable();
     }
 
-    public void FirstToAct (bool isTurnFirst) {
-        Debug.Log ( gameObject.name + " moves first" );
-    }
-
     public void EnterTurn ( ) {
         IsTurnActive = true;
     }
 
     public bool TakeTurn ( ) {
-        if (IsTurnActive)
-            if ( AttemptMove<Tile>( ) )
-                return true;
+        if (IsWinner == false) { // if no round winner yet
+            if ( IsTurnActive )
+                if ( AttemptMove<Tile> ( ) )
+                    return true;
+        } else {
+            // TODO: Handle Game Over!
+        }
+
         return false;
     }
 
@@ -61,7 +57,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         Vector2 selectedTilePosition = selectedTile.ReturnTilePosition();
         if ( gameBoard.TileTable.ContainsKey( selectedTilePosition ) ) {
             if ( selectedTile.isAValidMove == true ) {
-                selectedTile.MarkTileAsSelected(PlayerByID);
+                selectedTile.MarkTileAsSelected( PlayerByID );
                 moveTable.IncrementMove( selectedTilePosition );
                 if ( moveTable.CheckForTicTacToe( ) ) {
                     IsWinner = true;

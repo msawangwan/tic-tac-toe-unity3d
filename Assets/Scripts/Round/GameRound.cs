@@ -1,41 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameRound {
-    private GameManager gameManager;
-    private PlayerManager playerManager;
+public class GameRound : IRound {
+    private GameObject gameBoardObj;
+    // TODO: implement boardInitialiser class??
     private BoardManager boardManager;
-
-    private GameObject boardObject;
-    private Board board;
+    private Board gameBoardRef;
 
     private PlayerInitialiser playerInitialiser;
 
-    private int boardWidth;
-    private int boardHeight;
+    private int boardWidth = 3;
+    private int boardHeight = 3;
 
-    public bool roundOver { get; private set; }
+    public bool IsGameOver { get; private set; }
 
-    public static GameRound StartNewRound ( ) {
+    public static GameRound LoadNewRound ( ) {
         return new GameRound ( );
     }
 
-    private GameRound( ) {
-        gameManager = MonoBehaviour.FindObjectOfType<GameManager> ( );
-        boardManager = MonoBehaviour.FindObjectOfType<BoardManager> ( );
-        playerManager = MonoBehaviour.FindObjectOfType<PlayerManager> ( );
-
-        boardObject = MonoBehaviour.Instantiate ( Resources.Load<GameObject> ( ResourcePath.board ) as GameObject );
-        boardObject.transform.SetParent ( boardManager.transform );
-
-        boardWidth = 3;
-        boardHeight = 3;
-
-        board = boardObject.GetComponent<Board> ( );
-        board.CreateBoard ( boardObject, board, boardManager , boardWidth , boardHeight );
-
-        playerInitialiser = new PlayerInitialiser( playerManager, board );
-
+    public void StartNewRound(IRound roundToStart) {
+        IsGameOver = false;
+        gameBoardRef.CreateBoard ( gameBoardObj , gameBoardRef , boardManager , boardWidth , boardHeight );
+        playerInitialiser = new PlayerInitialiser ( roundToStart, gameBoardRef );
+        playerInitialiser.PlayersReadyStartRound ( );
         MainCamera.SetCameraPosition ( );
+    }
+
+    public void EndCurrentRound() {
+        IsGameOver = true;
+    }
+
+    // private constructor, called when an instance is instantiated via static method
+    private GameRound() {
+        boardManager = MonoBehaviour.FindObjectOfType<BoardManager> ( );
+        gameBoardObj = MonoBehaviour.Instantiate<GameObject> ( Resources.Load<GameObject> ( ResourcePath.board ) );
+        gameBoardObj.transform.SetParent ( boardManager.transform );
+        gameBoardRef = gameBoardObj.GetComponent<Board> ( );
     }
 }
