@@ -3,16 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum PlayerID {
-    player1 = 0,
-    player2 = 1,
-}
-
 public class PlayerInitialiser {
+    private GameObject playerTurnStateMachineObj;
     private GameObject playerObj1;
     private GameObject playerObj2;
 
     private PlayerManager playerManager;
+    private PlayerTurnStateMachine playerTurnStateMachine;
     private List<Player> players;
     private Player player1;
     private Player player2;
@@ -24,6 +21,7 @@ public class PlayerInitialiser {
         playerBoardReference = boardReference;
 
         InstantiatePlayers ( );
+        InitialisePlayerTurns ( );
     }
 
     public List<Player> GetPlayers() {
@@ -31,8 +29,8 @@ public class PlayerInitialiser {
     }
 
     private void InstantiatePlayers() {
-        playerObj1 = MonoBehaviour.Instantiate<GameObject> ( Resources.Load ( ResourcePath.playerHuman ) as GameObject );
-        playerObj2 = MonoBehaviour.Instantiate<GameObject> ( Resources.Load ( ResourcePath.playerAI ) as GameObject );
+        playerObj1 = MonoBehaviour.Instantiate<GameObject> ( Resources.Load<GameObject> ( ResourcePath.playerHuman ) );
+        playerObj2 = MonoBehaviour.Instantiate<GameObject> ( Resources.Load<GameObject> ( ResourcePath.playerAI ) );
 
         playerObj1.transform.SetParent ( playerManager.transform );
         playerObj2.transform.SetParent ( playerManager.transform );
@@ -48,16 +46,15 @@ public class PlayerInitialiser {
 
         player1.InitPlayer ( playerBoardReference , 0 );
         player2.InitPlayer ( playerBoardReference , ( PlayerID ) 1 );
-
-        RandomizeStartingPlayer ( );
     }
 
-    private void RandomizeStartingPlayer ( ) {
+    private void InitialisePlayerTurns ( ) {
         int coinFlip = UnityEngine.Random.Range( 0, 2 );
-
-        //if ( coinFlip == 0 )
-            //player1.MoveFirst ( true );
-        //else
-            //player2.MoveFirst ( true );
+        playerTurnStateMachineObj = MonoBehaviour.Instantiate<GameObject> (Resources.Load<GameObject> (ResourcePath.playerTurnStateMachine) );
+        playerTurnStateMachine = playerTurnStateMachineObj.GetComponent<PlayerTurnStateMachine> ( );
+        if ( coinFlip == 0 )
+            playerTurnStateMachine.InitPlayerPlayMachine ( player1 );
+        else
+            playerTurnStateMachine.InitPlayerPlayMachine ( player2 );
     }
 }

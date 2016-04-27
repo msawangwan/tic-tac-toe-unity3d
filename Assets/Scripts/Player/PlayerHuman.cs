@@ -2,42 +2,31 @@
 using System;
 using System.Collections;
 
-public class PlayerHuman : Player, IPlayer {
-    public bool IsTurnActive { get; private set; }
+public class PlayerHuman : Player, IPlayerMove {
+    public bool HasMadeValidMove { get; private set; }
 
     protected override bool AttemptMove<T>( ) {
+        HasMadeValidMove = false;
         if ( Input.GetMouseButtonDown ( 0 ) ) {
-            if ( isTurn ) {
-                T hitComponent = HitComponent<T>() as T;
-                if ( hitComponent != null && hitComponent is Tile ) {
-                    Tile selectedTile = hitComponent as Tile;
-                    if ( selectedTile.isAValidMove == true ) {
-                        IsTurnActive = turn.ExecuteTurn ( selectedTile );
-                    }
+            T hitComponent = HitComponent<T>() as T;
+            if ( hitComponent != null && hitComponent is Tile ) {
+                Tile selectedTile = hitComponent as Tile;
+                if ( selectedTile.isAValidMove == true ) {
+                    HasMadeValidMove = VerifyMove( selectedTile );
                 }
             }
         }
+        return HasMadeValidMove;
     }
 
-    public void EnterTurn ( ) {
-        IsTurnActive = true;
-    }
+    // base class needs an instance of 'endTurnEvent'
+    protected override PlayerTurnExitEvent MadeValidMove ( ) {
+        Logger.DebugToConsole ( "PlayerHuman", "MadeValidMove", "Ending turn." );
+        Player opponentPlayer = FindObjectOfType<PlayerComputer>();
+        IPlayer nextPlayer = opponentPlayer.GetComponent<IPlayer>();
+        IPlayerTurn nextPlayerTurn = opponentPlayer.GetComponent<IPlayerTurn>();
 
-    public void TakeTurn ( ) {
-        AttemptMove<Tile> ( );
-    }
-
-    public void ExitTurn ( ) {
-        IsTurnActive = false;
-    }
-
-    public event Action<PlayerTurnExitEvent> ExitTurnEvent;
-    
-    private void OnTurnEnd() {
-        Logger.DebugToConsole ( "PlayerHuman" , "OnTurnEnd" , "Ending turn." );
-        IPlayer nextPlayer = FindObjectOfType<PlayerComputer>();
-        PlayerTurnExitEvent endTurnEvent = new PlayerTurnExitEvent( nextPlayer );
-        ExitTurnEvent ( endTurnEvent );
+        return new PlayerTurnExitEvent( nextPlayer, nextPlayerTurn );
     }
 
     // returns a selected component
@@ -49,6 +38,7 @@ public class PlayerHuman : Player, IPlayer {
             }
         }
         T hitComponent = hit.transform.GetComponent<T>();
+
         return hitComponent;
     }
 }

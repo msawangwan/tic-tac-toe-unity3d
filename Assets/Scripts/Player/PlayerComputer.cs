@@ -3,42 +3,33 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerComputer : Player, IPlayer {
-    public bool IsTurnActive { get; private set; }
+public class PlayerComputer : Player, IPlayerMove {
+    public bool HasMadeValidMove { get; private set; }
 
+    // refactor, use more intelligent implementation over 'foreach'
     protected override bool AttemptMove<T>() {
-        foreach ( Vector2 move in gameboard.TileCoordinates ) {
-            if ( gameboard.TileTable.ContainsKey ( move ) ) {
-                Tile selectedTile = gameboard.TileTable[move];
+        HasMadeValidMove = false;
+        foreach ( Vector2 move in gameBoard.TileCoordinates ) {
+            if ( gameBoard.TileTable.ContainsKey ( move ) ) {
+                Tile selectedTile = gameBoard.TileTable[move];
                 if ( selectedTile.isAValidMove == true ) {
-                    IsTurnActive = turn.ExecuteTurn ( selectedTile );
+                    HasMadeValidMove = VerifyMove( selectedTile );
                     break;
                 } else {
                     continue;
                 }
             }
         }
+        return HasMadeValidMove;
     }
 
-    public void EnterTurn ( ) {
-        IsTurnActive = true;
+    // base class needs an instance of 'endTurnEvent'
+    protected override PlayerTurnExitEvent MadeValidMove ( ) {
+        Logger.DebugToConsole ( "PlayerComputer", "MadeValidMove", "Ending turn." );
+        Player opponentPlayer = FindObjectOfType<PlayerHuman>();
+        IPlayer nextPlayer = opponentPlayer.GetComponent<IPlayer>();
+        IPlayerTurn nextPlayerTurn = opponentPlayer.GetComponent<IPlayerTurn>();
+
+        return new PlayerTurnExitEvent ( nextPlayer, nextPlayerTurn );
     }
-
-    public void TakeTurn ( ) {
-        AttemptMove<Tile> ( );
-    }
-
-    public void ExitTurn ( ) {
-        IsTurnActive = false;
-    }
-
-    public event Action<PlayerTurnExitEvent> ExitTurnEvent;
-
-    private void OnTurnEnd ( ) {
-        Logger.DebugToConsole ( "PlayerHuman" , "OnTurnEnd" , "Ending turn." );
-        IPlayer nextPlayer = FindObjectOfType<PlayerHuman>();
-        PlayerTurnExitEvent endTurnEvent = new PlayerTurnExitEvent( nextPlayer );
-        ExitTurnEvent ( endTurnEvent );
-    }
-
 }

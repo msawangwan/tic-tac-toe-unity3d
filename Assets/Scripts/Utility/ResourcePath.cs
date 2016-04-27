@@ -8,5 +8,7 @@ public class ResourcePath : MonoBehaviour {
     public const string playerHuman = "Player/PlayerHuman";
     public const string playerAI = "Player/PlayerAI";
 
+    public const string playerTurnStateMachine = "Player/PlayerTurnStateMachine";
+
     public const string mainMenu = "UI/Panel_MainMenu";
 }

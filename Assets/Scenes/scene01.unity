@@ -439,7 +439,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1341808999}
-  - 114: {fileID: 1341808998}
   - 114: {fileID: 1341809000}
   m_Layer: 0
   m_Name: UIManager
@@ -448,21 +447,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1341808998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1341808997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7f77208fce27be489261d1ad2475b5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gamemanager: {fileID: 0}
-  mainMenu: {fileID: 0}
-  newGame: {fileID: 0}
-  settings: {fileID: 0}
 --- !u!4 &1341808999
 Transform:
   m_ObjectHideFlags: 0

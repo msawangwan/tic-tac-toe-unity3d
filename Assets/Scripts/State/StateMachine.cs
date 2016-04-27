@@ -4,11 +4,13 @@ using System.Collections;
 
 public class StateMachine : MonoBehaviour, IStateMachine  {
     private IStateTransition transition;
+
     private IState state;
     private IState nextState;  
-    private IState internalState {
+    private IState newState {
         set {
             state = value;
+            Debug.Log ( "[StateMachine][newState] Adding state as listener ... " );
             state.StartStateTransition += HandleStateExit; // add listener
             state.EnterState ( );
         }
@@ -19,7 +21,7 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
     // use as constructor
     public void InitStateMachine ( IState initialState ) {
         isExecuting = true;      
-        internalState = initialState;
+        newState = initialState;
         Debug.Log ( "[StateMachine][InitStateMachine] State Machine Initialised. " );
         // TODO: add a state.EndEnter();
     }
@@ -42,6 +44,7 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
                 return;
             }
 
+            Debug.Log ( "[StateMachine][Update] Removing state as listener ... " );
             state.StartStateTransition -= HandleStateExit;
 
             if ( nextState == null ) { // if no next state, then we've quit the application
@@ -62,7 +65,7 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
 
             // TODO: add a state.EndExit()
 
-            internalState = nextState;
+            newState = nextState;
             nextState = null;
 
             // TODO: add a run enter transition

@@ -1,51 +1,80 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Player : MonoBehaviour {
-    protected Board gameboard;
+public enum PlayerID {
+    player1 = 0,
+    player2 = 1,
+}
 
-    protected PlayerTurnController turn;
-    protected PlayerMoveTable moves;
+public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
+    protected Board gameBoard;
 
-    public PlayerID playerID { get; private set; }
+    protected PlayerMoveTable moveTable;
+    protected PlayerTurnExitEvent endTurnEvent; // instantiated in child classes
 
-    public void InitPlayer(Board newBoard, PlayerID id) {
-        gameboard = newBoard;
-        playerID = id;
+    public PlayerID PlayerByID { get; private set; }
 
-        turn = new PlayerTurnController ( gameboard , this );
-        moves = new PlayerMoveTable();
+    public bool IsTurnActive { get; private set; }
+    public bool IsWinner { get; private set; }
+
+    // use as constructor
+    public void InitPlayer(Board newGameBoard, PlayerID newPlayerByID) {
+        gameBoard = newGameBoard;
+        PlayerByID = newPlayerByID;
+
+        IsTurnActive = false;
+        IsWinner = false;
+
+        moveTable = new PlayerMoveTable();
     }
 
-    public void MoveFirst (bool isTurnFirst) {
+    public void FirstToAct (bool isTurnFirst) {
         Debug.Log ( gameObject.name + " moves first" );
     }
 
-    public virtual bool ExecuteMove ( Vector2 move ) {
-        moves.IncrementMove ( move );
-        bool win = moves.CheckForTicTacToe( );
-        return win;
+    public void EnterTurn ( ) {
+        IsTurnActive = true;
     }
 
-    //TODO: implement this as a Player protected or public method, and delete PlayerTurnController entirely
-    //public bool ExecuteTurn ( Tile selectedTile ) {
-        //Debug.Log ( "[PlayerTurnController][ExecuteTurn] Executing Turn." );
-        //if ( !isRoundOver ) {
-            //Vector2 selectedTilePosition = selectedTile.ReturnTilePosition();
-            //if ( board.TileTable.ContainsKey ( selectedTilePosition ) ) {
-                //if ( selectedTile.isAValidMove == true ) {
-                    //Debug.Log ( "[PlayerTurnController][ExecuteTurn] Found a move." );
-                    //selectedTile.MarkTileAsSelected ( playerByID );
-                    //isRoundOver = player.ExecuteMove ( selectedTilePosition );
-                    //return true;
-                //}
-            //}
-        //} else {
-            //Debug.Log ( "[PlayerTurnController][ExecuteTurn] Game is over." );
-        //}
-        //return false;
-    //}
+    public bool TakeTurn ( ) {
+        if (IsTurnActive)
+            if ( AttemptMove<Tile>( ) )
+                return true;
+        return false;
+    }
 
-    protected abstract bool AttemptMove<T>( ) where T : Component;
+    public void ExitTurn ( ) {
+        IsTurnActive = false;
+        HandleOnTurnEnd ( );
+    }
+
+    // 'PlayerTurnStateMachine' manages the listeners for this event (to listen, implement 'MadeValidMove')
+    public event Action<PlayerTurnExitEvent> ExitTurnEvent;
+
+    protected abstract PlayerTurnExitEvent MadeValidMove ( );
+    protected abstract bool AttemptMove<T> ( ) where T : Component;
+
+    protected bool VerifyMove ( Tile selectedTile ) {
+        Debug.Log("[Player][VerifyMove] Entering method call.");
+        Vector2 selectedTilePosition = selectedTile.ReturnTilePosition();
+        if ( gameBoard.TileTable.ContainsKey( selectedTilePosition ) ) {
+            if ( selectedTile.isAValidMove == true ) {
+                selectedTile.MarkTileAsSelected(PlayerByID);
+                moveTable.IncrementMove( selectedTilePosition );
+                if ( moveTable.CheckForTicTacToe( ) ) {
+                    IsWinner = true;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // calling this method, fires event 'ExitTurnEvent'
+    private void HandleOnTurnEnd ( ) {
+        ExitTurnEvent ( MadeValidMove ( ) );
+    }
+
 }

@@ -38,6 +38,7 @@ public class LoadApplicationState :  IState {
 
     public event Action<StateBeginExitEvent> StartStateTransition;
 
+    // calling this method, fires the event 'StartStateTransition'
     private void HandleOnApplicationLoadComplete() {
         Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Exiting state." );
         IState nextState = new MainMenuState();
