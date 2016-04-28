@@ -15,7 +15,7 @@ public class LoadApplicationState :  IState {
     public LoadApplicationState() {
         IsStateExecuting = true;
         loadTicks = 1.5f;
-        float interval = 1.2f;
+        float interval = .5f;
         stopwatch = new Utility ( interval );
     }
 
@@ -30,19 +30,19 @@ public class LoadApplicationState :  IState {
             if ( currentStopwatchTick > loadTicks ) {
                 isInitialised = true;
                 IsStateExecuting = false; ;
-                HandleOnApplicationLoadComplete ( );
+                OnApplicationLoadComplete ( );
             }
         }   
     }
 
-    public event Action<StateBeginExitEvent> StartStateTransition;
+    public event Action<StateBeginExitEvent> RaiseStateChangeEvent;
 
     // calling this method, fires the event 'StartStateTransition'
-    private void HandleOnApplicationLoadComplete() {
+    private void OnApplicationLoadComplete() {
         Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Exiting state." );
         IState nextState = new MainMenuState();
         IStateTransition transition = new LoadingTransition();
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
-        StartStateTransition ( exitEvent );
+        RaiseStateChangeEvent ( exitEvent );
     }
 }

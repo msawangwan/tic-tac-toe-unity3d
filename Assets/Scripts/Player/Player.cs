@@ -54,7 +54,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
 
     protected bool VerifyMove ( Tile selectedTile ) {
         Debug.Log("[Player][VerifyMove] Entering method call.");
-        Vector2 selectedTilePosition = selectedTile.ReturnTilePosition();
+        Vector2 selectedTilePosition = selectedTile.TilePosition;
         if ( gameBoard.TileTable.ContainsKey( selectedTilePosition ) ) {
             if ( selectedTile.isAValidMove == true ) {
                 selectedTile.MarkTileAsSelected( PlayerByID );

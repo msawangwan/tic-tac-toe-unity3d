@@ -11,7 +11,7 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
         set {
             state = value;
             Debug.Log ( "[StateMachine][newState] Adding state as listener ... " );
-            state.StartStateTransition += HandleStateExit; // add listener
+            state.RaiseStateChangeEvent += HandleOnStateTransition; // add listener
             state.EnterState ( );
         }
     }
@@ -26,8 +26,8 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
         // TODO: add a state.EndEnter();
     }
 
-    // fires event and notifies any listeners
-    public void HandleStateExit ( StateBeginExitEvent exitStateEvent ) {
+    // signature matches 'startstatetransition' event
+    private void HandleOnStateTransition ( StateBeginExitEvent exitStateEvent ) {
         Debug.Log ( "[StateMachine][HandleStateExit] Exit Event Fired. " );
         nextState = exitStateEvent.NextState;
         transition = exitStateEvent.Transition;
@@ -45,7 +45,7 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
             }
 
             Debug.Log ( "[StateMachine][Update] Removing state as listener ... " );
-            state.StartStateTransition -= HandleStateExit;
+            state.RaiseStateChangeEvent -= HandleOnStateTransition;
 
             if ( nextState == null ) { // if no next state, then we've quit the application
                 Debug.Log ( "[StateMachine][Update] Application terminating ... " );             
@@ -53,12 +53,12 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
             }
 
             if ( transition != null ) {
-                if ( transition.hasTriggered == false ) {
+                if ( transition.HasTriggered == false ) {
                     Debug.Log ( "[StateMachine][Update] Triggering exit transition to next state ... " );
-                    StartCoroutine ( transition.Exit ( ).GetEnumerator ( ) );
+                    StartCoroutine ( transition.BeginTransition ( ).GetEnumerator ( ) );
                 }
 
-                if ( transition.hasCompleted == false ) {
+                if ( transition.HasCompleted == false ) {
                     return;
                 }
             }

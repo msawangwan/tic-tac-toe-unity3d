@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Board : MonoBehaviour {
+public class Board : MonoBehaviour, IFadeableGameObject {
     private GameObject boardObject;
 
     private Board board; // cache reference to self from parent gameObject
@@ -35,6 +35,22 @@ public class Board : MonoBehaviour {
 
         TileTable = boardUtility.DrawBoard ( gameObject, TileCoordinates );
 
-        isBoardActive = boardObject.activeInHierarchy;
+        isBoardActive = true;
+    }
+    
+    // implements 'IFadeAbleGameObject'
+    public IEnumerable FadeOut( float fadeMultiplier ) {
+        if ( isBoardActive ) {
+            ITile[] boardTiles = GetComponentsInChildren<ITile>();
+            foreach ( IFadeableGameObject tile in boardTiles ) {
+                StartCoroutine ( tile.FadeOut ( fadeMultiplier ).GetEnumerator ( ) );
+                yield return new WaitForSeconds ( fadeMultiplier );
+            }
+            DestroyBoardGameObject ( );
+        }
+    }
+
+    private void DestroyBoardGameObject() {
+        Destroy ( boardObject );
     }
 }

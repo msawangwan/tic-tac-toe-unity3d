@@ -65,6 +65,7 @@ public class BoardInitialiser {
                 GameObject tilePrefab = MonoBehaviour.Instantiate(Resources.Load(ResourcePath.boardTile), tileCoordinates[i], Quaternion.identity) as GameObject;
                 Tile tile = tilePrefab.GetComponent<Tile>( ) as Tile;
 
+                tile.InitState ( );
                 tilePrefab.transform.SetParent ( boardObject.transform );
                 tileTable.Add ( tileCoordinates[i] , tile as Tile );
             }

@@ -3,10 +3,10 @@ using System;
 using System.Collections;
 
 public interface IState {
-    bool IsStateExecuting { get; } // sets to 'true' in constructor
+    bool IsStateExecuting { get; } // default to 'true' in constructor or 'EnterState'
 
     void EnterState ( );
     void ExecuteState ( );
 
-    event Action<StateBeginExitEvent> StartStateTransition;
+    event Action<StateBeginExitEvent> RaiseStateChangeEvent;
 }

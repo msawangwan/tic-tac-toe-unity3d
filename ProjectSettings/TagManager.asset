@@ -10,6 +10,9 @@ TagManager:
   - manager_game
   - manager_player
   - manager_board
+  - ui_Panel_RoundOverMenu
+  - ui_Btn_ReturnToMainMenu
+  - ui_Btn_ToggleSettingsMenu
   layers:
   - Default
   - TransparentFX
