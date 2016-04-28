@@ -30,6 +30,12 @@ public class GameRound : IRound {
         IsGameOver = true;
     }
 
+    public GameObject FetchBoardObjectRefernce () {
+        if ( gameBoardObj )
+            return gameBoardObj;
+        return null;
+    }
+
     // private constructor, called when an instance is instantiated via static method
     private GameRound() {
         boardManager = MonoBehaviour.FindObjectOfType<BoardManager> ( );

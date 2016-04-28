@@ -2,5 +2,5 @@
 using System.Collections;
 
 public interface ITile {
-    Vector2 ReturnTilePosition( );
+    Vector2 TilePosition { get; }
 }

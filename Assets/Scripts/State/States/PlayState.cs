@@ -31,17 +31,17 @@ public class PlayState : IState {
 
         if ( gameWonOrQuit ) {
             Debug.Log ( "[PlayState][ExecuteState] Game over... notify of exit event! " );
-            HandleOnTerminatePlay ( );
+            OnGameOver ( );
         }
     }
 
-    public event Action<StateBeginExitEvent> StartStateTransition;
+    public event Action<StateBeginExitEvent> RaiseStateChangeEvent;
 
-    private void HandleOnTerminatePlay ( ) {
+    private void OnGameOver ( ) {
         Debug.Log ( "[PlayState][HandleOnTerminatePlay] Exiting state." );
         IState nextState = new EndOfGameState();
-        IStateTransition transition = new LoadingTransition();
+        IStateTransition transition = new EndGameTransition( currentRound );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
-        StartStateTransition ( exitEvent );
+        RaiseStateChangeEvent ( exitEvent );
     }
 }

@@ -11,4 +11,5 @@ public class ResourcePath : MonoBehaviour {
     public const string playerTurnStateMachine = "Player/PlayerTurnStateMachine";
 
     public const string mainMenu = "UI/Panel_MainMenu";
+    public const string roundOverMenu = "UI/Panel_RoundOverMenu";
 }

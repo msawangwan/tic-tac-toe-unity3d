@@ -16,7 +16,7 @@ public class LoadNewGameState : IState {
 
     public LoadNewGameState( float loadTime ) {
         IsStateExecuting = true;
-        delayTimer = new Utility ( 1.7f );
+        delayTimer = new Utility ( .6f );
         numTicksToDelay = loadTime;
         numDelayTicks = 0;
 
@@ -31,7 +31,7 @@ public class LoadNewGameState : IState {
         Logger.DebugToConsole ( "LoadNewGameState" , "ExecuteState" , "Executing ... " );
         if ( hasGameLoaded == true ) {
             IsStateExecuting = false;
-            HandleOnNewGameLoadComplete ( );
+            OnGameSetupComplete ( );
         }
 
         if ( delayTimer != null ) {
@@ -47,13 +47,13 @@ public class LoadNewGameState : IState {
         }
     }
 
-    public event Action<StateBeginExitEvent> StartStateTransition;
+    public event Action<StateBeginExitEvent> RaiseStateChangeEvent;
 
-    private void HandleOnNewGameLoadComplete ( ) {
+    private void OnGameSetupComplete ( ) {
         Logger.DebugToConsole ( "LoadNewGameState" , "HandleOnNewGameLoadComplete" , "Exiting state." );
         IState nextState = new PlayState( newRound );
         IStateTransition transition = new LoadingTransition(); // <- TODO: change to 'startnewgametransition' for boardgame fade-in
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
-        StartStateTransition ( exitEvent );
+        RaiseStateChangeEvent ( exitEvent );
     }
 }

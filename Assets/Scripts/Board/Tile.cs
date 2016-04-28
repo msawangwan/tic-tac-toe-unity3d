@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tile : MonoBehaviour, ITile {
+public class Tile : MonoBehaviour, ITile, IFadeableGameObject {
     private SpriteRenderer spriteRenderer;
-    private Vector2 tilePosition;
     private Color defaultColor = Color.white;
 
+    public Vector2 TilePosition { get; private set; }
     public bool isAValidMove { get; private set; }
 
-    public void ResetTileState ( ) {
-        tilePosition = new Vector2 ( transform.position.x , transform.position.y );
+    public void InitState ( ) {
+        TilePosition = new Vector2 ( transform.position.x , transform.position.y );
         spriteRenderer = GetComponent<SpriteRenderer> ( );
         spriteRenderer.color = defaultColor;
         isAValidMove = true;
@@ -29,16 +29,15 @@ public class Tile : MonoBehaviour, ITile {
         }
     }
 
-    public Vector2 ReturnTilePosition ( ) {
-        return tilePosition;
+    // implements 'IFadeAbleGameObject'
+    public IEnumerable FadeOut( float fadeSpeed ) { // a good speed is between .3f and 5.0f
+        while ( spriteRenderer.color.a > 0 ) {
+            Color spriteAlpha = spriteRenderer.color;
+            print ( "ALPHA" + spriteAlpha.a );
+            spriteAlpha.a -= Time.deltaTime * fadeSpeed;
+            spriteRenderer.color = new Color(spriteAlpha.r, spriteAlpha.g, spriteAlpha.b, spriteAlpha.a );
+            yield return null;
+        }
+        Destroy ( gameObject );
     }
-
-    // TODO: test and see if we can delete the start method (can just call the public 'constructor' when the tile is instantiated')
-    private void Start() {
-        tilePosition = new Vector2 ( transform.position.x , transform.position.y );
-        spriteRenderer = GetComponent<SpriteRenderer> ( );
-        spriteRenderer.color = defaultColor;       
-        isAValidMove = true;
-    }
-
 }

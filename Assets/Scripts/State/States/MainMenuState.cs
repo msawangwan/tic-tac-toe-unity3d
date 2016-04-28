@@ -2,7 +2,9 @@
 using UnityEngine.UI;
 using System;
 using System.Collections;
-
+/// <summary>
+/// TODO: REFACTOR TO USE ABSTRACT BASE CLASS!!!
+/// </summary>
 public class MainMenuState : IState {
     private Canvas uiCanvas;
     private GameObject mainMenu;
@@ -16,7 +18,7 @@ public class MainMenuState : IState {
     public MainMenuState() {
         IsStateExecuting = true;
         uiCanvas = MonoBehaviour.FindObjectOfType<Canvas> ( );
-        mainMenu = MonoBehaviour.Instantiate ( Resources.Load ( ResourcePath.mainMenu ) ) as GameObject;
+        mainMenu = MonoBehaviour.Instantiate<GameObject> ( Resources.Load<GameObject> ( ResourcePath.mainMenu ) );
         mainMenu.transform.SetParent ( uiCanvas.transform , false );
         MapButtons ( );
     }
@@ -30,7 +32,7 @@ public class MainMenuState : IState {
         Debug.Log ( "[MainMenuState][ExecuteState] Executing state ... " );
     }
 
-    public event Action<StateBeginExitEvent> StartStateTransition;
+    public event Action<StateBeginExitEvent> RaiseStateChangeEvent;
 
     private void MapButtons ( ) {
         if ( mainMenu == null ) return;
@@ -38,19 +40,19 @@ public class MainMenuState : IState {
             mainMenuButtons = mainMenu.GetComponentsInChildren<Button> ( true );
             foreach ( Button btn in mainMenuButtons ) {
                 if (btn.CompareTag(TagsUI.startNewGameBtn)) { // btn - start a new game
-                    btnNewGame = btn.GetComponent<Button> ( );
-                    btnNewGame.onClick.RemoveAllListeners ( );
-                    btnNewGame.onClick.AddListener ( HandleOnButtonNewGame );
+                    btn.onClick.RemoveAllListeners ( );
+                    btn.onClick.AddListener ( OnButtonNewGame );
                 }
             }
         }
     }
 
-    private void HandleOnButtonNewGame() {
+    private void OnButtonNewGame() {
+        IsStateExecuting = false;
         float loadingTime = 1.8f;
         IState nextState = new LoadNewGameState( loadingTime );
-        IStateTransition transition = new MenuFadeTransition ( mainMenu );
+        IStateTransition transition = new MenuExitTransition ( mainMenu );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent( nextState, transition );
-        StartStateTransition( exitEvent );
+        RaiseStateChangeEvent( exitEvent );
     }
 }

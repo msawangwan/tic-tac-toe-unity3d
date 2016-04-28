@@ -2,26 +2,27 @@
 using System.Collections;
 
 public class LoadingTransition : IStateTransition {
-    public bool hasTriggered { get; private set; }
-    public bool hasCompleted { get; private set; }
+    public bool HasTriggered { get; private set; }
+    public bool HasCompleted { get; private set; }
+
     public LoadingTransition ( ) {
         InitBools ( );
     }
 
-    public IEnumerable Enter ( ) {
-        hasTriggered = true;
-        yield return new WaitForEndOfFrame ( );
-        hasCompleted = true;
+    // use this constructor if a gameobject needs to be removed from scene on state change
+    public LoadingTransition ( GameObject objectToDestroy ) {
+        InitBools ( );
+        MonoBehaviour.Destroy ( objectToDestroy );
     }
 
-    public IEnumerable Exit ( ) {
-        hasTriggered = true;
+    public IEnumerable BeginTransition ( ) {
+        HasTriggered = true;
         yield return new WaitForEndOfFrame ( );
-        hasCompleted = true;
+        HasCompleted = true;
     }
 
     private void InitBools ( ) {
-        hasTriggered = false;
-        hasCompleted = false;
+        HasTriggered = false;
+        HasCompleted = false;
     }
 }
