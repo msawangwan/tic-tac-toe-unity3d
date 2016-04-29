@@ -7,9 +7,9 @@ public class EndGameTransition : IStateTransition {
     public bool HasTriggered { get; private set; }
     public bool HasCompleted { get; private set; }
 
-    public EndGameTransition ( GameRound endingRound ) {
+    public EndGameTransition ( IRound endingRound ) {
         InitBools ( );
-        gameBoardObject = endingRound.FetchBoardObjectRefernce ( );
+        gameBoardObject = endingRound.GridObject;
     }
 
     public IEnumerable BeginTransition ( ) {

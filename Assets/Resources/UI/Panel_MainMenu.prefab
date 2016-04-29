@@ -104,7 +104,7 @@ GameObject:
   - 114: {fileID: 11406402}
   m_Layer: 5
   m_Name: Button_Settings
-  m_TagString: Untagged
+  m_TagString: ui_Btn_ToggleSettingsMenu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -756,7 +756,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 800, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22491614
 RectTransform:

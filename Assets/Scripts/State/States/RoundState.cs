@@ -2,14 +2,14 @@
 using System;
 using System.Collections;
 
-public class PlayState : IState {
-    private GameRound currentRound;
+public class RoundState : IState {
+    private IRound currentRound;
 
     public bool IsStateExecuting { get; private set; }
 
     private bool gameWonOrQuit;
 
-    public PlayState( GameRound newRound ) {
+    public RoundState( IRound newRound ) {
         currentRound = newRound;
         IsStateExecuting = true;
         gameWonOrQuit = false;
@@ -42,6 +42,9 @@ public class PlayState : IState {
         IState nextState = new EndOfGameState();
         IStateTransition transition = new EndGameTransition( currentRound );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
-        RaiseStateChangeEvent ( exitEvent );
+
+        if ( RaiseStateChangeEvent != null ) {
+            RaiseStateChangeEvent ( exitEvent );
+        }
     }
 }

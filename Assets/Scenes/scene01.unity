@@ -760,7 +760,7 @@ GameObject:
   - 4: {fileID: 1907253415}
   - 114: {fileID: 1907253416}
   m_Layer: 0
-  m_Name: BoardManager
+  m_Name: BoardContainer
   m_TagString: manager_board
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

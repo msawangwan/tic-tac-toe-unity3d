@@ -15,14 +15,17 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     public bool IsWinner { get; private set; }
 
     // use as constructor
-    public void InitPlayer(Board newGameBoard, int newPlayerByID) {
-        gameBoard = newGameBoard;
+    public void Init(int newPlayerByID) {
         PlayerByID = newPlayerByID;
 
         IsTurnActive = false;
         IsWinner = false;
 
         moveTable = new PlayerMoveTable();
+    }
+
+    public void SetPlayingBoard() {
+
     }
 
     public void EnterTurn ( ) {

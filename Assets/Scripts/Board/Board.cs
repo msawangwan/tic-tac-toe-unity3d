@@ -6,7 +6,6 @@ public class Board : MonoBehaviour, IFadeableGameObject {
     private GameObject boardObject;
 
     private Board board; // cache reference to self from parent gameObject
-    private BoardManager manager;
     private BoardInitialiser boardUtility;
 
     public Vector2[] TileCoordinates { get; set; }
@@ -20,8 +19,7 @@ public class Board : MonoBehaviour, IFadeableGameObject {
     public bool isBoardActive = false;
 
     // use as constructor
-    public void CreateBoard( GameObject boardObj, Board boardScriptReference, BoardManager boardManager , int boardWidth, int boardHeight ) {
-        manager = boardManager;
+    public void CreateBoard( GameObject boardObj, Board boardScriptReference, int boardWidth, int boardHeight ) {
         boardObject = boardObj;
         board = boardScriptReference;
 
@@ -37,8 +35,9 @@ public class Board : MonoBehaviour, IFadeableGameObject {
 
         isBoardActive = true;
     }
-    
+
     // implements 'IFadeAbleGameObject'
+    public IEnumerable FadeIn ( float fadeMultiplier ) { yield return new WaitForSeconds ( fadeMultiplier ); }
     public IEnumerable FadeOut( float fadeMultiplier ) {
         if ( isBoardActive ) {
             ITile[] boardTiles = GetComponentsInChildren<ITile>();

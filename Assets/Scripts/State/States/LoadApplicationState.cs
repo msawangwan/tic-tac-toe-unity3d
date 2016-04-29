@@ -6,7 +6,7 @@ using System.Collections;
 public class LoadApplicationState :  IState {
     private float loadTicks = 0;
     private float currentStopwatchTick = 0;
-    private Utility stopwatch;
+    private Ticker stopwatch;
 
     private bool isInitialised = false;
 
@@ -16,7 +16,7 @@ public class LoadApplicationState :  IState {
         IsStateExecuting = true;
         loadTicks = 1.5f;
         float interval = .5f;
-        stopwatch = new Utility ( interval );
+        stopwatch = new Ticker ( interval );
     }
 
     public void EnterState ( ) {
@@ -26,7 +26,7 @@ public class LoadApplicationState :  IState {
     public void ExecuteState() {
         if ( isInitialised == false ) {
             stopwatch.Timer ( ); // do a little counting
-            currentStopwatchTick = stopwatch.timer_tickCount;
+            currentStopwatchTick = stopwatch.TickCount;
             if ( currentStopwatchTick > loadTicks ) {
                 isInitialised = true;
                 IsStateExecuting = false; ;
@@ -43,6 +43,9 @@ public class LoadApplicationState :  IState {
         IState nextState = new MainMenuState();
         IStateTransition transition = new LoadingTransition();
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
-        RaiseStateChangeEvent ( exitEvent );
+
+        if ( RaiseStateChangeEvent != null ) {
+            RaiseStateChangeEvent ( exitEvent );
+        }      
     }
 }

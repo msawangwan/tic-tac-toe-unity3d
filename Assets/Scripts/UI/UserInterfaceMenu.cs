@@ -12,7 +12,7 @@ public abstract class UserInterfaceMenu : IUserInterface {
 
     protected bool isWaitingForInput;
 
-    public IUIEvent buttonEvent;         // define in child
+    public IUIEvent buttonEvent;         // child classes should implement this interface AND init this reference using the 'this' keyword
 
     public UserInterfaceMenu ( ) {
         uiCanvasReference = MonoBehaviour.FindObjectOfType<Canvas> ( );
@@ -22,12 +22,6 @@ public abstract class UserInterfaceMenu : IUserInterface {
     public void MakeActiveInScene ( ) {
         if ( menuObject )
             menuObject.SetActive ( true );
-    }
-
-    public bool Poll() {                 // currently, not implemented anywhere -- may not need this afterall ...
-        if ( isWaitingForInput )
-            return true;
-        return false;
     }
 
     protected abstract void MapButtons ( );

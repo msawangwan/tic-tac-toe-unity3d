@@ -21,7 +21,7 @@ public class MainMenu : UserInterfaceMenu, IUIEvent {
                 btn.onClick.RemoveAllListeners ( );
                 btn.onClick.AddListener ( ( ) => {
                     float fadeTime = 1.8f;
-                    IState nextState = new LoadNewGameState ( fadeTime );
+                    IState nextState = new LoadNewRoundState ( fadeTime );
                     IStateTransition transition = new MenuExitTransition ( menuObject );
                     StateBeginExitEvent newRoundState = new StateBeginExitEvent ( nextState, transition );
                     RaiseUIEvent ( newRoundState );

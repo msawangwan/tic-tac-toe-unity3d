@@ -58,7 +58,7 @@ public class PlayerInitialiser {
 
     private void InitialisePlayers() {
         for ( int i = 0; i < players.Count; i++ ) {
-            players[i].InitPlayer ( gameBoardRef , i );
+            //players[i].InitPlayer ( gameBoardRef , i );
         }
     }
 

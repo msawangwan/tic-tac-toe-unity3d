@@ -14,7 +14,7 @@ public class PlayerTurnStateMachine : MonoBehaviour {
         set {
             turnCurrent = value;
             turnCurrent.RaiseTurnCompletedEvent += HandlePlayerTurnExitEvent; // add current player as the sole listener
-            turnCurrent.EnterTurn ( );                              // set 'IsTurnActive' to true
+            turnCurrent.EnterTurn ( );                                        // set 'IsTurnActive' to true
         }
     }
 
@@ -42,12 +42,9 @@ public class PlayerTurnStateMachine : MonoBehaviour {
         CheckForEndOfRound ( );
 
         if ( isExecuting ) {
-            Assert.IsFalse ( turnCurrent == null, "[PlayerTurnStateMachine][Update] PlayerMachine has no current player!" );
-
             if ( turnCurrent.IsTurnActive ) {
-                Debug.Log ( "[PlayerTurnStateMachine][Update] Turn active for: " + turnCurrent.GetType ( ).ToString ( ) );
                 if ( turnCurrent.TakeTurn ( ) ) {
-                    turnCurrent.ExitTurn ( );                               // will set 'IsTurnActive' to false
+                    turnCurrent.ExitTurn ( );                                         // will set 'IsTurnActive' to false
                     turnCurrent.RaiseTurnCompletedEvent -= HandlePlayerTurnExitEvent; // remove listener
                     if ( movingPlayer.IsWinner ) {
                         isExecuting = false;
@@ -58,7 +55,6 @@ public class PlayerTurnStateMachine : MonoBehaviour {
             }
 
             if ( movingPlayer.IsWinner ) {
-                Debug.Log ( "[PlayerTurnStateMachine][Update] Game over, winner is: " + turnCurrent.GetType ( ).ToString ( ) );
                 isExecuting = false;
             }
 
@@ -73,7 +69,6 @@ public class PlayerTurnStateMachine : MonoBehaviour {
 
     private void CheckForEndOfRound() {
         if ( isExecuting == false && (movingPlayer.IsWinner == true || idlePlayer.IsWinner == true ) ) {
-            Debug.Log ( "[PlayerTurnStateMachine][CheckForEndOfRound] Gameover, deleting self from scene ... " );
             currentRound.EndCurrentRound ( );
             Destroy ( gameObject );
         }
