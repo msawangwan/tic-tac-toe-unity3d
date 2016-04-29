@@ -47,7 +47,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     }
 
     // 'PlayerTurnStateMachine' manages the listeners for this event (to listen, implement 'MadeValidMove')
-    public event Action<PlayerTurnExitEvent> ExitTurnEvent;
+    public event Action<PlayerTurnExitEvent> RaiseTurnCompletedEvent;
 
     protected abstract PlayerTurnExitEvent MadeValidMove ( );
     protected abstract bool AttemptMove<T> ( ) where T : Component;
@@ -70,7 +70,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
 
     // calling this method, fires event 'ExitTurnEvent'
     private void HandleOnTurnEnd ( ) {
-        ExitTurnEvent ( MadeValidMove ( ) );
+        RaiseTurnCompletedEvent ( MadeValidMove ( ) );
     }
 
 }

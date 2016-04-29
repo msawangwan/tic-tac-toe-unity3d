@@ -47,7 +47,6 @@ GameObject:
   - 222: {fileID: 22236932}
   - 114: {fileID: 11483892}
   - 225: {fileID: 22558610}
-  - 114: {fileID: 11478988}
   m_Layer: 5
   m_Name: Panel_MainMenu
   m_TagString: ui_Panel_MainMenu
@@ -440,17 +439,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11478988
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 130996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e70734999ca365049af924171d12cced, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11481746
 MonoBehaviour:
   m_ObjectHideFlags: 1

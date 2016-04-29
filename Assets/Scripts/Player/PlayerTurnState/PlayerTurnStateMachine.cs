@@ -13,7 +13,7 @@ public class PlayerTurnStateMachine : MonoBehaviour {
     private IPlayerTurn setTurnCurrent {
         set {
             turnCurrent = value;
-            turnCurrent.ExitTurnEvent += HandlePlayerTurnExitEvent; // add current player as the sole listener
+            turnCurrent.RaiseTurnCompletedEvent += HandlePlayerTurnExitEvent; // add current player as the sole listener
             turnCurrent.EnterTurn ( );                              // set 'IsTurnActive' to true
         }
     }
@@ -48,7 +48,7 @@ public class PlayerTurnStateMachine : MonoBehaviour {
                 Debug.Log ( "[PlayerTurnStateMachine][Update] Turn active for: " + turnCurrent.GetType ( ).ToString ( ) );
                 if ( turnCurrent.TakeTurn ( ) ) {
                     turnCurrent.ExitTurn ( );                               // will set 'IsTurnActive' to false
-                    turnCurrent.ExitTurnEvent -= HandlePlayerTurnExitEvent; // remove listener
+                    turnCurrent.RaiseTurnCompletedEvent -= HandlePlayerTurnExitEvent; // remove listener
                     if ( movingPlayer.IsWinner ) {
                         isExecuting = false;
                         CheckForEndOfRound ( );
