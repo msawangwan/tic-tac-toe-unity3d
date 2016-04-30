@@ -1,49 +1,59 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerObjData {
-    public GameObject PlayerObject { get; set; }
-    public Player PlayerReference { get; set; }
-}
-
 public class PlayerConfiguration : IConfigureable {
-    private Dictionary<int, PlayerObjData> players;
     private Dictionary<int,bool> playerTypes;
 
+    public List<IConfig> ObjectConfigData { get; private set; }
+
     public PlayerConfiguration( Dictionary<int,bool> playerTypes ) {
-        players = new Dictionary<int , PlayerObjData> ( );
+        ObjectConfigData = new List<IConfig> ( );
         playerTypes = new Dictionary<int , bool> ( );
 
-        players.Clear ( );
+        ObjectConfigData.Clear ( );
         playerTypes.Clear ( );
 
         this.playerTypes = playerTypes;
     }
 
     // implements 'IConfigureable'
-    public Configuration Configure () {
-        InstantiatePlayers ( );
-        return new Configuration (  );
+    public List<IConfig> Configure() {
+        InstantiatePlayerObjects ( );
+        return ObjectConfigData;
     }
 
-    private void InstantiatePlayers() {
-        Resources.Load<GameObject> ( ResourcePath.playerHuman );
-        Resources.Load<GameObject> ( ResourcePath.playerAI );
+    /* Spawn initialised player gameobjects in  
+        the scene and add them to a collection */
+    private void InstantiatePlayerObjects() {
+        GameObject human = Resources.Load<GameObject> ( ResourcePath.playerHuman );
+        GameObject ai = Resources.Load<GameObject> ( ResourcePath.playerAI );
 
-        for ( int id = 0; id < players.Count; id++ ) {
-            GameObject current;
-            PlayerObjData newPlayer;
+        for ( int id = 0; id < ObjectConfigData.Count; id++ ) {
+            GameObject player;
+            PlayerObjectData newPlayer;
+            bool isHuman;
 
-            if ( playerTypes[id] ) // is a human player
-                current = MonoBehaviour.Instantiate<GameObject> ( Resources.Load<GameObject> ( ResourcePath.playerHuman ) );
-            else                   // is an AI player
-                current = MonoBehaviour.Instantiate<GameObject> ( Resources.Load<GameObject> ( ResourcePath.playerAI ) );
-            PlayerContainer.AttachToTransformAsChild ( current );
+            if ( playerTypes[id] ) {
+                isHuman = true;
+                player = MonoBehaviour.Instantiate<GameObject> ( human );
+            } else {
+                isHuman = false;
+                player = MonoBehaviour.Instantiate<GameObject> ( ai );
+            }
+            
+            newPlayer = new PlayerObjectData { PlayerObject = player, PlayerReference = player.GetComponent<Player>(), ID = id, IsHuman = isHuman };
+            ObjectConfigData.Add ( newPlayer );
 
-            newPlayer = new PlayerObjData { PlayerObject = current, PlayerReference = current.GetComponent<Player>() };
-            newPlayer.PlayerReference.Init ( id );
-
-            players.Add ( id, newPlayer );
+            PlayerContainer.AttachToTransformAsChild ( player );
         }
     }
+}
+/// <summary>
+/// Related sister class
+/// </summary>
+public class PlayerObjectData : IConfig {
+    public GameObject PlayerObject { get; set; }
+    public Player PlayerReference { get; set; }
+    public int ID { get; set; }
+    public bool IsHuman { get; set; }
 }

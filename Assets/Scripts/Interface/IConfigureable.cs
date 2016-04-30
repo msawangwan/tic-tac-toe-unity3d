@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public interface IConfigureable {
-    Configuration Configure ( );
+    List<IConfig> ObjectConfigData { get; }
+    List<IConfig> Configure ( );
 }
+
+public interface IConfig { }
