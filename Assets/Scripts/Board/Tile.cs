@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tile : MonoBehaviour, ITile, IFadeableGameObject {
+public class Tile : Grid2DVertex, ITile, IFadeableGameObject {
     private SpriteRenderer spriteRenderer;
     private Color defaultColor = Color.white;
 
-    public Vector2 TilePosition { get; private set; }
-    public bool isAValidMove { get; private set; }
+    public Vector2 Position { get; private set; }
+    public bool IsAValidMove { get; private set; }
 
-    public void InitState ( ) {
-        TilePosition = new Vector2 ( transform.position.x , transform.position.y );
+    public override void InitAsNew ( ) {
+        base.InitAsNew ( );
+
         spriteRenderer = GetComponent<SpriteRenderer> ( );
-        spriteRenderer.color = defaultColor;
-        isAValidMove = true;
+        ResetSpriteRenderer ( );
+
+        Position = vertexPos;
+        IsAValidMove = true;
     }
 
     public void MarkTileAsSelected ( int playerByID ) {
@@ -23,18 +26,17 @@ public class Tile : MonoBehaviour, ITile, IFadeableGameObject {
             playerColor = Color.blue;
         }
 
-        if ( isAValidMove ) {
+        if ( IsAValidMove ) {
             spriteRenderer.color = playerColor;
-            isAValidMove = false;
+            IsAValidMove = false;
         }
     }
 
-    public void MakeActiveInScene() {
-        gameObject.SetActive ( true );
+    // implements 'IFadeAbleGameObject' -- fades each child tild of boarObject
+    public IEnumerable FadeIn ( float fadeMultiplier ) {
+        yield return null;
     }
 
-    // implements 'IFadeAbleGameObject' -- fades each child tild of boarObject
-    public IEnumerable FadeIn ( float fadeMultiplier ) { yield return null; }
     public IEnumerable FadeOut( float fadeMultiplier ) { // a good speed is between .3f and 5.0f
         while ( spriteRenderer.color.a > 0 ) {
             Color spriteAlpha = spriteRenderer.color;
@@ -44,5 +46,12 @@ public class Tile : MonoBehaviour, ITile, IFadeableGameObject {
             yield return null;
         }
         Destroy ( gameObject );
+    }
+
+    private void ResetSpriteRenderer() {
+        spriteRenderer.color = defaultColor;
+        Color spriteZeroAlpha = spriteRenderer.color;
+        spriteZeroAlpha.a = 0;
+        spriteRenderer.color = new Color ( defaultColor.r , defaultColor.g , defaultColor.b , spriteZeroAlpha.a );
     }
 }

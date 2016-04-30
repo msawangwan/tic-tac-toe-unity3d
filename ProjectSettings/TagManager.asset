@@ -13,6 +13,7 @@ TagManager:
   - ui_Panel_RoundOverMenu
   - ui_Btn_ReturnToMainMenu
   - ui_Btn_ToggleSettingsMenu
+  - gameplay_Grid2D_TicTacToeBoard
   layers:
   - Default
   - TransparentFX

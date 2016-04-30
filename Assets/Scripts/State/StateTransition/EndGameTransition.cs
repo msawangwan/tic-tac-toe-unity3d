@@ -9,7 +9,7 @@ public class EndGameTransition : IStateTransition {
 
     public EndGameTransition ( IRound endingRound ) {
         InitBools ( );
-        gameBoardObject = endingRound.GridObject;
+        //gameBoardObject = endingRound.GridObject;
     }
 
     public IEnumerable BeginTransition ( ) {

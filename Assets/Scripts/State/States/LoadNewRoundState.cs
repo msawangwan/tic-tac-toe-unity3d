@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public class LoadNewRoundState : IState {
-    //private IRound round;
+    private GameRound round;
 
     private Dictionary<int, bool> playerTypes; // < id, isHumanPlayer >
 
@@ -45,19 +45,7 @@ public class LoadNewRoundState : IState {
         }
                 
         if (numDelayTicks > numTicksToDelay && hasGameLoaded == false) {
-            //IGameBoard newBoard = new GameBoard(3,3);
-
-            // TO DOOOOO !!! do all this in a new ROUND
-            IConfigureable newGameBoard = new Grid2DConfiguration(3,3);
-            IConfigureable newPlayers = new PlayerConfiguration(playerTypes);
-
-            //List<IConfig> boardDataAsList = newGameBoard.Configure();
-            Grid2DObjectData boardData = (Grid2DObjectData) newGameBoard.Configure()[0];
-            Player p1Data = (Player) newPlayers.Configure()[0];
-            Player p2Data = (Player) newPlayers.Configure()[1];
-
-            //round = new GameRound( newBoard );
-
+            round = new GameRound( );
             delay = null;
             hasGameLoaded = true;
         }

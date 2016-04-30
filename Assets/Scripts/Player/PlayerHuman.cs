@@ -11,7 +11,7 @@ public class PlayerHuman : Player, IPlayerMove {
             T hitComponent = HitComponent<T>() as T;
             if ( hitComponent != null && hitComponent is Tile ) {
                 Tile selectedTile = hitComponent as Tile;
-                if ( selectedTile.isAValidMove == true ) {
+                if ( selectedTile.IsAValidMove == true ) {
                     HasMadeValidMove = VerifyMove( selectedTile );
                 }
             }

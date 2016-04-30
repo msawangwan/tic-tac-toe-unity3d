@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class ResourcePath : MonoBehaviour {
+    public const string boardTicTacToe = "Gameplay/Board/GridTicTacToe2D";
+    public const string GridVertex2D = "GamePlay/Board/GridVertex2D";
+
     public const string board = "Gameplay/Board/Board";
     public const string boardTile = "Gameplay/Board/BoardTile";
 

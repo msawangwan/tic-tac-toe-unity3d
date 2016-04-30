@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MainCamera : MonoBehaviour {
     public static void SetCameraPosition( ) {
-        Board board = FindObjectOfType<Board>();
+        Grid2D board = FindObjectOfType<Grid2D>();
         bool hasBeenSet = false;
         if (!hasBeenSet) {
             // get references
@@ -11,9 +11,9 @@ public class MainCamera : MonoBehaviour {
             //RectTransform uiCanvas = GameObject.FindGameObjectWithTag(Tags.ui_battle).GetComponent<RectTransform>(); // canvas
             //RectTransform uiImage = GameObject.FindGameObjectWithTag(Tags.ui_battleBottomHUD).GetComponent<RectTransform>(); // bottom ui container (an image element)
             // extract values from references
-            float boardMidpointx = board.BoardCenterPoint.x;
-            float boardMidpointy = board.BoardCenterPoint.y;
-            float boardHeight = board.Height;
+            float boardMidpointx = board.grid2D.CenterPoint.x;
+            float boardMidpointy = board.grid2D.CenterPoint.y;
+            float boardHeight = board.grid2D.yDimension;
             //float uiCanvasHeight = uiCanvas.sizeDelta.y;
             //float uiImageHeight = uiImage.sizeDelta.y;
             // calculate positions

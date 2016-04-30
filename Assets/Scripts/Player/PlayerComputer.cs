@@ -9,15 +9,11 @@ public class PlayerComputer : Player, IPlayerMove {
     // refactor, use more intelligent implementation over 'foreach'
     protected override bool AttemptMove<T>() {
         HasMadeValidMove = false;
-        foreach ( Vector2 move in gameBoard.TileCoordinates ) {
-            if ( gameBoard.TileTable.ContainsKey ( move ) ) {
-                Tile selectedTile = gameBoard.TileTable[move];
-                if ( selectedTile.isAValidMove == true ) {
-                    HasMadeValidMove = VerifyMove( selectedTile );
-                    break;
-                } else {
-                    continue;
-                }
+        foreach ( Vector2 move in gameBoard.grid2D.VertexTable.Keys ) {
+            Tile selectedTile = gameBoard.grid2D.VertexTable[move] as Tile;
+            if ( selectedTile.IsAValidMove == true ) {
+                HasMadeValidMove = VerifyMove ( selectedTile );
+                break;
             }
         }
         return HasMadeValidMove;

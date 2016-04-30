@@ -1,59 +1,91 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 
-public class PlayerConfiguration : IConfigureable {
-    private Dictionary<int,bool> playerTypes;
+public class PlayerConfiguration {
+    private List<PlayerObjectData> playerData;
+    private List<bool> playerControlType;
 
-    public List<IConfig> ObjectConfigData { get; private set; }
+    private int currentGamePlayerCount = 0;
 
-    public PlayerConfiguration( Dictionary<int,bool> playerTypes ) {
-        ObjectConfigData = new List<IConfig> ( );
-        playerTypes = new Dictionary<int , bool> ( );
+    private bool isConfigured;
 
-        ObjectConfigData.Clear ( );
-        playerTypes.Clear ( );
+    /* Constructor takes a list of bools. Each bool 
+        signifies if player is of type 'human' or 'ai' */
+    public PlayerConfiguration( List<bool> playerControlType ) {
+        isConfigured = false;
+        playerData = new List<PlayerObjectData> ( );
+        playerControlType = new List<bool> ( );
 
-        this.playerTypes = playerTypes;
+        playerData.Clear ( );
+        playerControlType.Clear ( );
+
+        this.playerControlType = playerControlType;
     }
 
-    // implements 'IConfigureable'
-    public List<IConfig> Configure() {
-        InstantiatePlayerObjects ( );
-        return ObjectConfigData;
+    /* Returns a copy of the current player data. */
+    public List<PlayerObjectData> GetPlayerData() {
+        if ( isConfigured == false ) { // will be false first time this method is called
+            playerData = InstantiatePlayerObjects ( );
+            isConfigured = true;
+        }
+        return playerData;
     }
 
-    /* Spawn initialised player gameobjects in  
-        the scene and add them to a collection */
-    private void InstantiatePlayerObjects() {
+    /* Instantiate player GameObjects in  
+        the scene and init their data. */
+    private List<PlayerObjectData> InstantiatePlayerObjects () {
+        List<PlayerObjectData> playerDataList = new List<PlayerObjectData>();
+
+        /* Possible player control types. */
         GameObject human = Resources.Load<GameObject> ( ResourcePath.playerHuman );
         GameObject ai = Resources.Load<GameObject> ( ResourcePath.playerAI );
 
-        for ( int id = 0; id < ObjectConfigData.Count; id++ ) {
+        playerDataList.Clear ( );
+
+        for ( int id = 0; id < playerControlType.Count; id++ ) {
             GameObject player;
-            PlayerObjectData newPlayer;
+            Player playerReference; // TODO: if 'player.GetComponent<Player>' works, delete this ref
             bool isHuman;
 
-            if ( playerTypes[id] ) {
+            if ( playerControlType[id] ) {
                 isHuman = true;
                 player = MonoBehaviour.Instantiate<GameObject> ( human );
+                playerReference = player.GetComponent<PlayerHuman> ( );
             } else {
                 isHuman = false;
                 player = MonoBehaviour.Instantiate<GameObject> ( ai );
+                playerReference = player.GetComponent<PlayerComputer> ( );
             }
-            
-            newPlayer = new PlayerObjectData { PlayerObject = player, PlayerReference = player.GetComponent<Player>(), ID = id, IsHuman = isHuman };
-            ObjectConfigData.Add ( newPlayer );
 
-            PlayerContainer.AttachToTransformAsChild ( player );
+            playerReference.InitAsNew ( id );
+
+            if ( player != null ) {
+                PlayerContainer.AttachToTransformAsChild ( player );
+                playerDataList.Add ( new PlayerObjectData ( player , player.GetComponent<Player> ( ) , id , isHuman ) );
+                ++currentGamePlayerCount;
+            } else {
+                Debug.Log ( "[PlayerConfiguration][InstantiatePlayerObjects] GameObject 'player' is null " );
+            }
         }
+        return playerDataList;
     }
 }
+
 /// <summary>
-/// Related sister class
+/// Related sister class:
+/// Small object that packages important player data
 /// </summary>
-public class PlayerObjectData : IConfig {
-    public GameObject PlayerObject { get; set; }
-    public Player PlayerReference { get; set; }
-    public int ID { get; set; }
-    public bool IsHuman { get; set; }
+public class PlayerObjectData {
+    public GameObject PlayerObject { get; private set; }
+    public Player PlayerReference { get; private set; }
+    public int ID { get; private set; }
+    public bool IsHuman { get; private set; }
+
+    public PlayerObjectData ( GameObject playerObject, Player playerReference, int id, bool isHuman ) {
+        PlayerObject = playerObject;
+        PlayerReference = playerReference;
+        ID = id;
+        IsHuman = isHuman;
+    }
 }

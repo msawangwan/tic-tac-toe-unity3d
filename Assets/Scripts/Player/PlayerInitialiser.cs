@@ -13,13 +13,13 @@ public class PlayerInitialiser {
     private Player player1Ref;
     private Player player2Ref;   
     private PlayerTurnStateMachine turnStateMachineRef;
-    private Board gameBoardRef;
+    //private Board gameBoardRef;
 
     private List<Player> players;
 
-    public PlayerInitialiser( IRound newRound, Board boardReference ) {
+    public PlayerInitialiser( IRound newRound ) {
         currentRount = newRound; 
-        gameBoardRef = boardReference;
+        //gameBoardRef = boardReference;
 
         InstantiatePlayers ( );
         InitialisePlayers ( );

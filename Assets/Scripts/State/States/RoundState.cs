@@ -3,13 +3,13 @@ using System;
 using System.Collections;
 
 public class RoundState : IState {
-    private IRound currentRound;
+    private GameRound currentRound;
 
     public bool IsStateExecuting { get; private set; }
 
     private bool gameWonOrQuit;
 
-    public RoundState( IRound newRound ) {
+    public RoundState( GameRound newRound ) {
         currentRound = newRound;
         IsStateExecuting = true;
         gameWonOrQuit = false;
@@ -17,7 +17,7 @@ public class RoundState : IState {
 
     public void EnterState ( ) {
         Debug.Log ( "[PlayState][EnterState] Entering state ... starting a new round " );
-        currentRound.StartNewRound ( currentRound );
+        currentRound.StartNewRound ( );
     }
 
     public void ExecuteState ( ) {

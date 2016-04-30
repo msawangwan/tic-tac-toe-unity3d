@@ -41,7 +41,7 @@ public class GameBoard : IGameBoard, IFadeableGameObject {
 
         boardObject = MonoBehaviour.Instantiate<GameObject> ( new GameObject() );
         boardObject.name = "Board";
-        boardObject.AddComponent<BoardTicTacToe> ( );
+        boardObject.AddComponent<Grid2DTicTacToe> ( );
 
         BoardWidth = width;
         BoardHeight = height;
@@ -77,7 +77,7 @@ public class GameBoard : IGameBoard, IFadeableGameObject {
 
                     tilePrefab.SetActive ( false );
                     tilePrefab.transform.SetParent ( boardObject.transform );
-                    tilePrefab.GetComponent<Tile> ( ).InitState ( );
+                    //tilePrefab.GetComponent<Tile> ( ).InitState ( );
 
                     TileTable.Add ( coordinates[i] , tilePrefab.GetComponent<Tile> ( ) );
                 }
