@@ -6,16 +6,17 @@ using System.Collections.Generic;
 public class PlayerComputer : Player, IPlayerMove {
     public bool HasMadeValidMove { get; private set; }
 
-    private Grid2D gameboard;
+    private Grid2D grid;
 
-    public void InitAi() {
-        gameboard = FindObjectOfType<Grid2D> ( );
+    public override void NewGameState ( ) {
+        base.NewGameState ( );
+        GetGridReferenceForAI ( );
     }
 
     protected override bool AttemptMove<T>() {
         HasMadeValidMove = false;
-        foreach ( Transform v in gameboard.Grid2DData.GridObject.transform ) {         
-            if ( v.GetComponent<GridInteractableObject>( ).IsUnMarked( ) ) {
+        foreach ( Transform v in grid.Grid2DData.GridObject.transform ) {         
+            if ( v.GetComponent<Grid2DInteractable>( ).IsUnMarked( ) ) {
                 HasMadeValidMove = VerifyMove ( v.transform, Color.red );
                 break;
             }
@@ -25,11 +26,15 @@ public class PlayerComputer : Player, IPlayerMove {
 
     // base class needs an instance of 'endTurnEvent'
     protected override PlayerTurnExitEvent MadeValidMove ( ) {
-        Logger.DebugToConsole ( "PlayerComputer", "MadeValidMove", "Ending turn." );
         Player opponentPlayer = FindObjectOfType<PlayerHuman>();
         IPlayer nextPlayer = opponentPlayer.GetComponent<IPlayer>();
         IPlayerTurn nextPlayerTurn = opponentPlayer.GetComponent<IPlayerTurn>();
 
         return new PlayerTurnExitEvent ( nextPlayer, nextPlayerTurn );
     }
+
+    private void GetGridReferenceForAI ( ) {
+        grid = FindObjectOfType<Grid2D> ( );
+    }
+
 }

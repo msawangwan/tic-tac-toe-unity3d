@@ -26,15 +26,13 @@ public class LoadingTransition : IStateTransition {
 
     public IEnumerable BeginTransition ( ) {
         HasTriggered = true;
-        Debug.Log ( "[Loading Transition][Begin Transition] Transition starting ... " );
         if (loadTransition != null) {
             yield return loadTransition.GetEnumerator ( );
-            yield return new WaitForSeconds ( .8f );
+            yield return null;
         } else {
             yield return new WaitForEndOfFrame ( );
         }
         HasCompleted = true;
-        Debug.Log ( "[Loading Transition][Begin Transition] Transition complete ... " );
     }
 
     private void InitBools ( ) {

@@ -9,8 +9,8 @@ public class PlayerHuman : Player, IPlayerMove {
         HasMadeValidMove = false;
         if ( Input.GetMouseButtonDown ( 0 ) ) {
             T hitComponent = HitComponent<T>() as T;
-            if ( hitComponent != null && hitComponent is GridInteractableObject ) {
-                GridInteractableObject selected = hitComponent as GridInteractableObject;
+            if ( hitComponent != null && hitComponent is Grid2DInteractable ) {
+                Grid2DInteractable selected = hitComponent as Grid2DInteractable;
                 if ( selected.IsUnMarked ( ) ) {
                     HasMadeValidMove = VerifyMove( selected.transform, Color.blue );
                 }
@@ -21,7 +21,6 @@ public class PlayerHuman : Player, IPlayerMove {
 
     // base class needs an instance of 'endTurnEvent'
     protected override PlayerTurnExitEvent MadeValidMove ( ) {
-        Logger.DebugToConsole ( "PlayerHuman", "MadeValidMove", "Ending turn." );
         Player opponentPlayer = FindObjectOfType<PlayerComputer>();
         IPlayer nextPlayer = opponentPlayer.GetComponent<IPlayer>();
         IPlayerTurn nextPlayerTurn = opponentPlayer.GetComponent<IPlayerTurn>();

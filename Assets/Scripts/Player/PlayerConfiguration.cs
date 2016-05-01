@@ -2,6 +2,13 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Configures a player.
+/// 
+/// A player can be either human or AI - this class is accompanied
+/// by a sister class PlayerObjectData which acts as a data container
+/// that wraps the important player references.
+/// </summary>
 public class PlayerConfiguration {
     private List<PlayerObjectData> playerData;
     private List<bool> playerControlType;
@@ -69,6 +76,14 @@ public class PlayerConfiguration {
             }
         }
         return playerDataList;
+    }
+
+    /* Static method, on call will return a new turn-based state machine. */
+    public static PlayerTurnSystem InstantiatePlayerTurnBasedMachine () {
+        GameObject turnMachine = new GameObject("Player Turn System");
+        PlayerContainer.AttachToTransformAsChild ( turnMachine );
+
+        return turnMachine.AddComponent<PlayerTurnSystem> ( );
     }
 }
 

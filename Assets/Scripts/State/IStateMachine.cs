@@ -3,5 +3,5 @@ using System.Collections;
 
 public interface IStateMachine {
     bool isExecuting { get; }
-    void InitStateMachine ( IState initialState );
+    void SetInitialState ( IState initialState );
 }

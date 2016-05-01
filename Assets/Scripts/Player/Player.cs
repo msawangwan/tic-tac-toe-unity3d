@@ -13,7 +13,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     private bool isInGame = false;
 
     /* Substitute for constructor, call on GameObject instantiantion. */
-    public void InitAsNew ( int id ) {
+    public virtual void InitAsNew ( int id ) {
         PlayerByID = id;
         isInGame = false;
 
@@ -21,9 +21,9 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         IsWinner = false;
     }
 
-    /* Resets player to fresh state for a new round. Initialises
-        moves. Allows player to persist between rounds. */
-    public void NewGameState ( ) {
+    /* Call on start of each round! Resets player to fresh state for 
+        a new round. Initialises moves. Allows player to persist between rounds. */
+    public virtual void NewGameState ( ) {
         isInGame = true;
         IsWinner = false;
 
@@ -45,7 +45,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         Debug.Log ( "Take Turn " + gameObject.name + " " + IsWinner + " " + IsTurnActive + " " + isInGame );
         if (IsWinner == false) { // game is live branch
             if ( IsTurnActive )
-                if ( AttemptMove<GridInteractableObject> ( ) )
+                if ( AttemptMove<Grid2DInteractable> ( ) )
                     return true;
         } else {                 // game is over branch
             RoundOverState ( );
@@ -70,7 +70,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     /* When Player selects a Vector2 represented as a tile on the gameboard, this method checks 
         to see if the selection is a valid move against a table of precomputed Vector2s. */
     protected bool VerifyMove ( Transform vertex2D, Color player ) {
-        if ( vertex2D.GetComponent<GridInteractableObject>( ) ) {
+        if ( vertex2D.GetComponent<Grid2DInteractable>( ) ) {
             vertex2D.GetComponent<Grid2DTile>().MarkBycolor( player );
             validMoves.IncrementMove ( vertex2D.transform.position );
             if ( validMoves.CheckForTicTacToe ( ) ) {

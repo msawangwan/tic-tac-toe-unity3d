@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GridContainer : MonoBehaviour {
+public class Grid2DContainer : MonoBehaviour {
     public static void AttachToTransformAsChild ( GameObject gridGameObject ) {
         if ( gridGameObject.GetComponent<Grid2D> ( ) ) {
-            GridContainer container = FindObjectOfType<GridContainer> ( );
+            Grid2DContainer container = FindObjectOfType<Grid2DContainer> ( );
             gridGameObject.transform.SetParent ( container.transform );
         }
     }

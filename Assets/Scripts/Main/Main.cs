@@ -9,6 +9,6 @@ public class Main : MonoBehaviour {
 
 	private void Start () {
         statemachine = FindObjectOfType<StateMachine> ( );
-        statemachine.InitStateMachine ( new LoadApplicationState());
+        statemachine.SetInitialState ( new LoadApplicationState());
     }
 }

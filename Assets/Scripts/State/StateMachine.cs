@@ -18,8 +18,8 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
 
     public bool isExecuting { get; private set; }
 
-    // use as constructor
-    public void InitStateMachine ( IState initialState ) {
+    /* Set the first state the State Machine will run on start. */
+    public void SetInitialState ( IState initialState ) {
         isExecuting = true;      
         newState = initialState;
         Debug.Log ( "[StateMachine][InitStateMachine] State Machine Initialised. " );

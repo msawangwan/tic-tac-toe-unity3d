@@ -2,7 +2,7 @@
 using UnityEngine.Assertions;
 using System.Collections;
 
-public class PlayerTurnStateMachine : MonoBehaviour {
+public class PlayerTurnSystem : MonoBehaviour {
     private IRound currentRound;
 
     private IPlayer movingPlayer;
@@ -10,6 +10,9 @@ public class PlayerTurnStateMachine : MonoBehaviour {
 
     private IPlayerTurn turnCurrent;
     private IPlayerTurn turnNext;
+
+    /* Everytime the movingPlayer variable is updated, the value is
+        piped through this setter to add a listener to the new value. */
     private IPlayerTurn setTurnCurrent {
         set {
             turnCurrent = value;
@@ -20,28 +23,27 @@ public class PlayerTurnStateMachine : MonoBehaviour {
 
     public bool IsExecuting { get; private set; }
 
-    // use as constructor
-    public void InitPlayerPlayMachine ( IRound newRound, Player startingPlayer ) {
+    /* Call this method before starting the first turn, as this initializes the necessarry
+        local variables. */
+    public void SetStartingPlayer ( IRound newRound, Player startingPlayer ) {
         currentRound = newRound;
         movingPlayer = startingPlayer.GetComponent<IPlayer> ( );
         setTurnCurrent = startingPlayer.GetComponent<IPlayerTurn> ( );
-        Debug.Log ( "INIT" + IsExecuting );
-
     }
 
+    /* No turns will be processed until this method call. */
     public void StartFirstTurn() {
         IsExecuting = true;
-        Debug.Log ( "StartFirstTurn" + IsExecuting );
     }
 
+    /* Event handler, fires on end of any players turn. */
     public void HandlePlayerTurnExitEvent ( PlayerTurnExitEvent exitTurnEvent ) { // fires event and notifies any listeners
         idlePlayer = exitTurnEvent.NextPlayer;
         turnNext = exitTurnEvent.NextPlayerMove;
     }
 
-    // TODO: better way to check for end of round?
+    /* Loop until IsExecuting is False. */
     private void Update ( ) {
-        Debug.Log ( "UPDATE" + IsExecuting );
         if ( IsExecuting ) {
             CheckForEndOfRound ( );
             Debug.Log ( movingPlayer.GetType ( ).ToString ( ) );
@@ -70,6 +72,7 @@ public class PlayerTurnStateMachine : MonoBehaviour {
         }
     }
 
+    /* Win condition check. */
     private void CheckForEndOfRound() {
         if ( IsExecuting == false && (movingPlayer.IsWinner == true || idlePlayer.IsWinner == true ) ) {
             currentRound.EndCurrentRound ( );

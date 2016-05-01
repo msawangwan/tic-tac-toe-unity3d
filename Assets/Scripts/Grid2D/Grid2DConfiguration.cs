@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// grid data. Use with a Grid2D Component to create a visual representation
 /// of the 2Dgrid in a Unity3D scene.
 /// </summary>
-public class Grid2DConfiguration : IConfigureable {
+public class Grid2DConfiguration {
     private GameObject grid2DObject;
 
     private Vector2[] vertices;
@@ -60,7 +60,7 @@ public class Grid2DConfiguration : IConfigureable {
         grid2DObject = new GameObject ( "Grid2D" );
         grid2DObject.AddComponent<Grid2D> ( );
         
-        GridContainer.AttachToTransformAsChild ( grid2DObject );
+        Grid2DContainer.AttachToTransformAsChild ( grid2DObject );
 
         CalculateVerticies ( );
         FillVerticies ( grid2DObject );
