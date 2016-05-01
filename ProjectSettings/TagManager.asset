@@ -7,13 +7,13 @@ TagManager:
   - ui_Canvas_UI
   - ui_Panel_MainMenu
   - ui_Btn_StartNewGame
-  - manager_game
-  - manager_player
-  - manager_board
   - ui_Panel_RoundOverMenu
   - ui_Btn_ReturnToMainMenu
   - ui_Btn_ToggleSettingsMenu
-  - gameplay_Grid2D_TicTacToeBoard
+  - ui_Txt_MenuSubHeader
+  - manager_game
+  - manager_player
+  - manager_board
   layers:
   - Default
   - TransparentFX

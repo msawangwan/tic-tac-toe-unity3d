@@ -2,14 +2,14 @@
 using System;
 using System.Collections;
 
-public class EndOfGameState : IState {
+public class RoundEndState : IState {
     private UserInterfaceMenu menu;
 
     public bool IsStateExecuting { get; private set; }
 
-    public EndOfGameState() {
+    public RoundEndState( GameRound round ) {
         IsStateExecuting = true;
-        menu = new EndOfRoundMenu ( );
+        menu = new EndOfRoundMenu ( round.RoundWinner );
         menu.buttonEvent.RaiseUIEvent += OnUIButtonEvent;
     }
 
@@ -17,15 +17,11 @@ public class EndOfGameState : IState {
         menu.MakeActiveInScene ( );
     }
     
-    public void ExecuteState ( ) {
-        if ( IsStateExecuting ) {
-
-        }
-    }
+    public void ExecuteState ( ) { if ( IsStateExecuting ) { } return; }
 
     public event Action<StateBeginExitEvent> RaiseStateChangeEvent;
 
-    // signature of a UI reference defined event -- called when 'buttonEvent' action fires, which then calls 'IState" event 'RaiseStateChangeEvent'
+    /* Handler method for when a UI button is selected. */
     private void OnUIButtonEvent( StateBeginExitEvent nextStateParameters ) {
         IsStateExecuting = false;
 

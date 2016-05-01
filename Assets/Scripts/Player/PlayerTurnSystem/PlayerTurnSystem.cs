@@ -75,7 +75,16 @@ public class PlayerTurnSystem : MonoBehaviour {
     /* Win condition check. */
     private void CheckForEndOfRound() {
         if ( IsExecuting == false && (movingPlayer.IsWinner == true || idlePlayer.IsWinner == true ) ) {
-            currentRound.EndCurrentRound ( );
+
+            // TODO find a better way
+            string winner = "";
+            if (movingPlayer.IsWinner) {
+                winner = movingPlayer.PlayerName;
+            } else {
+                winner = idlePlayer.PlayerName;
+            }
+
+            currentRound.EndCurrentRound ( winner );
             Destroy ( gameObject );
         }
     }

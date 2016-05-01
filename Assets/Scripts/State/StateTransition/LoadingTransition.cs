@@ -24,6 +24,7 @@ public class LoadingTransition : IStateTransition {
         MonoBehaviour.Destroy ( objectToDestroy );
     }
 
+    /* Implements IStateTransition. This sends an enumerator to the state machine. */
     public IEnumerable BeginTransition ( ) {
         HasTriggered = true;
         if (loadTransition != null) {
@@ -35,6 +36,7 @@ public class LoadingTransition : IStateTransition {
         HasCompleted = true;
     }
 
+    /* Sets the bools to an initial state. */
     private void InitBools ( ) {
         HasTriggered = false;
         HasCompleted = false;

@@ -7,11 +7,11 @@ public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
     public bool IsUnmarked { get; private set; }
 
     private SpriteRenderer sprite;
-    private Color defaultColor = Color.white;
     private Color alpha;
 
     private bool isDrawn;
 
+    /* Call on Attaching component to a GameObject. */
     public void InitOnStart ( ) {
         gameObject.SetActive ( false );
 
@@ -20,7 +20,8 @@ public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
         fadeTime = 25.5f;
     }
 
-    public void MarkBycolor ( Color c ) {
+    /* Sets tile color to players color. */
+    public void MarkByPlayerColor ( Color c ) {
         sprite.color = c;
     }
 
@@ -52,6 +53,7 @@ public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
         Destroy ( gameObject );
     }
 
+    /* Sets the sprite alpha to 0. */
     private void SetTransparencyZero ( ) {
         isDrawn = false;
 
@@ -60,6 +62,7 @@ public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
         sprite.color = new Color ( alpha.r , alpha.g , alpha.b , alpha.a );
     }
 
+    /* Attaches a sprite to the GameObject. */
     private void SetSprite() {
         Sprite s = Resources.Load<Sprite> ( ResourcePath.grid2DTileBasic );
 

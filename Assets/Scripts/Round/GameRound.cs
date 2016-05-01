@@ -12,6 +12,8 @@ public class GameRound : IRound {
     private PlayerObjectData p2Data;
     private List<PlayerObjectData> playerData;
 
+    public string RoundWinner { get; private set; }
+
     public IEnumerable LoadedTransitionIntroAsset { get; private set; }
     public IEnumerable LoadedTransitionOutroAsset { get; private set; }
 
@@ -26,14 +28,18 @@ public class GameRound : IRound {
 
     public void StartNewRound() {
         IsGameOver = false;
+        RoundWinner = "";
+
         foreach ( PlayerObjectData p in playerData ) {
             p.PlayerReference.NewGameState ( );
         }
+
         turnMachine.StartFirstTurn ( );
     }
 
-    public void EndCurrentRound() {
+    public void EndCurrentRound ( string winner ) {
         IsGameOver = true;
+        RoundWinner = winner;
     }
 
     public void LoadNewGrid ( ) {

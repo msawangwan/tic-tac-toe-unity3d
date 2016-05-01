@@ -80,7 +80,6 @@ public class Grid2DConfiguration {
 
         int boardDimensions = vertices.Length;
         for ( int i = 0; i < boardDimensions; i++ ) {
-            //this.v = MonoBehaviour.Instantiate<GameObject> (new GameObject ( ));
             GameObject vObj = new GameObject ( "vertex " + i );
             Grid2DVertex vRef = vObj.AddComponent<Grid2DVertex> ( );
 

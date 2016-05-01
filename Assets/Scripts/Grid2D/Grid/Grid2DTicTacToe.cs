@@ -6,6 +6,7 @@ using System;
 public class Grid2DTicTacToe : MonoBehaviour, IFadeableGameObject {
     public float fadeTime { get; private set; }
 
+    /* Attaches two components to each vertex of the grid. */
     public void LayTilesOnGrid ( ) {
         foreach ( Transform v in transform ) {
             Grid2DTile t = v.gameObject.AddComponent<Grid2DTile> ( );
@@ -16,7 +17,9 @@ public class Grid2DTicTacToe : MonoBehaviour, IFadeableGameObject {
         }
     }
 
-    /* Can either yield an enumerator OR StartCoroutine, and in both cases, yield again. 
+    /* Call this method only after LayTilesOnGrid has been called.
+
+        Can either yield an enumerator OR StartCoroutine, and in both cases, yield again. 
         Currently yielding WairForSeconds but try experimenting with other options. */
     public IEnumerable DrawTiles ( ) {
         foreach ( Transform v in transform ) {
@@ -27,7 +30,7 @@ public class Grid2DTicTacToe : MonoBehaviour, IFadeableGameObject {
 
     /* Implements IFadeableGameObject. 
     
-        Fades tiles and deletes the grid GameObject once the last tile has an alpha of 0. */
+        Fades tiles and destroys the grid GameObject once the last tile has an alpha of 0. */
     public IEnumerable FadeIn ( ) { yield return null; }
     public IEnumerable FadeOut ( ) {
         while (transform.childCount > 0) {
