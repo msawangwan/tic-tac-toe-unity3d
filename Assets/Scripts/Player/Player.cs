@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System;
 
-//protected PlayerTurnExitEvent endTurnEvent;
 public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     public int PlayerByID { get; private set; }
 
+    public string PlayerName { get; private set; }
     public bool IsTurnActive { get; private set; }
     public bool IsWinner { get; private set; }
 
@@ -13,8 +13,10 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     private bool isInGame = false;
 
     /* Substitute for constructor, call on GameObject instantiantion. */
-    public virtual void InitAsNew ( int id ) {
+    public virtual void InitAsNew ( int id, string playerName ) {
         PlayerByID = id;
+        PlayerName = playerName;
+
         isInGame = false;
 
         IsTurnActive = false;
@@ -33,6 +35,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     public void RoundOverState () {
         isInGame = false;
         IsTurnActive = false;
+        string playerName = gameObject.name;
     }
 
     public void EnterTurn ( ) {
@@ -71,7 +74,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         to see if the selection is a valid move against a table of precomputed Vector2s. */
     protected bool VerifyMove ( Transform vertex2D, Color player ) {
         if ( vertex2D.GetComponent<Grid2DInteractable>( ) ) {
-            vertex2D.GetComponent<Grid2DTile>().MarkBycolor( player );
+            vertex2D.GetComponent<Grid2DTile>().MarkByPlayerColor( player );
             validMoves.IncrementMove ( vertex2D.transform.position );
             if ( validMoves.CheckForTicTacToe ( ) ) {
                 IsWinner = true;

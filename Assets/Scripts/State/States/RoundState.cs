@@ -38,7 +38,7 @@ public class RoundState : IState {
     public event Action<StateBeginExitEvent> RaiseStateChangeEvent;
 
     private void OnGameOver ( ) {
-        IState nextState = new EndOfGameState();
+        IState nextState = new RoundEndState( round );
         IStateTransition transition = new LoadingTransition( round.LoadedTransitionOutroAsset );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
 

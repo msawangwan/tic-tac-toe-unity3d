@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LoadRoundState : IState {
+public class RoundLoadState : IState {
     public bool IsStateExecuting { get; private set; }
 
     private Ticker loadingCountdown;
@@ -16,7 +16,7 @@ public class LoadRoundState : IState {
     private bool hasGameLoaded = false;
 
     /* Constructor. */
-    public LoadRoundState( float loadTime ) {
+    public RoundLoadState( float loadTime ) {
         IsStateExecuting = true;
         hasGameLoaded = false;
 

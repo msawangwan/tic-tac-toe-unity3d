@@ -2,15 +2,31 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EndOfRoundMenu : UserInterfaceMenu, IUIEvent {
-    public EndOfRoundMenu() : base() {
+public class EndOfRoundMenu : UserInterfaceMenu, IUIEvent, ITextOutput {
+    private string winningPlayer = " won the round !";
+
+    /* Constructor. */
+    public EndOfRoundMenu( string winningPlayerByName ) : base() {
         buttonEvent = this;
 
         menuObject = MonoBehaviour.Instantiate<GameObject> ( Resources.Load<GameObject> ( ResourcePath.roundOverMenu ) );
         menuObject.SetActive ( false );
         menuObject.transform.SetParent ( uiCanvasReference.transform, false );
 
+        winningPlayer = winningPlayerByName + winningPlayer;
+
         FindButtonsInChildren ( );
+        MapText ( );
+    }
+
+    public void MapText ( ) {
+        Text[] txts = menuObject.GetComponentsInChildren<Text>( true );
+        foreach ( Text txt in txts ) {
+            if (txt.CompareTag(TagsUI.menuSubHeader)) {
+                txt.text = winningPlayer;
+                break;
+            }
+        }
     }
 
     public event Action<StateBeginExitEvent> RaiseUIEvent;
@@ -21,7 +37,7 @@ public class EndOfRoundMenu : UserInterfaceMenu, IUIEvent {
                 btn.onClick.RemoveAllListeners ( );
                 btn.onClick.AddListener ( ( ) => {
                     float fadeTime = 1.8f;
-                    IState nextState = new LoadRoundState ( fadeTime );
+                    IState nextState = new RoundLoadState ( fadeTime );
                     IStateTransition transition = new MenuExitTransition ( menuObject );
                     StateBeginExitEvent newRoundState = new StateBeginExitEvent ( nextState, transition );
                     RaiseUIEvent ( newRoundState );
@@ -42,4 +58,5 @@ public class EndOfRoundMenu : UserInterfaceMenu, IUIEvent {
             }
         }
     }
+
 }

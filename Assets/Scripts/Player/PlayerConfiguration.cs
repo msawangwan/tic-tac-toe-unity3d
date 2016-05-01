@@ -54,22 +54,25 @@ public class PlayerConfiguration {
             GameObject player;
             Player playerReference; // TODO: if 'player.GetComponent<Player>' works, delete this ref
             bool isHuman;
+            string playerName = "";
 
             if ( playerControlType[id] ) {
                 isHuman = true;
                 player = MonoBehaviour.Instantiate<GameObject> ( human );
                 playerReference = player.GetComponent<PlayerHuman> ( );
+                playerName = "Human";
             } else {
                 isHuman = false;
                 player = MonoBehaviour.Instantiate<GameObject> ( ai );
                 playerReference = player.GetComponent<PlayerComputer> ( );
+                playerName = "The AI";
             }
 
-            playerReference.InitAsNew ( id );
+            //playerReference.InitAsNew ( id , "DELETE MEEEEEE" );
 
             if ( player != null ) {
                 PlayerContainer.AttachToTransformAsChild ( player );
-                playerDataList.Add ( new PlayerObjectData ( player , player.GetComponent<Player> ( ) , id , isHuman ) );
+                playerDataList.Add ( new PlayerObjectData ( player , player.GetComponent<Player> ( ) , id , isHuman, playerName ) );
                 ++currentGamePlayerCount;
             } else {
                 Debug.Log ( "[PlayerConfiguration][InstantiatePlayerObjects] GameObject 'player' is null " );
@@ -96,13 +99,15 @@ public class PlayerObjectData {
     public Player PlayerReference { get; private set; }
     public int ID { get; private set; }
     public bool IsHuman { get; private set; }
+    public string PlayerName { get; private set; }
 
-    public PlayerObjectData ( GameObject playerObject, Player playerReference, int id, bool isHuman ) {
+    public PlayerObjectData ( GameObject playerObject, Player playerReference, int id, bool isHuman, string pname ) {
         PlayerObject = playerObject;
         PlayerReference = playerReference;
         ID = id;
         IsHuman = isHuman;
+        PlayerName = pname;
 
-        playerReference.InitAsNew ( ID );
+        playerReference.InitAsNew ( ID, PlayerName );
     }
 }

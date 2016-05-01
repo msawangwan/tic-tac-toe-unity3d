@@ -3,7 +3,7 @@ using UnityEngine.Assertions;
 using System;
 using System.Collections;
 
-public class LoadApplicationState :  IState {
+public class ApplicationLoadState :  IState {
     private float loadTicks = 0;
     private float currentStopwatchTick = 0;
     private Ticker stopwatch;
@@ -12,7 +12,7 @@ public class LoadApplicationState :  IState {
 
     public bool IsStateExecuting { get; private set; }
 
-    public LoadApplicationState() {
+    public ApplicationLoadState() {
         IsStateExecuting = true;
         loadTicks = 1.5f;
         float interval = .5f;
