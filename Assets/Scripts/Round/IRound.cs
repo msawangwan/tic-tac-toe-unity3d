@@ -3,6 +3,6 @@ using System.Collections;
 
 public interface IRound {
     bool IsGameOver { get; }
-    void StartNewRound ( IRound round );
+    void StartNewRound ( );
     void EndCurrentRound ( );
 }

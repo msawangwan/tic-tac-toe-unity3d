@@ -47,7 +47,6 @@ GameObject:
   - 222: {fileID: 22236932}
   - 114: {fileID: 11483892}
   - 225: {fileID: 22558610}
-  - 114: {fileID: 11478988}
   m_Layer: 5
   m_Name: Panel_MainMenu
   m_TagString: ui_Panel_MainMenu
@@ -105,7 +104,7 @@ GameObject:
   - 114: {fileID: 11406402}
   m_Layer: 5
   m_Name: Button_Settings
-  m_TagString: Untagged
+  m_TagString: ui_Btn_ToggleSettingsMenu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -440,17 +439,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11478988
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 130996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e70734999ca365049af924171d12cced, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11481746
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -768,7 +756,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 800, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22491614
 RectTransform:

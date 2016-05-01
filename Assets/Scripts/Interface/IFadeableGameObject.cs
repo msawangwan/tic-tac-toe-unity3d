@@ -2,5 +2,8 @@
 using System.Collections;
 
 public interface IFadeableGameObject {
-    IEnumerable FadeOut ( float fadeMultiplier );
+    float fadeTime { get; }
+
+    IEnumerable FadeIn ( );
+    IEnumerable FadeOut ( );
 }

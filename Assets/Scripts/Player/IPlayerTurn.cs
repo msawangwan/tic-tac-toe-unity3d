@@ -9,5 +9,5 @@ public interface IPlayerTurn {
     bool TakeTurn ( );
     void ExitTurn ( );
 
-    event Action<PlayerTurnExitEvent> ExitTurnEvent;
+    event Action<PlayerTurnExitEvent> RaiseTurnCompletedEvent;
 }

@@ -1,46 +1,78 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameRound : IRound {
-    private GameObject gameBoardObj;
-    // TODO: implement boardInitialiser class??
-    private BoardManager boardManager;
-    private Board gameBoardRef;
+    private Grid2DObjectData gridData;
 
-    private PlayerInitialiser playerInitialiser;
+    private List<bool> controlTypeOfPlayer = new List<bool> ( );
 
-    private int boardWidth = 3;
-    private int boardHeight = 3;
+    private PlayerTurnSystem turnMachine;
+    private PlayerObjectData p1Data;
+    private PlayerObjectData p2Data;
+    private List<PlayerObjectData> playerData;
+
+    public IEnumerable LoadedTransitionIntroAsset { get; private set; }
+    public IEnumerable LoadedTransitionOutroAsset { get; private set; }
 
     public bool IsGameOver { get; private set; }
 
-    public static GameRound LoadNewRound ( ) {
-        return new GameRound ( );
+    /* Constructor */
+    public GameRound() { }
+
+    public void AddPlayerControlType ( bool pType ) {
+        controlTypeOfPlayer.Add ( pType );
     }
 
-    public void StartNewRound(IRound roundToStart) {
+    public void StartNewRound() {
         IsGameOver = false;
-        gameBoardRef.CreateBoard ( gameBoardObj , gameBoardRef , boardManager , boardWidth , boardHeight );
-        playerInitialiser = new PlayerInitialiser ( roundToStart, gameBoardRef );
-        playerInitialiser.PlayersReadyStartRound ( );
-        MainCamera.SetCameraPosition ( );
+        foreach ( PlayerObjectData p in playerData ) {
+            p.PlayerReference.NewGameState ( );
+        }
+        turnMachine.StartFirstTurn ( );
     }
 
     public void EndCurrentRound() {
         IsGameOver = true;
     }
 
-    public GameObject FetchBoardObjectRefernce () {
-        if ( gameBoardObj )
-            return gameBoardObj;
-        return null;
+    public void LoadNewGrid ( ) {
+        InstantiateGrid ( );
+        InstantiateGridTiles ( );
+
+        MainCamera.SetCameraPosition ( gridData.GridReference );
     }
 
-    // private constructor, called when an instance is instantiated via static method
-    private GameRound() {
-        boardManager = MonoBehaviour.FindObjectOfType<BoardManager> ( );
-        gameBoardObj = MonoBehaviour.Instantiate<GameObject> ( Resources.Load<GameObject> ( ResourcePath.board ) );
-        gameBoardObj.transform.SetParent ( boardManager.transform );
-        gameBoardRef = gameBoardObj.GetComponent<Board> ( );
+    public void LoadPlayers ( ) {
+        playerData = new List<PlayerObjectData> ( );
+        playerData.Clear ( );
+
+        PlayerConfiguration playerConfig = DataInstantiator.GetNewInstance( () => new PlayerConfiguration ( controlTypeOfPlayer ) );
+
+        playerData = playerConfig.GetPlayerData ( );
+        p1Data = playerData[0];
+        p2Data = playerData[1];
+    }
+
+    public void LoadTurns ( ) {
+        turnMachine = PlayerConfiguration.InstantiatePlayerTurnBasedMachine ( );
+
+        int coinFlip = UnityEngine.Random.Range( 0, 2 );
+        if ( coinFlip == 0 )
+            turnMachine.SetStartingPlayer ( this , p1Data.PlayerReference );
+        else
+            turnMachine.SetStartingPlayer ( this , p2Data.PlayerReference );
+    }
+
+    private void InstantiateGrid ( ) {
+        Grid2DConfiguration gridConfig = DataInstantiator.GetNewInstance( () => new Grid2DConfiguration (3, 3));
+        gridData = gridConfig.GetGrid2DData ( );
+    }
+
+    private void InstantiateGridTiles ( ) {
+        Grid2DTicTacToe grid = gridData.GridObject.AddComponent<Grid2DTicTacToe> ( );
+        grid.LayTilesOnGrid ( );
+        LoadedTransitionIntroAsset = grid.DrawTiles ( ); // .34f
+        LoadedTransitionOutroAsset = grid.FadeOut ( );
     }
 }
