@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public interface IGameBoard {
-    Dictionary<Vector2 , Tile> TileTable { get; }
+    Dictionary<Vector2 , Grid2DTile> TileTable { get; }
     Vector2 BoardCenterPoint { get; }
 
     int BoardWidth { get; }

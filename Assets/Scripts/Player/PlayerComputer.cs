@@ -6,13 +6,17 @@ using System.Collections.Generic;
 public class PlayerComputer : Player, IPlayerMove {
     public bool HasMadeValidMove { get; private set; }
 
-    // refactor, use more intelligent implementation over 'foreach'
+    private Grid2D gameboard;
+
+    public void InitAi() {
+        gameboard = FindObjectOfType<Grid2D> ( );
+    }
+
     protected override bool AttemptMove<T>() {
         HasMadeValidMove = false;
-        foreach ( Vector2 move in gameBoard.grid2D.VertexTable.Keys ) {
-            Tile selectedTile = gameBoard.grid2D.VertexTable[move] as Tile;
-            if ( selectedTile.IsAValidMove == true ) {
-                HasMadeValidMove = VerifyMove ( selectedTile );
+        foreach ( Transform v in gameboard.Grid2DData.GridObject.transform ) {         
+            if ( v.GetComponent<GridInteractableObject>( ).IsUnMarked( ) ) {
+                HasMadeValidMove = VerifyMove ( v.transform, Color.red );
                 break;
             }
         }

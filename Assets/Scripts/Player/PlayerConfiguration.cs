@@ -12,7 +12,7 @@ public class PlayerConfiguration {
 
     /* Constructor takes a list of bools. Each bool 
         signifies if player is of type 'human' or 'ai' */
-    public PlayerConfiguration( List<bool> playerControlType ) {
+    public PlayerConfiguration( List<bool> controlType ) {
         isConfigured = false;
         playerData = new List<PlayerObjectData> ( );
         playerControlType = new List<bool> ( );
@@ -20,7 +20,7 @@ public class PlayerConfiguration {
         playerData.Clear ( );
         playerControlType.Clear ( );
 
-        this.playerControlType = playerControlType;
+        playerControlType = controlType;
     }
 
     /* Returns a copy of the current player data. */
@@ -87,5 +87,7 @@ public class PlayerObjectData {
         PlayerReference = playerReference;
         ID = id;
         IsHuman = isHuman;
+
+        playerReference.InitAsNew ( ID );
     }
 }

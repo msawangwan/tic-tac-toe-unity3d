@@ -3,34 +3,36 @@ using System;
 using System.Collections;
 
 public class RoundState : IState {
-    private GameRound currentRound;
+    private GameRound round;
 
     public bool IsStateExecuting { get; private set; }
 
     private bool gameWonOrQuit;
 
     public RoundState( GameRound newRound ) {
-        currentRound = newRound;
-        IsStateExecuting = true;
         gameWonOrQuit = false;
+        round = newRound;
+        round.LoadPlayers ( );
+        round.LoadTurns ( );
     }
 
     public void EnterState ( ) {
-        Debug.Log ( "[PlayState][EnterState] Entering state ... starting a new round " );
-        currentRound.StartNewRound ( );
+        Debug.Log ( "[RoundState][EnterState] Entering state ... starting a new round " );
+        round.StartNewRound ( );
+        IsStateExecuting = true;
     }
 
     public void ExecuteState ( ) {
-        Debug.Log ( "[PlayState][ExecuteState] Executing state ...  " );
+        Debug.Log ( "[RoundState][ExecuteState] Executing state ...  " );
         if ( gameWonOrQuit == false ) {
-            if ( currentRound.IsGameOver == false )
+            if ( round.IsGameOver == false )
                 return;
             else
                 gameWonOrQuit = true;
         }
 
         if ( gameWonOrQuit ) {
-            Debug.Log ( "[PlayState][ExecuteState] Game over... notify of exit event! " );
+            Debug.Log ( "[RoundState][ExecuteState] Game over... notify of exit event! " );
             OnGameOver ( );
         }
     }
@@ -40,7 +42,7 @@ public class RoundState : IState {
     private void OnGameOver ( ) {
         Debug.Log ( "[PlayState][HandleOnTerminatePlay] Exiting state." );
         IState nextState = new EndOfGameState();
-        IStateTransition transition = new EndGameTransition( currentRound );
+        IStateTransition transition = new EndGameTransition( round );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
 
         if ( RaiseStateChangeEvent != null ) {

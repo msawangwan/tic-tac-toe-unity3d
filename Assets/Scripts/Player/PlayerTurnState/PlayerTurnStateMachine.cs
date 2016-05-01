@@ -18,18 +18,20 @@ public class PlayerTurnStateMachine : MonoBehaviour {
         }
     }
 
-    public bool isExecuting { get; private set; }
+    public bool IsExecuting { get; private set; }
 
     // use as constructor
     public void InitPlayerPlayMachine ( IRound newRound, Player startingPlayer ) {
         currentRound = newRound;
         movingPlayer = startingPlayer.GetComponent<IPlayer> ( );
         setTurnCurrent = startingPlayer.GetComponent<IPlayerTurn> ( );
+        Debug.Log ( "INIT" + IsExecuting );
+
     }
 
-    // called by 'GameRound'
-    public void StartNewRound() {
-        isExecuting = true;
+    public void StartFirstTurn() {
+        IsExecuting = true;
+        Debug.Log ( "StartFirstTurn" + IsExecuting );
     }
 
     public void HandlePlayerTurnExitEvent ( PlayerTurnExitEvent exitTurnEvent ) { // fires event and notifies any listeners
@@ -39,15 +41,16 @@ public class PlayerTurnStateMachine : MonoBehaviour {
 
     // TODO: better way to check for end of round?
     private void Update ( ) {
-        CheckForEndOfRound ( );
-
-        if ( isExecuting ) {
+        Debug.Log ( "UPDATE" + IsExecuting );
+        if ( IsExecuting ) {
+            CheckForEndOfRound ( );
+            Debug.Log ( movingPlayer.GetType ( ).ToString ( ) );
             if ( turnCurrent.IsTurnActive ) {
                 if ( turnCurrent.TakeTurn ( ) ) {
                     turnCurrent.ExitTurn ( );                                         // will set 'IsTurnActive' to false
                     turnCurrent.RaiseTurnCompletedEvent -= HandlePlayerTurnExitEvent; // remove listener
                     if ( movingPlayer.IsWinner ) {
-                        isExecuting = false;
+                        IsExecuting = false;
                         CheckForEndOfRound ( );
                     }
                 }
@@ -55,20 +58,20 @@ public class PlayerTurnStateMachine : MonoBehaviour {
             }
 
             if ( movingPlayer.IsWinner ) {
-                isExecuting = false;
+                IsExecuting = false;
             }
 
             CheckForEndOfRound ( );
 
             movingPlayer = idlePlayer;
             setTurnCurrent = turnNext;    // switch the waiting player to the moving player
-        }
 
-        CheckForEndOfRound ( );
+            CheckForEndOfRound ( );
+        }
     }
 
     private void CheckForEndOfRound() {
-        if ( isExecuting == false && (movingPlayer.IsWinner == true || idlePlayer.IsWinner == true ) ) {
+        if ( IsExecuting == false && (movingPlayer.IsWinner == true || idlePlayer.IsWinner == true ) ) {
             currentRound.EndCurrentRound ( );
             Destroy ( gameObject );
         }

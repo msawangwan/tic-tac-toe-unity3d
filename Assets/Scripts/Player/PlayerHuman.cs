@@ -9,10 +9,10 @@ public class PlayerHuman : Player, IPlayerMove {
         HasMadeValidMove = false;
         if ( Input.GetMouseButtonDown ( 0 ) ) {
             T hitComponent = HitComponent<T>() as T;
-            if ( hitComponent != null && hitComponent is Tile ) {
-                Tile selectedTile = hitComponent as Tile;
-                if ( selectedTile.IsAValidMove == true ) {
-                    HasMadeValidMove = VerifyMove( selectedTile );
+            if ( hitComponent != null && hitComponent is GridInteractableObject ) {
+                GridInteractableObject selected = hitComponent as GridInteractableObject;
+                if ( selected.IsUnMarked ( ) ) {
+                    HasMadeValidMove = VerifyMove( selected.transform, Color.blue );
                 }
             }
         }

@@ -2,5 +2,5 @@
 using System.Collections;
 
 public interface IGrid2D {
-    //GameObject GridObject { get; }
+    Grid2DObjectData Grid2DData { get; }
 }

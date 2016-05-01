@@ -20,8 +20,8 @@ public class MainMenu : UserInterfaceMenu, IUIEvent {
             if ( btn.CompareTag ( TagsUI.startNewGameBtn ) ) {        // btn - starts a new round
                 btn.onClick.RemoveAllListeners ( );
                 btn.onClick.AddListener ( ( ) => {
-                    float fadeTime = 1.8f;
-                    IState nextState = new LoadNewRoundState ( fadeTime );
+                    float loadTime = .6f;
+                    IState nextState = new LoadRoundState ( loadTime );
                     IStateTransition transition = new MenuExitTransition ( menuObject );
                     StateBeginExitEvent newRoundState = new StateBeginExitEvent ( nextState, transition );
                     RaiseUIEvent ( newRoundState );

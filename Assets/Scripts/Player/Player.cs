@@ -9,7 +9,6 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     public bool IsWinner { get; private set; }
 
     protected PlayerMoveTable validMoves { get; private set; }
-    protected Grid2D gameBoard { get; private set; } // TODO: find better way to handle this dependency 
 
     private bool isInGame = false;
 
@@ -20,11 +19,6 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
 
         IsTurnActive = false;
         IsWinner = false;
-    }
-
-    /* Set board reference on a per round basis */
-    public void SetPlayingBoard ( Grid2D board ) {
-        gameBoard = board;
     }
 
     /* Resets player to fresh state for a new round. Initialises
@@ -42,14 +36,16 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     }
 
     public void EnterTurn ( ) {
+        Debug.Log ( "Enter Turn " + gameObject.name );
         IsTurnActive = true;
     }
 
     /* Called in update while IsTurnActive is true. */
     public bool TakeTurn ( ) {
+        Debug.Log ( "Take Turn " + gameObject.name + " " + IsWinner + " " + IsTurnActive + " " + isInGame );
         if (IsWinner == false) { // game is live branch
             if ( IsTurnActive )
-                if ( AttemptMove<Tile> ( ) )
+                if ( AttemptMove<GridInteractableObject> ( ) )
                     return true;
         } else {                 // game is over branch
             RoundOverState ( );
@@ -58,6 +54,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     }
 
     public void ExitTurn ( ) {
+        Debug.Log ( "Exit Turn " + gameObject.name );
         IsTurnActive = false;
         OnTurnEnd ( );
     }
@@ -72,17 +69,14 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
 
     /* When Player selects a Vector2 represented as a tile on the gameboard, this method checks 
         to see if the selection is a valid move against a table of precomputed Vector2s. */
-    protected bool VerifyMove ( Tile selectedTile ) {
-        Vector2 selectedTilePosition = selectedTile.Position;
-        if ( gameBoard.grid2D.VertexTable.ContainsKey( selectedTilePosition ) ) {
-            if ( selectedTile.IsAValidMove == true ) {
-                selectedTile.MarkTileAsSelected( PlayerByID );
-                validMoves.IncrementMove( selectedTilePosition );
-                if ( validMoves.CheckForTicTacToe( ) ) {
-                    IsWinner = true;
-                }
-                return true;
+    protected bool VerifyMove ( Transform vertex2D, Color player ) {
+        if ( vertex2D.GetComponent<GridInteractableObject>( ) ) {
+            vertex2D.GetComponent<Grid2DTile>().MarkBycolor( player );
+            validMoves.IncrementMove ( vertex2D.transform.position );
+            if ( validMoves.CheckForTicTacToe ( ) ) {
+                IsWinner = true;
             }
+            return true;
         }
         return false;
     }
@@ -91,5 +85,4 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     private void OnTurnEnd ( ) {
         RaiseTurnCompletedEvent ( MadeValidMove ( ) );
     }
-
 }

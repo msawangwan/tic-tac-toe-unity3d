@@ -15,4 +15,7 @@ public class ResourcePath : MonoBehaviour {
 
     public const string mainMenu = "UI/Panel_MainMenu";
     public const string roundOverMenu = "UI/Panel_RoundOverMenu";
+
+    //Grid
+    public const string grid2DTileBasic = "Grid2D/Sprite/grid_tile_128x128_blue_white_border";
 }
