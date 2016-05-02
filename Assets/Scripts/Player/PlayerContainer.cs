@@ -8,9 +8,7 @@ using System.Collections;
 /// </summary>
 public class PlayerContainer : MonoBehaviour {
     public static void AttachToTransformAsChild(GameObject playerGameObject) {
-        if (playerGameObject.GetComponent<Player>()) {
-            PlayerContainer container = FindObjectOfType<PlayerContainer> ( );
-            playerGameObject.transform.SetParent ( container.transform );
-        }
+        PlayerContainer container = FindObjectOfType<PlayerContainer> ( );
+        playerGameObject.transform.SetParent ( container.transform );
     }
 }

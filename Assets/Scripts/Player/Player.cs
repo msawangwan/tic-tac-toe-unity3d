@@ -10,14 +10,14 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
 
     protected PlayerMoveTable validMoves { get; private set; }
 
-    private bool isInGame = false;
+    //private bool isInGame = false; < -- delete if nothing broke
 
     /* Substitute for constructor, call on GameObject instantiantion. */
     public virtual void InitAsNew ( int id, string playerName ) {
         PlayerByID = id;
         PlayerName = playerName;
 
-        isInGame = false;
+        //isInGame = false;
 
         IsTurnActive = false;
         IsWinner = false;
@@ -26,26 +26,23 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     /* Call on start of each round! Resets player to fresh state for 
         a new round. Initialises moves. Allows player to persist between rounds. */
     public virtual void NewGameState ( ) {
-        isInGame = true;
+        //isInGame = true;
         IsWinner = false;
 
         validMoves = new PlayerMoveTable ( );
     }
 
     public void RoundOverState () {
-        isInGame = false;
+        //isInGame = false;
         IsTurnActive = false;
-        string playerName = gameObject.name;
     }
 
     public void EnterTurn ( ) {
-        Debug.Log ( "Enter Turn " + gameObject.name );
         IsTurnActive = true;
     }
 
     /* Called in update while IsTurnActive is true. */
     public bool TakeTurn ( ) {
-        Debug.Log ( "Take Turn " + gameObject.name + " " + IsWinner + " " + IsTurnActive + " " + isInGame );
         if (IsWinner == false) { // game is live branch
             if ( IsTurnActive )
                 if ( AttemptMove<Grid2DInteractable> ( ) )
@@ -57,7 +54,6 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     }
 
     public void ExitTurn ( ) {
-        Debug.Log ( "Exit Turn " + gameObject.name );
         IsTurnActive = false;
         OnTurnEnd ( );
     }

@@ -10,6 +10,7 @@ public static class TagsUI {
     public const string startNewGameBtn = "ui_Btn_StartNewGame";
     public const string returnToMainMenuBtn = "ui_Btn_ReturnToMainMenu";
     public const string settingsMenuBtn = "ui_Btn_ToggleSettingsMenu";
+    public const string exitApp = "ui_Btn_ExitApp";
 
     // Text
     public const string menuSubHeader = "ui_Txt_MenuSubHeader";

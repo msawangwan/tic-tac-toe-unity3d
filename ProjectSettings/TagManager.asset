@@ -11,6 +11,7 @@ TagManager:
   - ui_Btn_ReturnToMainMenu
   - ui_Btn_ToggleSettingsMenu
   - ui_Txt_MenuSubHeader
+  - ui_Btn_ExitApp
   - manager_game
   - manager_player
   - manager_board

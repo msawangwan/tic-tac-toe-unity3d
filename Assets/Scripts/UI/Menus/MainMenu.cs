@@ -31,6 +31,12 @@ public class MainMenu : UserInterfaceMenu, IUIEvent {
                 btn.onClick.AddListener ( ( ) => {
                     Debug.Log ( "[MainMenu][OnToggleSettingsMenu] Settings menu not yet implemented ... " );
                 } );
+            } else if (btn.CompareTag(TagsUI.exitApp)) {
+                btn.onClick.RemoveAllListeners ( );
+                btn.onClick.AddListener ( ( ) => {
+                    //Application.Quit ( );
+                    Debug.Log ( "[MainMenu][MapButtons] You're in the editor, you can't quit! Just toggle the play button !" );
+                } );
             }
         }
     }
