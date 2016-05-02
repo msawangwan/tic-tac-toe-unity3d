@@ -52,23 +52,18 @@ public class PlayerConfiguration {
 
         for ( int id = 0; id < playerControlType.Count; id++ ) {
             GameObject player;
-            Player playerReference; // TODO: if 'player.GetComponent<Player>' works, delete this ref
             bool isHuman;
             string playerName = "";
 
             if ( playerControlType[id] ) {
                 isHuman = true;
                 player = MonoBehaviour.Instantiate<GameObject> ( human );
-                playerReference = player.GetComponent<PlayerHuman> ( );
                 playerName = "Human";
             } else {
                 isHuman = false;
                 player = MonoBehaviour.Instantiate<GameObject> ( ai );
-                playerReference = player.GetComponent<PlayerComputer> ( );
                 playerName = "The AI";
             }
-
-            //playerReference.InitAsNew ( id , "DELETE MEEEEEE" );
 
             if ( player != null ) {
                 PlayerContainer.AttachToTransformAsChild ( player );

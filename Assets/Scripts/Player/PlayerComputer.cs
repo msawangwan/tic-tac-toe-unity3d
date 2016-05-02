@@ -36,5 +36,4 @@ public class PlayerComputer : Player, IPlayerMove {
     private void GetGridReferenceForAI ( ) {
         grid = FindObjectOfType<Grid2D> ( );
     }
-
 }
