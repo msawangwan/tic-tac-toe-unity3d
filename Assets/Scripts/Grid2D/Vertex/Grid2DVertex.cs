@@ -2,14 +2,11 @@
 using System.Collections;
 
 public class Grid2DVertex : MonoBehaviour {
-    protected Vector2 vertexPos { get; private set; }
-    public float X { get; private set; }
-    public float Y { get; private set; }
+    public Grid2DNode vertexNode { get; private set; }
+    public Vector2 vertexPos { get; private set; }
 
-    public virtual void InitOnStart() {
+    public void InitOnStart() {
         vertexPos = ( new Vector2 ( transform.position.x , transform.position.y ) );
-
-        X = vertexPos.x;
-        Y = vertexPos.y;
+        vertexNode = new Grid2DNode ( vertexPos );
     }
 }

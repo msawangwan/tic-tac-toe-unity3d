@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 public class PlayerComputer : Player, IPlayerMove {
     public bool HasMadeValidMove { get; private set; }

@@ -29,26 +29,40 @@ public class Grid2D : MonoBehaviour {
         HasVertexGameObjects = true;
     }
 
-    public bool InBounds ( Vector2 vertex ) {
-        if ( vertex.x >= 0 && vertex.x < Grid2DData.xDimension )
-            if ( vertex.y >= 0 && vertex.y < Grid2DData.yDimension )
+    public bool InBounds ( Vector2 point ) { // TODO: use lookup table as in IsValid
+        if ( point.x >= 0 && point.x < Grid2DData.xDimension )
+            if ( point.y >= 0 && point.y < Grid2DData.yDimension )
                 return true;
         return false;
     }
 
-    // TODO: needs implementation or do in tictactoe..
-    public virtual bool IsValid ( Vector2 vertex ) {
-        // get the 'interactable component' and check 'if marked'
-        return true;
+    public bool IsValid ( Vector2 point ) {
+        if (Grid2DData.VertexTable.ContainsKey( point ) ) {
+            Grid2DVertex v = Grid2DData.VertexTable[point];
+            if ( !v.gameObject.GetComponent<Grid2DInteractable> ( ).IsInteractable ) { // already marked?
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false; // out of bounds?
     }
 
-    // TODO: decide on vertex or nodes or a common interface...?
-    public IEnumerable<Vector2> Neighbors(Grid2DVertex v ) {
+    public IEnumerable<Vector2> Neighbors ( Grid2DVertex v ) { // may also want to use node?
         foreach ( Vector2 dir in Directions ) {
-            Vector2 next = new Vector2 (v.X + dir.x, v.Y + dir.y);
-            if (InBounds(next) && IsValid(next)) {
+            Vector2 next = new Vector2 (v.vertexPos.x + dir.x, v.vertexPos.y + dir.y);
+            if ( InBounds ( next ) && IsValid ( next ) ) {
                 yield return next;
             }
         }
+    }
+
+    public int Cost( Grid2DVertex a, Grid2DVertex b ) {
+        if ( a.gameObject.GetComponent<Grid2DInteractable> ( ).OwnerByID == 0 ) {
+            return 1;
+        } else if ( a.gameObject.GetComponent<Grid2DInteractable> ( ).OwnerByID == 1 ) {
+            return -1;
+        }
+        return 5;
     }
 }

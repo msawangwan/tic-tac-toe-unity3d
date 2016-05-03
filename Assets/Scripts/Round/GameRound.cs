@@ -76,7 +76,7 @@ public class GameRound : IRound {
     }
 
     private void InstantiateGridTiles ( ) {
-        Grid2DTicTacToe grid = gridData.GridObject.AddComponent<Grid2DTicTacToe> ( );
+        Grid2DTiledBoard grid = gridData.GridObject.AddComponent<Grid2DTiledBoard> ( );
         grid.LayTilesOnGrid ( );
         LoadedTransitionIntroAsset = grid.DrawTiles ( ); // .34f
         LoadedTransitionOutroAsset = grid.FadeOut ( );

@@ -3,13 +3,11 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 /// <summary>
-/// A Fast Priority Queque, based on implementation by 'BlueRaja'.
-/// Modified by misha 'madmeesh' sawangwan.
-/// 
-/// Nodes must implement the class "PriorityQueueNode".
+/// Data Structure: Priority Queque 
+/// Implements: IPriorityQueue<typeparam name="T">PriorityQueueNode</typeparam>
 /// </summary>
-/// <typeparam name="T"></typeparam>
 public class PriorityQueue<T> : IPriorityQueue<T> where T : PriorityQueueNode {
     public T Head { get { return minHeap[1]; } }              // returns HEAD without dequeueing
 
@@ -21,13 +19,14 @@ public class PriorityQueue<T> : IPriorityQueue<T> where T : PriorityQueueNode {
     private int numNodes;
     private int numNodesEnqueued;
 
-    public PriorityQueue ( int maxNodes ) {
-        minHeap = new T[maxNodes + 1];
+    public PriorityQueue ( int maxNodesAllowed ) {
+        minHeap = new T[maxNodesAllowed + 1];
         numNodes = 0;
         numNodesEnqueued = 0;
     }
 
-    public void Enqueue ( T node , float priority ) { // enqueue a node to the priority queue
+    /* Enqueue a node. */
+    public void Enqueue ( T node , float priority ) {
 #if DEBUG
         if (node == null) { throw new ArgumentException ( "node" ); }
         if (numNodes >= minHeap.Length - 1) { throw new InvalidOperationException ( "Queue is full - node cannot be added: " + node + "." ); }
@@ -71,12 +70,12 @@ public class PriorityQueue<T> : IPriorityQueue<T> where T : PriorityQueueNode {
             return;
         }
 
-        T previousLastNode = minHeap[numNodes];
-        Swap ( node , previousLastNode );
+        T old_TAIL = minHeap[numNodes];
+        Swap ( node , old_TAIL );
         minHeap[numNodes] = null;
         numNodes--;
 
-        OnNodeUpdated ( previousLastNode );
+        OnNodeUpdated ( old_TAIL );
     }
     
     /* Must be called on a node any time its priority changes while it's in the queue. */           
@@ -89,7 +88,7 @@ public class PriorityQueue<T> : IPriorityQueue<T> where T : PriorityQueueNode {
         OnNodeUpdated ( node );
     }           
 
-    /* Check if a given node enqueued. */
+    /* Check if a given node is enqueued. */
     public bool Contains ( T node ) {
 #if DEBUG
         if ( node == null ) { throw new ArgumentNullException ( "node" ); }
@@ -100,30 +99,34 @@ public class PriorityQueue<T> : IPriorityQueue<T> where T : PriorityQueueNode {
         return false;
     }
 
+    /* Copy the contents of minHeap into a new array, resizedMinHeap. */
     public void Resize ( int maxNodes ) {
 #if DEBUG
         if ( maxNodes <= 0 ) { throw new InvalidOperationException ( "Queue size cannot be smaller than 1." ); }
         if ( maxNodes < numNodes ) { throw new InvalidOperationException ( "Called Resize("+ maxNodes + "), but current queue contains " + numNodes + "nodes" ); }
 #endif
-        T[] resizedPqueue = new T[maxNodes + 1];
+        T[] resizedMinHeap = new T[maxNodes + 1];
         int highestIndexToCopy = Math.Min(maxNodes,numNodes);
 
         for ( int i = 1; i < highestIndexToCopy; i++ ) {
-            resizedPqueue[i] = minHeap[i];
+            resizedMinHeap[i] = minHeap[i];
         }
 
-        minHeap = resizedPqueue;
+        minHeap = resizedMinHeap;
     }
 
+    /* Implements IEnumerable. */
     public IEnumerator<T> GetEnumerator() {
         for ( int i = 1; i <= numNodes; i++ )
             yield return minHeap[i];
     }
 
+    /* Implements IEnumerable. */
     IEnumerator IEnumerable.GetEnumerator() {
         return GetEnumerator ( );
     }
 
+    /* Encapsulate swap routine. */
     private void Swap(T n1, T n2) {
         minHeap[n1.QueueIndex] = n2;
         minHeap[n2.QueueIndex] = n1;
@@ -137,9 +140,7 @@ public class PriorityQueue<T> : IPriorityQueue<T> where T : PriorityQueueNode {
     private void CascadeUp(T newLeft) {
         int parentIndex = newLeft.QueueIndex / 2;
         while ( parentIndex >= 1 ) {
-            Debug.Log ( "parentIndex: " + parentIndex );
             T parent = minHeap[parentIndex];
-            Debug.Log ( "parent: " + parent );
 
             if ( HasHigherPriority( parent, newLeft ) )
                 break;
@@ -153,39 +154,39 @@ public class PriorityQueue<T> : IPriorityQueue<T> where T : PriorityQueueNode {
     private void CascadeDown(T node) {
         T newParent;
 
-        int currentIndex = node.QueueIndex; // this variable is more commonly known as the 'final index' -- find out why!
+        int correctIndexInHeap = node.QueueIndex;
         while ( true ) {
             newParent = node;
-            int childLeftIndex = 2 * currentIndex;
+            int childLeftIndex = 2 * correctIndexInHeap;
 
-            if ( childLeftIndex > numNodes ) { // is left-child higher P than node current?
-                node.QueueIndex = currentIndex;
-                minHeap[currentIndex] = node;
+            if ( childLeftIndex > numNodes ) { 
+                node.QueueIndex = correctIndexInHeap;
+                minHeap[correctIndexInHeap] = node;
                 break;
             }
 
             T childLeft = minHeap[childLeftIndex];
-            if ( HasHigherPriority ( childLeft , newParent ) ) {
+            if ( HasHigherPriority ( childLeft , newParent ) ) { // is left-child higher P than node current?
                 newParent = childLeft;
             }
 
             int childRightIndex = childLeftIndex + 1;
-            if ( childRightIndex <= numNodes ) { // is right-child higher P than node current or left child?
+            if ( childRightIndex <= numNodes ) { 
                 T childRight = minHeap[childRightIndex];
-                if ( HasHigherPriority ( childRight , newParent ) ) {
+                if ( HasHigherPriority ( childRight , newParent ) ) { // is right-child higher P than node current or left child?
                     newParent = childRight;
                 }
             }
 
             if ( newParent != node ) { // if child node left or right has higher P, swap and go through loop again
-                minHeap[currentIndex] = newParent;
+                minHeap[correctIndexInHeap] = newParent;
 
                 int tempIndex = newParent.QueueIndex;
-                newParent.QueueIndex = currentIndex;
-                currentIndex = tempIndex;
+                newParent.QueueIndex = correctIndexInHeap;
+                correctIndexInHeap = tempIndex;
             } else {
-                node.QueueIndex = currentIndex;
-                minHeap[currentIndex] = node;
+                node.QueueIndex = correctIndexInHeap;
+                minHeap[correctIndexInHeap] = node;
                 break;
             }
         }
@@ -214,7 +215,7 @@ public class PriorityQueue<T> : IPriorityQueue<T> where T : PriorityQueueNode {
     }
 
     /* For testing only -- validates the min-heap invariant. */
-    public bool IsValidQueue() {
+    public bool ValidateMinHeapInvariant() {
         for ( int i = 1; i < minHeap.Length; i++ ) {
             if(minHeap[i] != null) {
                 int leftChildIdx = 2 * i;

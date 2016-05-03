@@ -5,7 +5,7 @@ public class AIBrain {
     private Grid2D grid;
     private Grid2DNode[] targets;
 
-    private int numTargets;
+    private int numNodes;
 
     /* Constructor. */
     public AIBrain() {
@@ -22,14 +22,11 @@ public class AIBrain {
         if ( grid == null )
             this.grid = grid;
 
-        numTargets = grid.Grid2DData.GridObject.transform.childCount;
-        targets = new Grid2DNode[numTargets];
+        numNodes = grid.Grid2DData.GridObject.transform.childCount;
+        targets = new Grid2DNode[numNodes];
 
-        Grid2DNode newTargetNode;
-        for ( int i = 0; i < numTargets; i++ ) {
-            newTargetNode = grid.Grid2DData.GridObject.transform.GetChild ( i ).gameObject.AddComponent<Grid2DNode> ( );
-            newTargetNode.SetPosition (( int ) newTargetNode.transform.position.x , (int) newTargetNode.transform.position.y );
-            targets[i] = newTargetNode;
+        for ( int i = 0; i < numNodes; i++ ) {
+            targets[i] = grid.Grid2DData.GridObject.transform.GetChild ( i ).GetComponent<Grid2DNode> ( );
         }
     }
 
