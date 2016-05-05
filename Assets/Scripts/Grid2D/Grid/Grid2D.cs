@@ -9,14 +9,14 @@ using System.Collections.Generic;
 /// </summary>
 
 public class Grid2D : MonoBehaviour {
-    public Grid2DObjectData Grid2DData { get; private set; }
+    public Grid2DData Grid2DData { get; private set; }
     public Vector2[] Directions { get; private set; } // make static?
 
     public bool HasVertexGameObjects { get; private set; }
 
     /* Use as constructor, call on Component instantiation. 
         Depends on Grid2DConfiguration and Grid2DObjectData. */
-    public void InitOnStart ( Grid2DObjectData grid2DData ) {
+    public void InitOnStart ( Grid2DData grid2DData ) {
         this.Grid2DData = grid2DData;
 
         Directions = new Vector2[] {

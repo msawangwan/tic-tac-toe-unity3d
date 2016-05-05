@@ -14,7 +14,7 @@ public class Grid2DConfiguration {
     private Vector2[] vertices;
     private Dictionary<Vector2, Grid2DVertex> vertexTable;
 
-    private Grid2DObjectData gridData;
+    private Grid2DData gridData;
 
     public int GridWidth { get; private set; }
     public int GridHeight { get; private set; }
@@ -49,9 +49,9 @@ public class Grid2DConfiguration {
     }
 
     /* Returns an instance of Grid2DData. */
-    public Grid2DObjectData GetGrid2DData () {
+    public Grid2DData GetGrid2DData () {
         Instantiate2DGridObject ( );
-        return new Grid2DObjectData ( grid2DObject, grid2DObject.GetComponent<Grid2D> ( ), vertexTable, GridCenterPoint, GridWidth, GridHeight );
+        return new Grid2DData ( grid2DObject, grid2DObject.GetComponent<Grid2D> ( ), vertexTable, GridCenterPoint, GridWidth, GridHeight );
     }
 
     /* Instantiate an instance of the grid as a GameObject
@@ -93,12 +93,13 @@ public class Grid2DConfiguration {
         }
     }
 }
+
 /// <summary>
 /// Related sister class.
 /// 
 /// Small package that holds reference to the current 2D Grid.
 /// </summary>
-public class Grid2DObjectData {
+public class Grid2DData {
     public Grid2D GridReference { get; private set; }
     public GameObject GridObject { get; private set; }
     public Vector2 CenterPoint { get; private set; }
@@ -107,7 +108,7 @@ public class Grid2DObjectData {
     public int yDimension { get; private set; }
 
     /* Constructor. */
-    public Grid2DObjectData(GameObject gridObject, Grid2D gridReference, Dictionary<Vector2, Grid2DVertex> vertexTable, Vector2 centerPoint, int x, int y) {
+    public Grid2DData(GameObject gridObject, Grid2D gridReference, Dictionary<Vector2, Grid2DVertex> vertexTable, Vector2 centerPoint, int x, int y) {
         GridObject = gridObject;
         GridReference = gridReference;
         VertexTable = vertexTable;

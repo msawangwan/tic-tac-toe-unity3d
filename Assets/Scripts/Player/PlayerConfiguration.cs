@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// that wraps the important player references.
 /// </summary>
 public class PlayerConfiguration {
-    private List<PlayerObjectData> playerData;
+    private List<PlayerData> playerData;
     private List<bool> playerControlType;
 
     private int currentGamePlayerCount = 0;
@@ -21,7 +21,7 @@ public class PlayerConfiguration {
         signifies if player is of type 'human' or 'ai' */
     public PlayerConfiguration( List<bool> controlType ) {
         isConfigured = false;
-        playerData = new List<PlayerObjectData> ( );
+        playerData = new List<PlayerData> ( );
         playerControlType = new List<bool> ( );
 
         playerData.Clear ( );
@@ -31,7 +31,7 @@ public class PlayerConfiguration {
     }
 
     /* Returns a copy of the current player data. */
-    public List<PlayerObjectData> GetPlayerData() {
+    public List<PlayerData> GetPlayerData() {
         if ( isConfigured == false ) { // will be false first time this method is called
             playerData = InstantiatePlayerObjects ( );
             isConfigured = true;
@@ -41,8 +41,8 @@ public class PlayerConfiguration {
 
     /* Instantiate player GameObjects in  
         the scene and init their data. */
-    private List<PlayerObjectData> InstantiatePlayerObjects () {
-        List<PlayerObjectData> playerDataList = new List<PlayerObjectData>();
+    private List<PlayerData> InstantiatePlayerObjects () {
+        List<PlayerData> playerDataList = new List<PlayerData>();
 
         /* Possible player control types. */
         GameObject human = Resources.Load<GameObject> ( ResourcePath.playerHuman );
@@ -67,7 +67,7 @@ public class PlayerConfiguration {
 
             if ( player != null ) {
                 PlayerContainer.AttachToTransformAsChild ( player );
-                playerDataList.Add ( new PlayerObjectData ( player , player.GetComponent<Player> ( ) , id , isHuman, playerName ) );
+                playerDataList.Add ( new PlayerData ( player , player.GetComponent<Player> ( ) , id , isHuman, playerName ) );
                 ++currentGamePlayerCount;
             } else {
                 Debug.Log ( "[PlayerConfiguration][InstantiatePlayerObjects] GameObject 'player' is null " );
@@ -89,14 +89,14 @@ public class PlayerConfiguration {
 /// Related sister class:
 /// Small object that packages important player data
 /// </summary>
-public class PlayerObjectData {
+public class PlayerData {
     public GameObject PlayerObject { get; private set; }
     public Player PlayerReference { get; private set; }
     public int ID { get; private set; }
     public bool IsHuman { get; private set; }
     public string PlayerName { get; private set; }
 
-    public PlayerObjectData ( GameObject playerObject, Player playerReference, int id, bool isHuman, string pname ) {
+    public PlayerData ( GameObject playerObject, Player playerReference, int id, bool isHuman, string pname ) {
         PlayerObject = playerObject;
         PlayerReference = playerReference;
         ID = id;

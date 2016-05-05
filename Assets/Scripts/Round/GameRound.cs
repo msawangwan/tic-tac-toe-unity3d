@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameRound : IRound {
-    private Grid2DObjectData gridData;
+    private Grid2DData gridData;
 
     private List<bool> controlTypeOfPlayer = new List<bool> ( );
 
     private PlayerTurnSystem turnMachine;
-    private PlayerObjectData p1Data;
-    private PlayerObjectData p2Data;
-    private List<PlayerObjectData> playerData;
+    private PlayerData p1Data;
+    private PlayerData p2Data;
+    private List<PlayerData> playerData;
 
     public string RoundWinner { get; private set; }
 
@@ -30,7 +30,7 @@ public class GameRound : IRound {
         IsGameOver = false;
         RoundWinner = "";
 
-        foreach ( PlayerObjectData p in playerData ) {
+        foreach ( PlayerData p in playerData ) {
             p.PlayerReference.NewGameState ( );
         }
 
@@ -50,7 +50,7 @@ public class GameRound : IRound {
     }
 
     public void LoadPlayers ( ) {
-        playerData = new List<PlayerObjectData> ( );
+        playerData = new List<PlayerData> ( );
         playerData.Clear ( );
 
         PlayerConfiguration playerConfig = DataInstantiator.GetNewInstance( () => new PlayerConfiguration ( controlTypeOfPlayer ) );
