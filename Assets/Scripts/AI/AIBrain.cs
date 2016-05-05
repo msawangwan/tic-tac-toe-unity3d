@@ -15,6 +15,7 @@ public class AIBrain {
     /* Constructor with grid paramter. */
     public AIBrain( Grid2D grid ) {
         this.grid = grid;
+        Pathfinder pf = new Pathfinder(grid);
     }
 
     /*Get a reference to the grid, attach targets to each vertex and store a local reference. */

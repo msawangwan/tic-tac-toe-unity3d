@@ -85,6 +85,11 @@ public class PlayerTurnSystem : MonoBehaviour {
             }
 
             currentRound.EndCurrentRound ( winner );
+
+            // TODO: FIX THIS TEMPORARY HACK!!!
+            Destroy ( FindObjectOfType<PlayerHuman> ( ).transform.gameObject );
+            Destroy ( FindObjectOfType<PlayerComputer> ( ).transform.gameObject );
+
             Destroy ( gameObject );
         }
     }

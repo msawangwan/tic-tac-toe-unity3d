@@ -16,21 +16,55 @@ public class Pathfinder {
     private Dictionary<Grid2DNode, int> costSoFar;
 
     private int numNodes;
-    private bool hasStarted;
 
-    public Pathfinder ( Grid2D grid, Grid2DNode[] nodes ) {
+    public Pathfinder ( Grid2D grid ) {
         this.grid = grid;
-        this.nodes = nodes;
 
-        numNodes = nodes.Length;
+        numNodes = grid.Grid2DData.VertexTable.Count;
 
         unvisited = new PriorityQueue<Grid2DNode> ( numNodes );
         visited = new PriorityQueue<Grid2DNode> ( numNodes );
 
         cameFrom = new Dictionary<Grid2DNode, Grid2DNode> ( );
         costSoFar = new Dictionary<Grid2DNode, int> ( );
+    }
 
-        hasStarted = false;
+    public void AStarPath ( Grid2DVertex start, Grid2DVertex end ) {
+        Grid2DNode n_start = start.vertexNode;
+        Debug.Log ( "start: " + n_start );
+        unvisited.Clear ( );
+        unvisited.Enqueue ( n_start, 0 );
+
+        cameFrom[n_start] = n_start;
+        costSoFar[n_start] = 0;
+
+        while ( unvisited.Count > 0 ) {
+            Grid2DNode n_current = unvisited.Dequeue();
+            Grid2DVertex v_current = null;
+
+            if ( grid.Grid2DData.VertexTable.ContainsKey ( new Vector2 ( n_current.x, n_current.y ) ) ) {
+                v_current = grid.Grid2DData.VertexTable[new Vector2 ( n_current.x, n_current.y )];
+            }
+
+            if ( v_current.vertexPos == end.vertexPos ) {
+                break;
+            }
+
+            foreach ( Vector2 v2_next in grid.Neighbors ( v_current ) ) {
+                Grid2DVertex v_next = null;
+                if ( grid.Grid2DData.VertexTable.ContainsKey(v2_next)) {
+                    v_next = grid.Grid2DData.VertexTable[v2_next];
+                    int newCost = costSoFar[v_current.vertexNode] + grid.Cost(v_current, v_next);
+
+                    if ( !costSoFar.ContainsKey ( v_next.vertexNode ) || newCost < costSoFar[v_next.vertexNode] ) {
+                        costSoFar[v_next.vertexNode] = newCost;
+                        int priority = newCost + (int)MovementCost(v_next.vertexNode, end.vertexNode);
+                        unvisited.Enqueue ( v_next.vertexNode, priority );
+                        cameFrom[v_next.vertexNode] = n_current;
+                    }
+                }
+            }
+        }
     }
 
     /* A STAR */
@@ -67,6 +101,7 @@ public class Pathfinder {
             visited.Enqueue ( n_current , n_current.Priority );
 
             foreach ( Vector2 n in grid.Neighbors ( v ) ) { // <-- TODO: fix condition: should be "for neighbors of current"
+
                 n_neighbor.parent = n_current.parent;
                 cost = n_current.g + MovementCost ( n_current , n_neighbor );
 

@@ -27,8 +27,11 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         validMoves = new PlayerMoveTable ( );
     }
 
+    /* Currently Not Being Called!!! */
     public void RoundOverState () {
         IsTurnActive = false;
+        Debug.Log ( "DESTROYED PLAYER: " + gameObject.name );
+        Destroy ( gameObject );
     }
 
     public void EnterTurn ( ) {
