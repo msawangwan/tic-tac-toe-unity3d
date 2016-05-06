@@ -29,6 +29,7 @@ public class Pathfinder {
         costSoFar = new Dictionary<Grid2DNode, int> ( );
     }
 
+    /* A STAR */
     public void AStarPath ( Grid2DVertex start, Grid2DVertex end ) {
         Grid2DNode n_start = start.vertexNode;
         Debug.Log ( "start: " + n_start );
