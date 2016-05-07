@@ -1,48 +1,35 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 /// <summary>
 /// http://blog.circuitsofimagination.com/2014/06/29/MiniMax-and-Tic-Tac-Toe.html
 /// https://www.ocf.berkeley.edu/~yosenl/extras/alphabeta/alphabeta.html
 /// </summary>
-public enum Cell {
+public enum CellMarking {
     Empty = 0,
     X = 1,
     O = 2,
 }
 
 public class Grid2DTicTacToe {
-    private Cell[][] board;
+    private CellMarking[][] board;
     private int gridSize;
 
     public Grid2DTicTacToe(int x, int y) {
         gridSize = x * y;
-        board = new Cell[x][];
+        board = new CellMarking[x][];
         
 
         for ( int i = 0; i < x; i++ ) {
-            board[i] = new Cell[y];
+            board[i] = new CellMarking[y];
             for ( int j = 0; j < y; j++ ) {
-                board[i][j] = Cell.Empty;
+                board[i][j] = CellMarking.Empty;
             }
         }
     }
 
-    public bool MakeMark(Cell playerMark, Vector2 cellPosition) {
-        int currentX = (int) cellPosition.x;
-        int currentY = (int) cellPosition.y;
-
-        if ( currentX <= gridSize && currentY <= gridSize ) {
-            if ( board[currentX][currentY] == Cell.Empty ) {
-                board[currentX][currentY] = playerMark;
-                return true;
-            } 
-        }
-        return false;
-    }
-
     public int Score(Game game) {
-        if ( game.Winner ( ) == Cell.O ) return 1;
-        else if ( game.Winner ( ) == Cell.X ) return -1;
+        if ( game.Winner ( ) == CellMarking.O ) return 1;
+        else if ( game.Winner ( ) == CellMarking.X ) return -1;
         else
             return 0;
     }
@@ -54,48 +41,177 @@ public class Grid2DTicTacToe {
 
         int bestScore = -1;
 
-        foreach(Cell cell in game.PossibleMoves()) {
-            Game newGame = game.MakeCopy()
+        foreach( Vector2 cell in game.PossibleMoves() ) {
+            Game newGame = game.MakeCopy(board);
+            newGame.MakeMove ( CellMarking.X, cell );
+            int score = Mini(newGame);
+
+            if ( score > bestScore ) {
+                bestScore = score;
+            }
         }
 
         return bestScore;
     }
 
-    public bool CheckWinner() {
-        return false;
-    }
+    public int Mini(Game game) {
+        if ( game.Over ( ) ) {
+            return Score ( game );
+        }
 
-    public Cell Winner() {
-        return Cell.Empty;
+        int worstScore = 1;
+
+        foreach ( Vector2 cell in game.PossibleMoves ( ) ) {
+            Game newGame = game.MakeCopy(board);
+            newGame.MakeMove ( CellMarking.X, cell );
+            int score = Maxi(newGame);
+
+            if ( score < worstScore ) {
+                worstScore = score;
+            }
+        }
+        return worstScore;
     }
 }
 
 public class Game {
-    int numCells;
+    bool isOver = false;
+    CellMarking winner = CellMarking.Empty;
+    CellMarking[][] board;
 
-    public Game() {
+    public Game(int x, int y) {
+        int gridSize = x * y;
+        board = new CellMarking[x][];
 
+
+        for ( int i = 0; i < x; i++ ) {
+            board[i] = new CellMarking[y];
+            for ( int j = 0; j < y; j++ ) {
+                board[i][j] = CellMarking.Empty;
+            }
+        }
     }
 
-    public Game(int numCells) {
-        this.numCells = numCells;
+    public Game(CellMarking[][] board) {
+        this.board = board;
     }
 
-    public Cell Winner ( ) {
-        return Cell.Empty;
+    public CellMarking Winner ( ) {
+        return winner;
     }
 
     public bool Over() {
-        return false;
+        return isOver;
     }
 
-    public Cell[] PossibleMoves() {
-        Cell[] remainingMoves = new Cell[numCells];
-        return remainingMoves;
+    /* Returns a list of cells marked Empty. */
+    public List<Vector2> PossibleMoves () {
+        List<Vector2> possibleMoves = new List<Vector2>();
+
+        for ( int i = 0; i < board.Length; i++ ) {
+            for ( int j = 0; j < board[i].Length; j++ ) {
+                if (board[i][j] == CellMarking.Empty) {
+                    Vector2 move = new Vector2(i, j);
+                    possibleMoves.Add ( move );
+                }
+            }
+        }
+
+        return possibleMoves;
     }
 
-    public Game MakeCopy() {
-        return new Game ( );
+    /* Returns a Game object that uses a copied board. */
+    public Game MakeCopy(CellMarking[][] board) {
+        return new Game ( board );
+    }
+
+    /* Marks a given cell as an X or O. */
+    public void MakeMove(CellMarking player, Vector2 move) {
+        int x = (int) move.x;
+        int y = (int) move.y;
+
+        if (board[x][y] == CellMarking.Empty)
+            board[x][y] = player;
+    }
+
+    public bool CheckBoard() {
+        int[] row_X = new int[board.Length];
+        int[] col_X = new int[board[0].Length];
+        int diag0_X = 0;
+        int diag1_X = 0;
+
+        int[] row_O = new int[board.Length];
+        int[] col_O = new int[board[0].Length];
+        int diag0_O = 0;
+        int diag1_O = 0;
+
+        int moveCount = 0;
+
+        for (int i = 0; i < board.Length; i++ ) {
+            for(int j = 0; j < board[i].Length; j++ ) {
+                if ( board[i][j] == CellMarking.X ) {
+                    ++moveCount;
+                    ++row_X[i];
+                    ++col_X[j];
+
+                    if ( col_X[j] >= board.Length || row_X[i] >= board[0].Length ) {
+                        isOver = true;
+                        winner = CellMarking.X;
+                        break;
+                    }
+                    if ( i == j ) {
+                        ++diag0_X;
+                    }
+                    if ( diag0_X >= board.Length ) {
+                        isOver = true;
+                        winner = CellMarking.X;
+                        break;
+                    }
+                    if ( i == (board.Length - 1) - j ) {
+                        ++diag1_X;
+                    }
+                    if ( diag1_X >= board.Length ) {
+                        isOver = true;
+                        winner = CellMarking.X;
+                        break;
+                    }
+
+                } else if ( board[i][j] == CellMarking.O ) {
+                    ++moveCount;
+                    ++row_O[i];
+                    ++col_O[j];
+
+                    if ( col_O[j] >= board.Length || row_O[i] >= board[0].Length ) {
+                        isOver = true;
+                        winner = CellMarking.O;
+                        break;
+                    }
+                    if ( i == j ) {
+                        ++diag0_O;
+                    }
+                    if ( diag0_O >= board.Length ) {
+                        isOver = true;
+                        winner = CellMarking.O;
+                        break;
+                    }
+                    if ( i == (board.Length - 1) - j ) {
+                        ++diag1_O;
+                    }
+                    if ( diag1_O >= board.Length ) {
+                        isOver = true;
+                        winner = CellMarking.O;
+                        break;
+                    }
+
+                }
+            }
+        }
+
+        if ( moveCount >= board.Length * board[0].Length ) {
+            isOver = true;
+        }
+
+        return isOver;
     }
 }
 
