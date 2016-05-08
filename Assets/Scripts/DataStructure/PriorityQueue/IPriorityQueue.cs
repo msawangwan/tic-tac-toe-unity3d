@@ -1,8 +1,21 @@
 ﻿using System.Collections.Generic;
+
 /// <summary>
-/// Head is node with LOWEST priority VALUE
+/// Priority Queque using the Min-Heap invariant:
+/// 
+/// - Uses a fixed-size array (for speed)
+/// - Index starts at 1 not 0
+/// - Left Child node is at [2 * i], if available
+/// - Right Child node is at [2 * i + 1], if available
+/// - Parent node is at [i / 2], if available
+/// 
+/// - Insert (Enqueue) -- O(logn)
+/// - Remove (Dequeue) -- O(logn)
+/// - Extract-Min (Head)- O(1)
+/// - Contains() -------- O(1)
+/// 
+/// For best performance nodes should extend, rather than implement, a node base class.
 /// </summary>
-/// <typeparam name="T"></typeparam>
 public interface IPriorityQueue<T> : IEnumerable<T> {
     void Enqueue ( T node , float priority );       // enqueue a node to the priority queue
     T Dequeue ( );                                  // remove and return the node at head of the queue

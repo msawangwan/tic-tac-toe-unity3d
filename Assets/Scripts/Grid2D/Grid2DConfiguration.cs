@@ -12,9 +12,9 @@ public class Grid2DConfiguration {
     private GameObject grid2DObject;
 
     private Vector2[] vertices;
-    private Dictionary<Vector2, Grid2DVertex> vertexTable;
+    private Dictionary<Vector2, GameObject> vertexTable; /* <vertexPosition, vertexGameObject> */
 
-    private Grid2DObjectData gridData;
+    private Grid2DData gridData;
 
     public int GridWidth { get; private set; }
     public int GridHeight { get; private set; }
@@ -43,15 +43,15 @@ public class Grid2DConfiguration {
         GridHeight = sizeY;
 
         vertices = new Vector2[GridWidth * GridHeight];
-        vertexTable = new Dictionary<Vector2, Grid2DVertex> ( );
+        vertexTable = new Dictionary<Vector2, GameObject> ( );
 
         vertexTable.Clear ( );
     }
 
     /* Returns an instance of Grid2DData. */
-    public Grid2DObjectData GetGrid2DData () {
+    public Grid2DData GetGrid2DData () {
         Instantiate2DGridObject ( );
-        return new Grid2DObjectData ( grid2DObject, grid2DObject.GetComponent<Grid2D> ( ), vertexTable, GridCenterPoint, GridWidth, GridHeight );
+        return new Grid2DData ( grid2DObject, grid2DObject.GetComponent<Grid2D> ( ), vertexTable, GridCenterPoint, GridWidth, GridHeight );
     }
 
     /* Instantiate an instance of the grid as a GameObject
@@ -89,25 +89,26 @@ public class Grid2DConfiguration {
 
             vRef.InitOnStart ( );
 
-            vertexTable.Add ( vertices[i], vRef );
+            vertexTable.Add ( vertices[i], vObj );
         }
     }
 }
+
 /// <summary>
 /// Related sister class.
 /// 
 /// Small package that holds reference to the current 2D Grid.
 /// </summary>
-public class Grid2DObjectData {
+public class Grid2DData {
     public Grid2D GridReference { get; private set; }
     public GameObject GridObject { get; private set; }
     public Vector2 CenterPoint { get; private set; }
-    public Dictionary<Vector2, Grid2DVertex> VertexTable { get; private set; }
+    public Dictionary<Vector2, GameObject> VertexTable { get; private set; }
     public int xDimension { get; private set; }
     public int yDimension { get; private set; }
 
     /* Constructor. */
-    public Grid2DObjectData(GameObject gridObject, Grid2D gridReference, Dictionary<Vector2, Grid2DVertex> vertexTable, Vector2 centerPoint, int x, int y) {
+    public Grid2DData(GameObject gridObject, Grid2D gridReference, Dictionary<Vector2, GameObject> vertexTable, Vector2 centerPoint, int x, int y) {
         GridObject = gridObject;
         GridReference = gridReference;
         VertexTable = vertexTable;
@@ -118,4 +119,3 @@ public class Grid2DObjectData {
         gridReference.InitOnStart ( this );
     }
 }
-

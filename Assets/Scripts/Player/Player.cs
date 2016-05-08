@@ -3,21 +3,18 @@ using System;
 
 public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     public int PlayerByID { get; private set; }
-
     public string PlayerName { get; private set; }
+
     public bool IsTurnActive { get; private set; }
     public bool IsWinner { get; private set; }
+    public bool HasMadeValidMove { get; protected set; }
 
     protected PlayerMoveTable validMoves { get; private set; }
-
-    //private bool isInGame = false; < -- delete if nothing broke
 
     /* Substitute for constructor, call on GameObject instantiantion. */
     public virtual void InitAsNew ( int id, string playerName ) {
         PlayerByID = id;
         PlayerName = playerName;
-
-        //isInGame = false;
 
         IsTurnActive = false;
         IsWinner = false;
@@ -26,18 +23,19 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
     /* Call on start of each round! Resets player to fresh state for 
         a new round. Initialises moves. Allows player to persist between rounds. */
     public virtual void NewGameState ( ) {
-        //isInGame = true;
         IsWinner = false;
 
         validMoves = new PlayerMoveTable ( );
     }
 
+    /* Currently Not Being Called!!! */
     public void RoundOverState () {
-        //isInGame = false;
         IsTurnActive = false;
+        Debug.Log ( "DESTROYED PLAYER: " + gameObject.name );
+        Destroy ( gameObject );
     }
 
-    public void EnterTurn ( ) {
+    public virtual void EnterTurn ( ) {
         IsTurnActive = true;
     }
 
@@ -53,7 +51,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         return false;
     }
 
-    public void ExitTurn ( ) {
+    public virtual void ExitTurn ( ) {
         IsTurnActive = false;
         OnTurnEnd ( );
     }
@@ -68,9 +66,12 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
 
     /* When Player selects a Vector2 represented as a tile on the gameboard, this method checks 
         to see if the selection is a valid move against a table of precomputed Vector2s. */
-    protected bool VerifyMove ( Transform vertex2D, Color player ) {
+    protected bool VerifyMove ( Transform vertex2D, Color player, int playerByID ) {
         if ( vertex2D.GetComponent<Grid2DInteractable>( ) ) {
-            vertex2D.GetComponent<Grid2DTile>().MarkByPlayerColor( player );
+            //vertex2D.GetComponent<Grid2DInteractable> ( ).SetOwner ( PlayerByID );
+            vertex2D.GetComponent<Grid2DTile> ( ).UpdateColor ( player );
+            vertex2D.GetComponent<TicTacToeCell> ( ).MarkCell ( playerByID );
+
             validMoves.IncrementMove ( vertex2D.transform.position );
             if ( validMoves.CheckForTicTacToe ( ) ) {
                 IsWinner = true;

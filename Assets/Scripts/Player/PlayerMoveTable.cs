@@ -3,41 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerMoveTable {   
-    const int rowSize = 3;
-    const int colSize = 3;
-    int[] rows;
-    int[] cols;
-    int diag0;
-    int diag1;
-    bool playerWon = false;
+    public const int RowSize = 3;
+    public const int ColSize = 3;
+
+    public int[] Rows { get; private set; }
+    public int[] Cols { get; private set; }
+    public int Diag0 { get; private set; }
+    public int Diag1 { get; private set; }
+
+    private bool playerWon = false;
 
     public PlayerMoveTable() {
-        rows = new int[rowSize * colSize];
-        cols = new int[rowSize * colSize];
+        //Rows = new int[RowSize * ColSize]; <- possible to delete if nothing breaks
+        //Cols = new int[RowSize * ColSize]; <- ditto
+
+        Rows = new int[RowSize];
+        Cols = new int[ColSize];
     }
 
     public void IncrementMove(Vector2 move) {
         int moveX = (int) move.x;
         int moveY = (int) move.y;
 
-        ++cols[moveX];
-        ++rows[moveY];
-        if (cols[moveX] >= colSize) {
+        ++Cols[moveX];
+        ++Rows[moveY];
+        if (Cols[moveX] >= ColSize) {
             playerWon = true;
         }
                   
-        if (rows[moveY] >= rowSize) {
+        if (Rows[moveY] >= RowSize) {
             playerWon = true;
         }
             
         if (moveX == moveY)
-            ++diag0;
-        if (diag0 >= colSize)
+            ++Diag0;
+        if (Diag0 >= ColSize)
             playerWon = true;
 
-        if (moveY == (colSize - 1) - moveX)
-            ++diag1;
-        if (diag1 >= colSize)
+        if (moveY == (ColSize - 1) - moveX)
+            ++Diag1;
+        if (Diag1 >= ColSize)
             playerWon = true;
     }
 

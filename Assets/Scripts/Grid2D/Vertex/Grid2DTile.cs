@@ -4,7 +4,6 @@ using System.Collections;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
     public float fadeTime { get; private set; }
-    public bool IsUnmarked { get; private set; }
 
     private SpriteRenderer sprite;
     private Color alpha;
@@ -21,7 +20,7 @@ public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
     }
 
     /* Sets tile color to players color. */
-    public void MarkByPlayerColor ( Color c ) {
+    public void UpdateColor ( Color c ) {
         sprite.color = c;
     }
 
@@ -68,7 +67,5 @@ public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
 
         sprite = GetComponent<SpriteRenderer> ( );
         sprite.sprite = s;
-
-        IsUnmarked = true;
     }
 }

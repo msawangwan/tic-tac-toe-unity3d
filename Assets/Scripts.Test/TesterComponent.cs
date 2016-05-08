@@ -1,56 +1,54 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
+
 /// <summary>
 /// Test Components and methods using this class.
 /// </summary>
 public class TesterComponent : MonoBehaviour {
-    PriorityQueue<Grid2DNode> testPQ; // <- TODO: instantiate monobehaviours during test
+    //priorityqueue<grid2dnode> testpq; // <- todo: instantiate monobehaviours during test
 
-    /* Use to trigger functions or methods with the spacebar key. */
-    private bool triggerd = false;
-    public void SpaceBarTrigger ( ) {
-        if ( Input.GetKeyDown ( KeyCode.Space ) ) {
-
-            if ( triggerd == false ) {
-                triggerd = true;
-                for ( int i = 0; i < testPQ.MaxSize; i++ ) {
-                    float randomMultiplier = ( UnityEngine.Random.Range ( 0 , 25 ) ) / 2;
-                    print ( "ENQUE: " + i * randomMultiplier );
-                    testPQ.Enqueue ( new Grid2DNode ( ) , i * randomMultiplier );
-                    print ( "QUEUE COUNT: " + testPQ.Count );
-                }
-                print ( "Testing QUEUE VALID: " + testPQ.IsValidQueue ( ) );
-                print ( "HEAD: " + testPQ.Head.Priority );
-            } else {
-                triggerd = false;
-                for (int i = 0; i < testPQ.MaxSize; i++ ) {
-                    Grid2DNode n = testPQ.Dequeue ( );
-                    print ( "DEQUEUED: " + n.Priority );
-                    print ( "QUEUE IS VALID: " + testPQ.IsValidQueue ( ) );
-                }
-            }
-        }
-    }
-
-    /* Use to trigger functions or methods with the A key. */
-    public void ButtonATrigger() {
-        if ( Input.GetKeyDown ( KeyCode.A ) ) {
-            if ( testPQ == null ) {
-                return;
-            } else {
-                testPQ.Clear ( );
-                print ( "QUEUE COUNT: " + testPQ.Count );
-            }
-        } 
-    }
-
-    //private void Start() {
-        //testPQ = new PriorityQueue<Grid2DNode_Test> ( UnityEngine.Random.Range(25, 300) );
+    ///* use to trigger functions or methods with the spacebar key. */
+    //private bool triggerd = false;
+    //public void spacebartrigger ( ) {
+    //    if ( input.getkeydown ( keycode.space ) ) {
+    //        if ( triggerd == false ) {
+    //            triggerd = true;
+    //            for ( int i = 0; i < testpq.maxsize; i++ ) {
+    //                float randommultiplier = ( unityengine.random.range ( 0 , 25 ) ) / 2;
+    //                print ( "enque: " + i * randommultiplier );
+    //                testpq.enqueue ( new grid2dnode ( ) , i * randommultiplier );
+    //                print ( "queue count: " + testpq.count );
+    //            }
+    //            print ( "testing queue valid: " + testpq.validateminheapinvariant ( ) );
+    //            print ( "head: " + testpq.head.priority );
+    //        } else {
+    //            triggerd = false;
+    //            for (int i = 0; i < testpq.maxsize; i++ ) {
+    //                grid2dnode n = testpq.dequeue ( );
+    //                print ( "dequeued: " + n.priority );
+    //                print ( "queue is valid: " + testpq.validateminheapinvariant ( ) );
+    //            }
+    //        }
+    //    }
     //}
 
-    //private void Update () {
-     //   SpaceBarTrigger ( );
-     //   ButtonATrigger ( );
+    ///* use to trigger functions or methods with the a key. */
+    //public void buttonatrigger() {
+    //    if ( input.getkeydown ( keycode.a ) ) {
+    //        if ( testpq == null ) {
+    //            return;
+    //        } else {
+    //            testpq.clear ( );
+    //            print ( "queue count: " + testpq.count );
+    //        }
+    //    } 
     //}
+
+    ////private void start() {
+    //    //testpq = new priorityqueue<grid2dnode_test> ( unityengine.random.range(25, 300) );
+    ////}
+
+    ////private void update () {
+    // //   spacebartrigger ( );
+    // //   buttonatrigger ( );
+    ////}
 }

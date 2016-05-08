@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class GameRound : IRound {
-    private Grid2DObjectData gridData;
+    private Grid2DData gridData;
 
     private List<bool> controlTypeOfPlayer = new List<bool> ( );
 
     private PlayerTurnSystem turnMachine;
-    private PlayerObjectData p1Data;
-    private PlayerObjectData p2Data;
-    private List<PlayerObjectData> playerData;
+    private PlayerData p1Data;
+    private PlayerData p2Data;
+    private List<PlayerData> playerData;
 
     public string RoundWinner { get; private set; }
 
@@ -30,10 +30,11 @@ public class GameRound : IRound {
         IsGameOver = false;
         RoundWinner = "";
 
-        foreach ( PlayerObjectData p in playerData ) {
+        foreach ( PlayerData p in playerData ) {
             p.PlayerReference.NewGameState ( );
         }
 
+        TicTacToeGame tttgame = new TicTacToeGame(gridData.GridReference);
         turnMachine.StartFirstTurn ( );
     }
 
@@ -50,7 +51,7 @@ public class GameRound : IRound {
     }
 
     public void LoadPlayers ( ) {
-        playerData = new List<PlayerObjectData> ( );
+        playerData = new List<PlayerData> ( );
         playerData.Clear ( );
 
         PlayerConfiguration playerConfig = DataInstantiator.GetNewInstance( () => new PlayerConfiguration ( controlTypeOfPlayer ) );
@@ -62,7 +63,7 @@ public class GameRound : IRound {
 
     public void LoadTurns ( ) {
         turnMachine = PlayerConfiguration.InstantiatePlayerTurnBasedMachine ( );
-
+        //turnMachine.SetStartingPlayer ( this , p1Data.PlayerReference );
         int coinFlip = UnityEngine.Random.Range( 0, 2 );
         if ( coinFlip == 0 )
             turnMachine.SetStartingPlayer ( this , p1Data.PlayerReference );
@@ -76,7 +77,7 @@ public class GameRound : IRound {
     }
 
     private void InstantiateGridTiles ( ) {
-        Grid2DTicTacToe grid = gridData.GridObject.AddComponent<Grid2DTicTacToe> ( );
+        Grid2DTiledBoard grid = gridData.GridObject.AddComponent<Grid2DTiledBoard> ( );
         grid.LayTilesOnGrid ( );
         LoadedTransitionIntroAsset = grid.DrawTiles ( ); // .34f
         LoadedTransitionOutroAsset = grid.FadeOut ( );

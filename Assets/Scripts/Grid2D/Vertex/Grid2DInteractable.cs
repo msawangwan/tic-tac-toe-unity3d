@@ -1,20 +1,25 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class Grid2DInteractable : MonoBehaviour {
-    // TODO: add a variable that tracks WHICH PLAYER interacts with this
+    public int OwnerByID { get; private set; }
     public bool IsInteractable { get; private set; }
 
     public void InitOnStart ( ) {
         IsInteractable = true;
+        OwnerByID = -1; // set to some value that isn't reachable -- TODO: find better way
     }
 
-    public bool IsUnMarked ( ) {
+    public bool InteractionState ( ) {
         if (IsInteractable == false) {
             return false;
         }
         IsInteractable = false;
         return true;
+    }
+
+    public void SetOwner ( int PlayerByID ) {
+        OwnerByID = PlayerByID;
+        //Debug.Log ( gameObject.name + " is owned by playerID: " + PlayerByID );
     }
 }

@@ -58,8 +58,8 @@ public class RoundLoadState : IState {
     }
 
     private void LoadPlayersIntoRound() {
+        round.AddPlayerControlType ( false ); // AI currently is always 0
         round.AddPlayerControlType ( true );
-        round.AddPlayerControlType ( false );
     }
 
     private void OnGameSetupCompleted ( ) {
