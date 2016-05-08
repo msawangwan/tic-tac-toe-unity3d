@@ -12,7 +12,7 @@ public class Grid2DConfiguration {
     private GameObject grid2DObject;
 
     private Vector2[] vertices;
-    private Dictionary<Vector2, Grid2DVertex> vertexTable;
+    private Dictionary<Vector2, GameObject> vertexTable; /* <vertexPosition, vertexGameObject> */
 
     private Grid2DData gridData;
 
@@ -43,7 +43,7 @@ public class Grid2DConfiguration {
         GridHeight = sizeY;
 
         vertices = new Vector2[GridWidth * GridHeight];
-        vertexTable = new Dictionary<Vector2, Grid2DVertex> ( );
+        vertexTable = new Dictionary<Vector2, GameObject> ( );
 
         vertexTable.Clear ( );
     }
@@ -89,7 +89,7 @@ public class Grid2DConfiguration {
 
             vRef.InitOnStart ( );
 
-            vertexTable.Add ( vertices[i], vRef );
+            vertexTable.Add ( vertices[i], vObj );
         }
     }
 }
@@ -103,12 +103,12 @@ public class Grid2DData {
     public Grid2D GridReference { get; private set; }
     public GameObject GridObject { get; private set; }
     public Vector2 CenterPoint { get; private set; }
-    public Dictionary<Vector2, Grid2DVertex> VertexTable { get; private set; }
+    public Dictionary<Vector2, GameObject> VertexTable { get; private set; }
     public int xDimension { get; private set; }
     public int yDimension { get; private set; }
 
     /* Constructor. */
-    public Grid2DData(GameObject gridObject, Grid2D gridReference, Dictionary<Vector2, Grid2DVertex> vertexTable, Vector2 centerPoint, int x, int y) {
+    public Grid2DData(GameObject gridObject, Grid2D gridReference, Dictionary<Vector2, GameObject> vertexTable, Vector2 centerPoint, int x, int y) {
         GridObject = gridObject;
         GridReference = gridReference;
         VertexTable = vertexTable;
@@ -119,4 +119,3 @@ public class Grid2DData {
         gridReference.InitOnStart ( this );
     }
 }
-

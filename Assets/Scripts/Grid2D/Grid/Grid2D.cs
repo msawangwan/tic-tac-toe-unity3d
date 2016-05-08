@@ -38,8 +38,7 @@ public class Grid2D : MonoBehaviour {
 
     public bool IsValid ( Vector2 point ) {
         if (Grid2DData.VertexTable.ContainsKey( point ) ) {
-            Grid2DVertex v = Grid2DData.VertexTable[point];
-            if ( !v.gameObject.GetComponent<Grid2DInteractable> ( ).IsInteractable ) { // already marked?
+            if ( !Grid2DData.VertexTable[point].GetComponent<Grid2DInteractable> ( ).IsInteractable ) { // already marked?
                 return false;
             } else {
                 return true;

@@ -44,7 +44,7 @@ public class Pathfinder {
             Grid2DVertex v_current = null;
 
             if ( grid.Grid2DData.VertexTable.ContainsKey ( new Vector2 ( n_current.x, n_current.y ) ) ) {
-                v_current = grid.Grid2DData.VertexTable[new Vector2 ( n_current.x, n_current.y )];
+               // v_current = grid.Grid2DData.VertexTable[new Vector2 ( n_current.x, n_current.y )];
             }
 
             if ( v_current.vertexPos == end.vertexPos ) {
@@ -54,7 +54,7 @@ public class Pathfinder {
             foreach ( Vector2 v2_next in grid.Neighbors ( v_current ) ) {
                 Grid2DVertex v_next = null;
                 if ( grid.Grid2DData.VertexTable.ContainsKey(v2_next)) {
-                    v_next = grid.Grid2DData.VertexTable[v2_next];
+                    //v_next = grid.Grid2DData.VertexTable[v2_next];
                     int newCost = costSoFar[v_current.vertexNode] + grid.Cost(v_current, v_next);
 
                     if ( !costSoFar.ContainsKey ( v_next.vertexNode ) || newCost < costSoFar[v_next.vertexNode] ) {
@@ -86,10 +86,10 @@ public class Pathfinder {
         while ( unvisited.Count > 0 ) { // <-- TODO: fix condition: should be "while lowest rank in OPEN is not the GOAL"
             n_current = unvisited.Dequeue ( );
 
-            Grid2DVertex v;
+            Grid2DVertex v = null;
             Vector2 p = new Vector2 (n_current.x, n_current.y);
             if ( grid.Grid2DData.VertexTable.ContainsKey ( p ) ) {
-                v = grid.Grid2DData.VertexTable[p];
+                //v = grid.Grid2DData.VertexTable[p];
             } else {
                 continue;
             }

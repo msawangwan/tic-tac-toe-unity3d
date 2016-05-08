@@ -7,6 +7,9 @@ using System.Collections.Generic;
 public class PlayerComputer : Player, IPlayerMove {
     private Grid2D grid;
     private TicTacToeBoard currentGame;
+    private Stack<TicTacToeMove> moveStack;
+
+    private bool triggeredMoveSearch = false;
 
     public override void NewGameState ( ) {
         base.NewGameState ( );
@@ -14,9 +17,17 @@ public class PlayerComputer : Player, IPlayerMove {
         currentGame = new TicTacToeBoard (grid, 2 , 3 , 3 );
     }
 
+    public override void EnterTurn ( ) {
+        base.EnterTurn ( );
+        triggeredMoveSearch = false;
+    }
+
     protected override bool AttemptMove<T> ( ) {
         HasMadeValidMove = false;
-        IteratePossibleMoves ( );
+        if (triggeredMoveSearch == false) {
+            triggeredMoveSearch = true;
+            IteratePossibleMoves ( );
+        }
         return HasMadeValidMove;
     }
 
@@ -46,16 +57,13 @@ public class PlayerComputer : Player, IPlayerMove {
     }
 
     private void IteratePossibleMoves() {
+        Dictionary<Vector2, GameObject> verticies = grid.Grid2DData.VertexTable;
+        moveStack = new Stack<TicTacToeMove>();
         Transform node = null;
 
-        int numNodes = grid.Grid2DData.GridObject.transform.childCount;
-        Debug.Log ( "NUM NODES: " + numNodes );
-
-        for ( int i = 0; i < numNodes; i++ ) {
-            Transform t = grid.Grid2DData.GridObject.transform.GetChild(i);
-            //Debug.Log ( "CURRENT T: " + t.name + "," + t.GetComponent<TicTacToeCell> ( ).Mark );           
-            if ( t.GetComponent<TicTacToeCell> ( ).Mark == CellState.Empty ) {
-                node = t;
+        foreach ( KeyValuePair<Vector2 , GameObject> v in verticies ) {
+            if ( v.Value.GetComponent<TicTacToeCell> ( ).Mark == CellState.Empty ) {
+                node = v.Value.transform;
                 break;
             }
         }
@@ -63,17 +71,20 @@ public class PlayerComputer : Player, IPlayerMove {
         TicTacToeMove firstValidMove = new TicTacToeMove(new Vector2(node.transform.position.x, node.transform.position.y));
         TicTacToeMove bestMove = AlphaBeta(currentGame, firstValidMove, 0, 0);
         Vector2 movePosition = new Vector2(bestMove.Move.x, bestMove.Move.y);
-        Debug.Log ( "Placing move: " + bestMove.Move );
+        Debug.Log ( "best move score: " + bestMove.Score );
         currentGame.AddMove (0,  bestMove );
         Transform move = grid.Grid2DData.VertexTable[movePosition].transform;
+
+        while(moveStack.Count > 0) {
+            grid.Grid2DData.VertexTable[moveStack.Pop ( ).Move].GetComponent<TicTacToeCell> ( ).Mark = CellState.Empty; 
+        }
 
         HasMadeValidMove = VerifyMove ( move , Color.red , PlayerByID );     
     }
 
     private TicTacToeMove AlphaBeta (TicTacToeBoard board, TicTacToeMove move, int playerByID, int depthCount ) {
-        Debug.Log ( "Fake Move added: " + depthCount );
         board.AddMove ( playerByID, move );
-
+        moveStack.Push ( move );
         if (board.IsGameOver) {
             move.Score = board.GetScore ( );          
             return move;
@@ -90,12 +101,13 @@ public class PlayerComputer : Player, IPlayerMove {
         TicTacToeMove bestMove = null;
 
         foreach ( TicTacToeMove nextMove in board.PossibleMoves ( ) ) {
-            TicTacToeMove scoredMove = AlphaBeta(board, nextMove, nextPlayerByID, depthCount+1);
-            if (bestMove == null || bestMove.Score <= scoredMove.Score) {
+            TicTacToeBoard boardCopy = board;
+            TicTacToeMove scoredMove = AlphaBeta(boardCopy, nextMove, nextPlayerByID, depthCount+1);
+            if (bestMove == null || bestMove.Score < scoredMove.Score) {
                 bestMove = scoredMove;
             }
         }
-        Debug.Log ( "Fake Move REMOVED: " + depthCount );
+
         board.RemoveMove ( move );
         return bestMove;
     }

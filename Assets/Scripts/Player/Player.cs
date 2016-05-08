@@ -35,7 +35,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         Destroy ( gameObject );
     }
 
-    public void EnterTurn ( ) {
+    public virtual void EnterTurn ( ) {
         IsTurnActive = true;
     }
 
@@ -51,7 +51,7 @@ public abstract class Player : MonoBehaviour, IPlayer, IPlayerTurn {
         return false;
     }
 
-    public void ExitTurn ( ) {
+    public virtual void ExitTurn ( ) {
         IsTurnActive = false;
         OnTurnEnd ( );
     }

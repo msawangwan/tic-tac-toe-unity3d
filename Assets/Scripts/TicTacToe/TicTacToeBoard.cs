@@ -25,9 +25,8 @@ public class TicTacToeBoard {
     }
 
     public void RemoveMove ( TicTacToeMove move ) {
-        Vector2 moveToRemove = move.Move;
-        grid.Grid2DData.VertexTable[moveToRemove].transform.gameObject.GetComponent<TicTacToeCell> ( ).InitialiseCell ( );
-        Debug.Log ( "REMOVING " + grid.Grid2DData.VertexTable[moveToRemove].transform.gameObject.GetComponent<TicTacToeCell> ( ).Mark );
+        grid.Grid2DData.VertexTable[move.Move].GetComponent<TicTacToeCell> ( ).InitialiseCell ( );
+        Debug.Log ( "REMOVING " + grid.Grid2DData.VertexTable[move.Move].transform.gameObject.GetComponent<TicTacToeCell> ( ).Mark );
     }
 
     public List<TicTacToeMove> PossibleMoves ( ) {

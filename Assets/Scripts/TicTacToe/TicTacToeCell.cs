@@ -2,11 +2,10 @@
 using System.Collections;
 
 public class TicTacToeCell : MonoBehaviour {
-    public CellState Mark { get; private set; }
+    public CellState Mark { get; set; }
 
     public void InitialiseCell ( ) {
         Mark = CellState.Empty;
-        //Debug.Log ( "UNMARKING " + transform.position );
     }
 
     public void MarkCell ( int playerByID ) {
@@ -15,6 +14,5 @@ public class TicTacToeCell : MonoBehaviour {
         } else {
             Mark = CellState.O;
         }
-        //Debug.Log ( "Player Marked at position: " + transform.position + " , " + playerByID );
     }
 }
