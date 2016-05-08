@@ -7,6 +7,8 @@ using System.Collections.Generic;
 public class PlayerComputer : Player, IPlayerMove {
     private Grid2D grid;
     private TicTacToeBoard currentGame;
+
+    Dictionary<Vector2, GameObject> verticies;
     private Stack<TicTacToeMove> moveStack;
 
     private bool triggeredMoveSearch = false;
@@ -57,9 +59,9 @@ public class PlayerComputer : Player, IPlayerMove {
     }
 
     private void IteratePossibleMoves() {
-        Dictionary<Vector2, GameObject> verticies = grid.Grid2DData.VertexTable;
-        moveStack = new Stack<TicTacToeMove>();
         Transform node = null;
+        verticies = grid.Grid2DData.VertexTable;
+        moveStack = new Stack<TicTacToeMove>();
 
         foreach ( KeyValuePair<Vector2 , GameObject> v in verticies ) {
             if ( v.Value.GetComponent<TicTacToeCell> ( ).Mark == CellState.Empty ) {
@@ -71,7 +73,7 @@ public class PlayerComputer : Player, IPlayerMove {
         TicTacToeMove firstValidMove = new TicTacToeMove(new Vector2(node.transform.position.x, node.transform.position.y));
         TicTacToeMove bestMove = AlphaBeta(currentGame, firstValidMove, 0, 0);
         Vector2 movePosition = new Vector2(bestMove.Move.x, bestMove.Move.y);
-        Debug.Log ( "best move score: " + bestMove.Score );
+
         currentGame.AddMove (0,  bestMove );
         Transform move = grid.Grid2DData.VertexTable[movePosition].transform;
 
