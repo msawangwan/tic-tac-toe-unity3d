@@ -23,6 +23,8 @@ public class PlayerTurnSystem : MonoBehaviour {
 
     public bool IsExecuting { get; private set; }
 
+    private int NumTurns = 0;
+
     /* Call this method before starting the first turn, as this initializes the necessarry
         local variables. */
     public void SetStartingPlayer ( IRound newRound, Player startingPlayer ) {
@@ -68,21 +70,33 @@ public class PlayerTurnSystem : MonoBehaviour {
             movingPlayer = idlePlayer;
             setTurnCurrent = turnNext;    // switch the waiting player to the moving player
 
+            ++NumTurns; // tic-tac-toe turns, currently a hack
+
             CheckForEndOfRound ( );
         }
     }
 
     /* Win condition check. */
     private void CheckForEndOfRound() {
-        if ( IsExecuting == false && (movingPlayer.IsWinner == true || idlePlayer.IsWinner == true ) ) {
+        if (NumTurns >= 9) {
 
-            // TODO find a better way
+        }
+
+        if ( NumTurns >= 9 || IsExecuting == false && (movingPlayer.IsWinner == true || idlePlayer.IsWinner == true ) ) {
+
+            // TODO: find a better way
             string winner = "";
-            if (movingPlayer.IsWinner) {
-                winner = movingPlayer.PlayerName;
+
+            if (NumTurns >= 9) {
+                winner = "No one";
             } else {
-                winner = idlePlayer.PlayerName;
+                if ( movingPlayer.IsWinner ) {
+                    winner = movingPlayer.PlayerName;
+                } else {
+                    winner = idlePlayer.PlayerName;
+                }
             }
+
 
             currentRound.EndCurrentRound ( winner );
 

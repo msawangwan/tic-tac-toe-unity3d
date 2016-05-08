@@ -19,14 +19,12 @@ public class TicTacToeBoard {
     }
 
     public void AddMove ( int playerID , TicTacToeMove move ) {
-        Vector2 moveToAdd = move.Move;
-        grid.Grid2DData.VertexTable[moveToAdd].transform.gameObject.GetComponent<TicTacToeCell> ( ).MarkCell ( playerID );
+        grid.Grid2DData.VertexTable[move.Move].transform.gameObject.GetComponent<TicTacToeCell> ( ).MarkCell ( playerID );
         IsGameOver = CheckForWinCondition ( );
     }
 
     public void RemoveMove ( TicTacToeMove move ) {
         grid.Grid2DData.VertexTable[move.Move].GetComponent<TicTacToeCell> ( ).InitialiseCell ( );
-        Debug.Log ( "REMOVING " + grid.Grid2DData.VertexTable[move.Move].transform.gameObject.GetComponent<TicTacToeCell> ( ).Mark );
     }
 
     public List<TicTacToeMove> PossibleMoves ( ) {
