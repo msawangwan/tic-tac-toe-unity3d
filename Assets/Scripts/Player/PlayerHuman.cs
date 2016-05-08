@@ -3,23 +3,21 @@ using System;
 using System.Collections;
 
 public class PlayerHuman : Player, IPlayerMove {
-    public bool HasMadeValidMove { get; private set; }
-
     protected override bool AttemptMove<T>( ) {
         HasMadeValidMove = false;
         if ( Input.GetMouseButtonDown ( 0 ) ) {
             T hitComponent = HitComponent<T>() as T;
             if ( hitComponent != null && hitComponent is Grid2DInteractable ) {
                 Grid2DInteractable selected = hitComponent as Grid2DInteractable;
-                if ( selected.IsUnMarked ( ) ) {
-                    HasMadeValidMove = VerifyMove( selected.transform, Color.blue );
+                if ( selected.InteractionState ( ) ) {
+                    HasMadeValidMove = VerifyMove( selected.transform, Color.blue, PlayerByID );
                 }
             }
         }
         return HasMadeValidMove;
     }
 
-    // base class needs an instance of 'endTurnEvent'
+    /* Base class needs an instance of PlayerTurnExitEvent. */
     protected override PlayerTurnExitEvent MadeValidMove ( ) {
         Player opponentPlayer = FindObjectOfType<PlayerComputer>();
         IPlayer nextPlayer = opponentPlayer.GetComponent<IPlayer>();
@@ -28,7 +26,7 @@ public class PlayerHuman : Player, IPlayerMove {
         return new PlayerTurnExitEvent( nextPlayer, nextPlayerTurn );
     }
 
-    // returns a selected component
+    /* Returns a gameobject and components at player click position. */
     private T HitComponent<T>( ) where T : Component {
         RaycastHit2D hit = Physics2D.Raycast( Camera.main.ScreenToWorldPoint( Input.mousePosition ), Vector2.zero );
         if (Input.GetMouseButton( 0 )) {

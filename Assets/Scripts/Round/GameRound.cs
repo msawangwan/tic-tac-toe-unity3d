@@ -34,6 +34,7 @@ public class GameRound : IRound {
             p.PlayerReference.NewGameState ( );
         }
 
+        TicTacToeGame tttgame = new TicTacToeGame(gridData.GridReference);
         turnMachine.StartFirstTurn ( );
     }
 
@@ -62,7 +63,7 @@ public class GameRound : IRound {
 
     public void LoadTurns ( ) {
         turnMachine = PlayerConfiguration.InstantiatePlayerTurnBasedMachine ( );
-
+        //turnMachine.SetStartingPlayer ( this , p1Data.PlayerReference );
         int coinFlip = UnityEngine.Random.Range( 0, 2 );
         if ( coinFlip == 0 )
             turnMachine.SetStartingPlayer ( this , p1Data.PlayerReference );

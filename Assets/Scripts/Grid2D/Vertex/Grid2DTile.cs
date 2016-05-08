@@ -20,7 +20,7 @@ public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
     }
 
     /* Sets tile color to players color. */
-    public void MarkByPlayerColor ( Color c ) {
+    public void UpdateColor ( Color c ) {
         sprite.color = c;
     }
 

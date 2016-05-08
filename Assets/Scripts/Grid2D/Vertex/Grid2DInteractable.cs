@@ -7,10 +7,10 @@ public class Grid2DInteractable : MonoBehaviour {
 
     public void InitOnStart ( ) {
         IsInteractable = true;
-        OwnerByID = 1000; // set to some value that isn't reachable -- TODO: find better way
+        OwnerByID = -1; // set to some value that isn't reachable -- TODO: find better way
     }
 
-    public bool IsUnMarked ( ) {
+    public bool InteractionState ( ) {
         if (IsInteractable == false) {
             return false;
         }
@@ -20,6 +20,6 @@ public class Grid2DInteractable : MonoBehaviour {
 
     public void SetOwner ( int PlayerByID ) {
         OwnerByID = PlayerByID;
-        Debug.Log ( gameObject.name + " is owned by playerID: " + PlayerByID );
+        //Debug.Log ( gameObject.name + " is owned by playerID: " + PlayerByID );
     }
 }

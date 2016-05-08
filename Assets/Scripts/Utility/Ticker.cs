@@ -15,7 +15,7 @@ public class Ticker {
         isTimer = true;
     }
 
-    public bool Timer(float interval = 0) {                       // call in any update or while loop
+    public bool Timer(float interval = 0) {                      // call in any update or while loop
         if ( isTimer == false ) {
             this.TickInterval = interval;
         } 
@@ -24,7 +24,7 @@ public class Ticker {
 
         ElapsedSinceLastTick += Time.deltaTime;
         if(ElapsedSinceLastTick > TickInterval) {
-            Debug.Log ( "[Utility][Timer] Tick " + TickCount + " (" + "gametime " + Time.time + ")" );
+            //Debug.Log ( "[Utility][Timer] Tick " + TickCount + " (" + "gametime " + Time.time + ")" );
             ElapsedSinceLastTick = 0;
             ++TickCount;
             return true;
