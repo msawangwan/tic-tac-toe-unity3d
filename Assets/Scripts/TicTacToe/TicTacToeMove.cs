@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 
 public class TicTacToeMove {
-    public Vector2 Move { get; set; }
+    public Vector2 Cell { get; set; }
     public int Score { get; set; }
 
+    public TicTacToeMove() {
+
+    }
+
     public TicTacToeMove ( Vector2 move ) {
-        Move = move;
+        Cell = move;
         Score = 0;
     }
 
     public TicTacToeMove ( Vector2 move , int score ) {
-        Move = move;
+        Cell = move;
         Score = score;
     }
 }

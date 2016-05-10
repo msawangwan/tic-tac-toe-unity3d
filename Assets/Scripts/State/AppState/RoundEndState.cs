@@ -9,7 +9,7 @@ public class RoundEndState : IState {
 
     public RoundEndState( GameRound round ) {
         IsStateExecuting = true;
-        menu = new EndOfRoundMenu ( round.RoundWinner );
+        menu = new EndOfRoundMenu ( round.Game.GameWinner );
         menu.buttonEvent.RaiseUIEvent += OnUIButtonEvent;
     }
 

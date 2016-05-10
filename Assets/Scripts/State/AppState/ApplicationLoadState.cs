@@ -19,9 +19,7 @@ public class ApplicationLoadState :  IState {
         stopwatch = new Ticker ( interval );
     }
 
-    public void EnterState ( ) {
-        Debug.Log ( "[LoadApplicationState][EnterState] Entering state ... " );
-    }
+    public void EnterState ( ) { }
 
     public void ExecuteState() {
         if ( isInitialised == false ) {
@@ -37,15 +35,12 @@ public class ApplicationLoadState :  IState {
 
     public event Action<StateBeginExitEvent> RaiseStateChangeEvent;
 
-    // calling this method, fires the event 'StartStateTransition'
     private void OnApplicationLoadComplete() {
-        Debug.Log ( "[LoadApplicationState][HandleOnApplicationLoadComplete] Exiting state." );
         IState nextState = new MainMenuState();
         IStateTransition transition = new LoadingTransition();
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
 
-        if ( RaiseStateChangeEvent != null ) {
-            RaiseStateChangeEvent ( exitEvent );
-        }      
+        if ( RaiseStateChangeEvent != null )
+            RaiseStateChangeEvent ( exitEvent );    
     }
 }

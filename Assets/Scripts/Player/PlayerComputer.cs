@@ -4,113 +4,80 @@ using System.Collections.Generic;
 /// <summary>
 /// Currently, AI always has id of 0.
 /// </summary>
-public class PlayerComputer : Player, IPlayerMove {
+public class PlayerComputer : Player {
     private Grid2D grid;
-    private TicTacToeBoard currentGame;
-
-    Dictionary<Vector2, GameObject> verticies;
-    private Stack<TicTacToeMove> moveStack;
-
-    private bool triggeredMoveSearch = false;
 
     public override void NewGameState ( ) {
         base.NewGameState ( );
         GetGridReferenceForAI ( );
-        currentGame = new TicTacToeBoard (grid, 2 , 3 , 3 );
     }
 
-    public override void EnterTurn ( ) {
-        base.EnterTurn ( );
-        triggeredMoveSearch = false;
-    }
+    public TicTacToeMove NegaMaxMove ( TicTacToeBoard game ) {
+        List<Vector2> moves = game.FindBlankCells(game.Board);
 
-    protected override bool AttemptMove<T> ( ) {
-        HasMadeValidMove = false;
-        if (triggeredMoveSearch == false) {
-            triggeredMoveSearch = true;
-            IteratePossibleMoves ( );
+        float score;
+
+        TicTacToeMove bestMove = new TicTacToeMove();
+        TicTacToeBoard boardCopy = new TicTacToeBoard();
+
+        bestMove.Score = -10000;
+
+        int depth = 0;
+
+        foreach ( Vector2 v in moves ) {
+            boardCopy.Board = game.CopyBoard ( game.Board );
+            boardCopy.PlaceMarker ( boardCopy.Board, Marker.X, v );
+            score = NegaMax ( boardCopy, boardCopy.GetOppositeMarker ( Marker.X ), depth );
+            if ( score >= bestMove.Score ) {
+                bestMove.Score = (int) score;
+                bestMove.Cell = v;
+            }
         }
-        return HasMadeValidMove;
+        return bestMove;
     }
 
-    /* Turn end event handler. */
-    protected override PlayerTurnExitEvent MadeValidMove ( ) {
-        Player opponentPlayer = FindObjectOfType<PlayerHuman>();
-        IPlayer nextPlayer = opponentPlayer.GetComponent<IPlayer>();
-        IPlayerTurn nextPlayerTurn = opponentPlayer.GetComponent<IPlayerTurn>();
+    public int NegaMax ( TicTacToeBoard game, Marker player, int depth ) {
+        int maxScore = -1;
+        int sign = 1;
 
-        return new PlayerTurnExitEvent ( nextPlayer, nextPlayerTurn );
+        if ( game.CheckForWinner ( game.Board, Marker.X ) ) { // return score/move
+            return StaticEvaluation ( Marker.X );
+        } else if ( game.CheckForWinner ( game.Board, Marker.O ) ) {
+            return StaticEvaluation ( Marker.O );
+        } else if ( game.CheckForDraw ( game.Board ) ) { //return score/move
+            return StaticEvaluation ( Marker.Blank );
+        }
+
+        if ( player != Marker.X ) {
+            sign = -1;
+        }
+
+        List<Vector2> moves = game.FindBlankCells(game.Board);
+        TicTacToeBoard gameCopy = new TicTacToeBoard();
+        int score = 0;
+
+        foreach ( Vector2 nextMove in moves ) {
+            gameCopy.Board = gameCopy.CopyBoard ( game.Board );
+            gameCopy.PlaceMarker ( gameCopy.Board, player, nextMove );
+            score = sign * NegaMax ( gameCopy, gameCopy.GetOppositeMarker ( player ), depth + 1 );
+            if ( score > maxScore ) {
+                maxScore = score;
+            }
+        }
+        return maxScore * sign;
+    }
+
+    private int StaticEvaluation ( Marker player ) {
+        if ( player == Marker.X ) {
+            return 1;
+        } else if ( player == Marker.O ) {
+            return -1;
+        }
+        return 0;
     }
 
     /* Find grid in the scene. */
     private void GetGridReferenceForAI ( ) {
         grid = FindObjectOfType<Grid2D> ( );
-    }
-
-    /* Naive move algorithm, simply finds the first empty cell as the next move. */
-    private void NaiveMove() {
-        foreach ( Transform tform in grid.Grid2DData.GridObject.transform ) {
-            Vector2 cell = new Vector2(tform.position.x, tform.position.y);
-            if ( tform.GetComponent<Grid2DInteractable> ( ).InteractionState ( ) ) {
-                HasMadeValidMove = VerifyMove ( tform, Color.red, PlayerByID );
-                break;
-            }
-        }
-    }
-
-    private void IteratePossibleMoves() {
-        Transform node = null;
-        verticies = grid.Grid2DData.VertexTable;
-        moveStack = new Stack<TicTacToeMove>();
-
-        foreach ( KeyValuePair<Vector2 , GameObject> v in verticies ) {
-            if ( v.Value.GetComponent<TicTacToeCell> ( ).Mark == CellState.Empty ) {
-                node = v.Value.transform;
-                break;
-            }
-        }
-
-        TicTacToeMove firstValidMove = new TicTacToeMove(new Vector2(node.transform.position.x, node.transform.position.y));
-        TicTacToeMove bestMove = AlphaBeta(currentGame, firstValidMove, 0, 0);
-        Vector2 movePosition = new Vector2(bestMove.Move.x, bestMove.Move.y);
-
-        currentGame.AddMove (0,  bestMove );
-        Transform move = grid.Grid2DData.VertexTable[movePosition].transform;
-
-        while(moveStack.Count > 0) {
-            grid.Grid2DData.VertexTable[moveStack.Pop ( ).Move].GetComponent<TicTacToeCell> ( ).Mark = CellState.Empty; 
-        }
-
-        HasMadeValidMove = VerifyMove ( move , Color.red , PlayerByID );     
-    }
-
-    private TicTacToeMove AlphaBeta (TicTacToeBoard board, TicTacToeMove move, int playerByID, int depthCount ) {
-        board.AddMove ( playerByID, move );
-        moveStack.Push ( move );
-        if (board.IsGameOver) {
-            move.Score = board.GetScore ( );          
-            return move;
-        }
-
-        int nextPlayerByID = -1;
-
-        if (playerByID == 0) {
-            nextPlayerByID = 1;
-        } else {
-            nextPlayerByID = 0;
-        }
-
-        TicTacToeMove bestMove = null;
-
-        foreach ( TicTacToeMove nextMove in board.PossibleMoves ( ) ) {
-            TicTacToeBoard boardCopy = board;
-            TicTacToeMove scoredMove = AlphaBeta(boardCopy, nextMove, nextPlayerByID, depthCount+1);
-            if (bestMove == null || bestMove.Score < scoredMove.Score) {
-                bestMove = scoredMove;
-            }
-        }
-
-        board.RemoveMove ( move );
-        return bestMove;
     }
 }

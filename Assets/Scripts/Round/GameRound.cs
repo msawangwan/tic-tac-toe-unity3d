@@ -2,22 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameRound : IRound {
-    private Grid2DData gridData;
-
-    private List<bool> controlTypeOfPlayer = new List<bool> ( );
-
-    private PlayerTurnSystem turnMachine;
-    private PlayerData p1Data;
-    private PlayerData p2Data;
-    private List<PlayerData> playerData;
-
-    public string RoundWinner { get; private set; }
-
+public class GameRound {
     public IEnumerable LoadedTransitionIntroAsset { get; private set; }
     public IEnumerable LoadedTransitionOutroAsset { get; private set; }
 
+    public TicTacToeEngine Game { get; set; }
+
     public bool IsGameOver { get; private set; }
+
+    private Grid2DData gridData;
+
+    private PlayerData p1Data;
+    private PlayerData p2Data;
+    private List<PlayerData> playerData;
+    private List<bool> controlTypeOfPlayer = new List<bool> ( );
 
     /* Constructor */
     public GameRound() { }
@@ -28,19 +26,12 @@ public class GameRound : IRound {
 
     public void StartNewRound() {
         IsGameOver = false;
-        RoundWinner = "";
 
         foreach ( PlayerData p in playerData ) {
             p.PlayerReference.NewGameState ( );
         }
 
-        TicTacToeGame tttgame = new TicTacToeGame(gridData.GridReference);
-        turnMachine.StartFirstTurn ( );
-    }
-
-    public void EndCurrentRound ( string winner ) {
-        IsGameOver = true;
-        RoundWinner = winner;
+        Game = new TicTacToeEngine ( gridData.GridReference, p1Data.PlayerReference, p2Data.PlayerReference );
     }
 
     public void LoadNewGrid ( ) {
@@ -59,16 +50,6 @@ public class GameRound : IRound {
         playerData = playerConfig.GetPlayerData ( );
         p1Data = playerData[0];
         p2Data = playerData[1];
-    }
-
-    public void LoadTurns ( ) {
-        turnMachine = PlayerConfiguration.InstantiatePlayerTurnBasedMachine ( );
-        //turnMachine.SetStartingPlayer ( this , p1Data.PlayerReference );
-        int coinFlip = UnityEngine.Random.Range( 0, 2 );
-        if ( coinFlip == 0 )
-            turnMachine.SetStartingPlayer ( this , p1Data.PlayerReference );
-        else
-            turnMachine.SetStartingPlayer ( this , p2Data.PlayerReference );
     }
 
     private void InstantiateGrid ( ) {

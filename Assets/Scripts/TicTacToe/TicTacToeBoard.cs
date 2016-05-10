@@ -1,141 +1,121 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+public enum Marker {
+    Blank = 0,
+    X = 1,
+    O = 2,
+}
+
 public class TicTacToeBoard {
-    public bool IsGameOver { get; private set; }
+    public Marker[][] Board { get; set; }
+    //int r; // aka x
+    //int q; // aka y
 
-    private Grid2D grid;
+    public TicTacToeBoard ( ) { }
 
-    private int rowSize;
-    private int colSize;
-    private int winner = -1;
+    public Marker[][] CreateEmptyBoard ( int numRows, int numCols ) {
+        int r = numRows; // aka x
+        int q = numCols; // aka y
+        Marker[][] cells = new Marker[r][];
 
-    public TicTacToeBoard( Grid2D grid, int numPlayers, int numRows, int numCols) {
-        this.grid = grid;
-        IsGameOver = false;
-
-        rowSize = numRows;
-        colSize = numCols;
-    }
-
-    public void AddMove ( int playerID , TicTacToeMove move ) {
-        grid.Grid2DData.VertexTable[move.Move].transform.gameObject.GetComponent<TicTacToeCell> ( ).MarkCell ( playerID );
-        IsGameOver = CheckForWinCondition ( );
-    }
-
-    public void RemoveMove ( TicTacToeMove move ) {
-        grid.Grid2DData.VertexTable[move.Move].GetComponent<TicTacToeCell> ( ).InitialiseCell ( );
-    }
-
-    public List<TicTacToeMove> PossibleMoves ( ) {
-        List<TicTacToeMove> moves = new List<TicTacToeMove>();
-
-        int numMoves = grid.Grid2DData.GridObject.transform.childCount;
-        for ( int i = 0; i < numMoves; i++ ) {
-            if ( grid.Grid2DData.GridObject.transform.GetChild ( i ).GetComponent<TicTacToeCell> ( ).Mark == CellState.Empty ) {
-                int x = (int) grid.Grid2DData.GridObject.transform.GetChild(i).transform.position.x;
-                int y = (int) grid.Grid2DData.GridObject.transform.GetChild(i).transform.position.y;
-
-                Vector2 possibleMove = new Vector2(x, y);
-                moves.Add ( new TicTacToeMove ( possibleMove ) );
+        for ( int i = 0; i < numRows; i++ ) {
+            cells[i] = new Marker[numCols];
+            for ( int j = 0; j < numCols; j++ ) {
+                cells[i][j] = Marker.Blank;
             }
         }
 
-        return moves;
+        return cells;
     }
 
-    public int GetScore() {
-        if ( IsGameOver ) {
-            if ( winner == 0 )
-                return 10;
-            else if ( winner == 1 )
-                return -10;
-        }
-        return 0;
-    }
+    public Marker[][] CopyBoard ( Marker[][] toCopy ) {
+        Marker[][] copy = new Marker[toCopy.Length][];
 
-    private bool CheckForWinCondition() {
-        int numCells = grid.Grid2DData.GridObject.transform.childCount;
-        int numMovesMade = 0;
-
-        int[] cols_X = new int[colSize];
-        int[] rows_X = new int[rowSize];
-        int[] cols_O = new int[colSize];
-        int[] rows_O = new int[rowSize];
-
-        int diag0_X = 0;
-        int diag1_X = 0;
-        int diag0_O = 0;
-        int diag1_O = 0;
-
-        bool isGameOver = false;
-
-        for ( int i = 0; i < numCells; i++ ) {
-            Transform node = grid.Grid2DData.GridObject.transform.GetChild ( i );
-            CellState cell = node.GetComponent<TicTacToeCell> ( ).Mark;
-
-            if (cell == CellState.Empty)
-                continue;
-
-            ++numMovesMade;
-            if ( numMovesMade >= ( colSize * rowSize ) ) {
-                winner = -1;
-                isGameOver = true;
-                return true;
+        for ( int i = 0; i < toCopy.Length; i++ ) {
+            copy[i] = new Marker[toCopy[i].Length];
+            for ( int j = 0; j < toCopy[i].Length; j++ ) {
+                copy[i][j] = toCopy[i][j];
             }
-                
-            int col = (int) node.position.x;
-            int row = (int) node.position.y;
+        }
+        return copy;
+    }
 
-            if (cell == CellState.X) {
-                ++cols_X[col];
-                ++rows_X[row];
-                isGameOver = CheckHorizontalAndVertical ( cols_X , col , rows_X , row );
+    public Marker[][] PlaceMarker ( Marker[][] board, Marker player, Vector2 cellPos ) {
+        board[(int) cellPos.x][(int) cellPos.y] = player;
+        return board;
+    }
 
-                if ( !isGameOver ) {
-                    if ( col == row )
-                        ++diag0_X;
-                    if ( row == ( colSize - 1 ) - col )
-                        ++diag1_X;
-                    isGameOver = CheckDiaganols ( diag0_X , diag1_X );
-                }
+    public Marker GetOppositeMarker ( Marker player ) {
+        if ( player == Marker.X ) {
+            return Marker.O;
+        } else {
+            return Marker.X;
+        }
+    }
 
-                if ( isGameOver ) {
-                    winner = 0;
-                    return true;
-                }
+    public void RemoveMarker ( Marker[][] board, Vector2 cellPos ) {
+        board[(int) cellPos.x][(int) cellPos.y] = Marker.Blank;
+    }
 
-            } else if (cell == CellState.O) {
-                ++cols_O[col];
-                ++rows_O[row];
-                isGameOver = CheckHorizontalAndVertical ( cols_O , col , rows_O , row );
+    public List<Vector2> FindBlankCells ( Marker[][] board ) {
+        List<Vector2> blankCells = new List<Vector2>();
 
-                if ( !isGameOver ) {
-                    if ( col == row )
-                        ++diag0_O;
-                    if ( row == ( colSize - 1 ) - col )
-                        ++diag1_O;
-                    isGameOver = CheckDiaganols ( diag0_O , diag1_O );
-                }
-
-                if ( isGameOver ) {
-                    winner = 1;
-                    return true;
+        for ( int i = 0; i < board.Length; i++ ) {
+            for ( int j = 0; j < board[i].Length; j++ ) {
+                if ( board[i][j] == Marker.Blank ) {
+                    Vector2 b = new Vector2 ( i, j );
+                    blankCells.Add ( b );
                 }
             }
         }
-        return false;
+        return blankCells;
     }
 
-    private bool CheckHorizontalAndVertical(int[] cols, int col, int[] rows, int row) {
-        if ( cols[col] >= colSize || rows[row] >= rowSize )
+    public bool CheckForWinner ( Marker[][] board, Marker player ) {
+        /* Each cell of the board as a 2D-Point. */
+        Vector2 cell0 = new Vector2(0,0);
+        Vector2 cell1 = new Vector2(0,1);
+        Vector2 cell2 = new Vector2(0,2);
+
+        Vector2 cell3 = new Vector2(1,0);
+        Vector2 cell4 = new Vector2(1,1);
+        Vector2 cell5 = new Vector2(1,2);
+
+        Vector2 cell6 = new Vector2(2,0);
+        Vector2 cell7 = new Vector2(2,1);
+        Vector2 cell8 = new Vector2(2,2);
+
+                /* Check the three rows. */
+        return (CheckLine ( board, player, cell0, cell1, cell2 ) ||
+                CheckLine ( board, player, cell3, cell4, cell5 ) ||
+                CheckLine ( board, player, cell6, cell7, cell8 ) ||
+                /* Check the three columns. */
+                CheckLine ( board, player, cell0, cell3, cell6 ) ||
+                CheckLine ( board, player, cell1, cell4, cell7 ) ||
+                CheckLine ( board, player, cell2, cell5, cell8 ) ||
+                /* Check the two diagonals. */
+                CheckLine ( board, player, cell0, cell4, cell8 ) ||
+                CheckLine ( board, player, cell2, cell4, cell6 ));
+    }
+
+    public bool CheckForDraw ( Marker[][] board ) {
+        for ( int i = 0; i < board.Length; i++ ) {
+            for ( int j = 0; j < board[i].Length; j++ ) {
+                if ( board[i][j] == Marker.Blank ) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private bool CheckLine ( Marker[][] board, Marker player, Vector2 c1, Vector2 c2, Vector2 c3 ) {
+        if ( board[(int) c1.x][(int) c1.y] == player &&
+            board[(int) c2.x][(int) c2.y] == player &&
+            board[(int) c3.x][(int) c3.y] == player ) {
             return true;
-        return false;
-    }
-
-    private bool CheckDiaganols(int diag0, int diag1) {
-        if ( diag0 >= colSize || diag1 >= colSize )
-            return true;
+        }
         return false;
     }
 }
