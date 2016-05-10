@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-public class SettingsMenuState : MonoBehaviour {
+/// <summary>
+/// DELETE
+/// </summary>
+public class RoundParametersState : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

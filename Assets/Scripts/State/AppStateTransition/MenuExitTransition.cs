@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 /// <summary>
-/// TODO: REFACTOR TO USE A MEMBER IFADEABLEOBJECT REFERENCE
+/// TODO: Refactor
 /// </summary>
 public class MenuExitTransition : IStateTransition {
     private GameObject menuToFade;
@@ -20,8 +20,6 @@ public class MenuExitTransition : IStateTransition {
     }
 
     public IEnumerable BeginTransition ( ) {
-        Debug.Log ( "[MenuFadeTransition][Exit] Fading menu ... " );
-
         HasTriggered = true;
         GameObject fullScreenMenu = menuToFade;
         CanvasGroup menuAlpha = fullScreenMenu.GetComponent<CanvasGroup>();

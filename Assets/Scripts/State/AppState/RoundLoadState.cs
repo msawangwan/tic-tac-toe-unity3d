@@ -69,8 +69,7 @@ public class RoundLoadState : IState {
         IStateTransition transition = new LoadingTransition( transitionAsset );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
 
-        if ( RaiseStateChangeEvent != null ) {
+        if ( RaiseStateChangeEvent != null )
             RaiseStateChangeEvent ( exitEvent );
-        }
     }
 }

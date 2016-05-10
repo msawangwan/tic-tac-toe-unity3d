@@ -2,28 +2,17 @@
 using System;
 using System.Collections;
 
-public class PlayerHuman : Player, IPlayerMove {
-    protected override bool AttemptMove<T>( ) {
-        HasMadeValidMove = false;
+public class PlayerHuman : Player {
+    /* Handles click input, returns the clicked GameObject based on component. */
+    public GameObject ClickHandler<T> ( ) where T : Component {
         if ( Input.GetMouseButtonDown ( 0 ) ) {
             T hitComponent = HitComponent<T>() as T;
             if ( hitComponent != null && hitComponent is Grid2DInteractable ) {
-                Grid2DInteractable selected = hitComponent as Grid2DInteractable;
-                if ( selected.InteractionState ( ) ) {
-                    HasMadeValidMove = VerifyMove( selected.transform, Color.blue, PlayerByID );
-                }
+                Debug.Log ( "Click ... " );
+                return hitComponent.gameObject;
             }
         }
-        return HasMadeValidMove;
-    }
-
-    /* Base class needs an instance of PlayerTurnExitEvent. */
-    protected override PlayerTurnExitEvent MadeValidMove ( ) {
-        Player opponentPlayer = FindObjectOfType<PlayerComputer>();
-        IPlayer nextPlayer = opponentPlayer.GetComponent<IPlayer>();
-        IPlayerTurn nextPlayerTurn = opponentPlayer.GetComponent<IPlayerTurn>();
-
-        return new PlayerTurnExitEvent( nextPlayer, nextPlayerTurn );
+        return null;
     }
 
     /* Returns a gameobject and components at player click position. */

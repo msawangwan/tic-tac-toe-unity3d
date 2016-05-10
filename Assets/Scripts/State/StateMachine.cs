@@ -10,7 +10,6 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
     private IState newState {
         set {
             state = value;
-            Debug.Log ( "[StateMachine][newState] Adding new state as listener ... " );
             state.RaiseStateChangeEvent += HandleOnStateTransition;          // add listener
             state.EnterState ( );
         }
@@ -22,12 +21,10 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
     public void SetInitialState ( IState initialState ) {
         isExecuting = true;      
         newState = initialState;
-        Debug.Log ( "[StateMachine][InitStateMachine] State Machine Initialised. " );
     }
 
     // signature matches 'startstatetransition' event
     private void HandleOnStateTransition ( StateBeginExitEvent exitStateEvent ) {
-        Debug.Log ( "[StateMachine][HandleStateExit] Exit Event Fired. " );
         nextState = exitStateEvent.NextState;
         exitStateTransition = exitStateEvent.Transition;
     }
@@ -35,25 +32,20 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
     private void Update ( ) {
         if ( isExecuting ) {                                                 // is the engine state machine running
             Assert.IsFalse ( state == null , "[StateMachine][Update] State Machine has no state!" );
-            Debug.Log ( "[StateMachine][Update] Current State: " + state.GetType ( ) );
 
             if ( exitStateTransition == null && state.IsStateExecuting ) {   // RTC the current state, return until done
-                Debug.Log ( "[StateMachine][Update] Executing state ... " );
                 state.ExecuteState ( );
                 return;
             }
 
-            Debug.Log ( "[StateMachine][Update] Removing current state listener ... " );
             state.RaiseStateChangeEvent -= HandleOnStateTransition;
 
-            if ( nextState == null ) {                                       // check if a nextState was passed, if not -- app was terminated
-                Debug.Log ( "[StateMachine][Update] Application terminating ... " );             
+            if ( nextState == null ) {                                       // check if a nextState was passed, if not -- app was terminated            
                 isExecuting = false;
             }
 
             if ( exitStateTransition != null ) {                             // if the transition variable has a transition, run 'transition exit current state' coroutine
                 if ( exitStateTransition.HasTriggered == false ) {
-                    Debug.Log ( "[StateMachine][Update] Triggering exit transition to next state ... " );
                     StartCoroutine ( exitStateTransition.BeginTransition ( ).GetEnumerator ( ) );
                 }
 
@@ -72,7 +64,6 @@ public class StateMachine : MonoBehaviour, IStateMachine  {
             exitStateTransition = null;
 
             // TODO: add a state.EndEnter();
-            Debug.Log ( "[StateMachine][Update] Last call in update ... " );
         }
     }
 }

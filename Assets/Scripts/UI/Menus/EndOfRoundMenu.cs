@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class EndOfRoundMenu : UserInterfaceMenu, IUIEvent, ITextOutput {
-    private string winningPlayer = " won the round !";
+    private string winningPlayer = "";
 
     /* Constructor. */
     public EndOfRoundMenu( string winningPlayerByName ) : base() {

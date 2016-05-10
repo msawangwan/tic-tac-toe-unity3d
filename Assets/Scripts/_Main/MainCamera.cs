@@ -29,7 +29,6 @@ public class MainCamera : MonoBehaviour {
             //mainCam.GetComponent<Camera>( ).orthographicSize = cameraOrthographicSize;
             // set bool
             hasBeenSet = true;
-            Debug.Log( "[MainCamera][SetCameraPosition] camera settings initialised ..." );
         } else {
             Debug.Log( "[MainCamera][SetCameraPosition] camera already set!" );
         }

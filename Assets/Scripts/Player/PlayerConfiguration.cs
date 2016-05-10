@@ -73,15 +73,9 @@ public class PlayerConfiguration {
                 Debug.Log ( "[PlayerConfiguration][InstantiatePlayerObjects] GameObject 'player' is null " );
             }
         }
+        //Resources.UnloadAsset ( human );
+        //Resources.UnloadAsset ( ai );
         return playerDataList;
-    }
-
-    /* Static method, on call will return a new turn-based state machine. */
-    public static PlayerTurnSystem InstantiatePlayerTurnBasedMachine () {
-        GameObject turnMachine = new GameObject("Player Turn System");
-        PlayerContainer.AttachToTransformAsChild ( turnMachine );
-
-        return turnMachine.AddComponent<PlayerTurnSystem> ( );
     }
 }
 

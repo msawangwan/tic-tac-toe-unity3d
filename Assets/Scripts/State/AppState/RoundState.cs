@@ -16,7 +16,6 @@ public class RoundState : IState {
 
     public void EnterState ( ) {
         round.LoadPlayers ( );
-        round.LoadTurns ( );
         round.StartNewRound ( );
 
         IsStateExecuting = true;
@@ -24,13 +23,17 @@ public class RoundState : IState {
 
     public void ExecuteState ( ) {
         if ( gameWonOrQuit == false ) {
-            if ( round.IsGameOver == false )
+            if ( round.IsGameOver == false ) {
+                round.Game.PlayTicTacToe ( );
+                if (round.Game.IsGameover == true) {
+                    gameWonOrQuit = true;
+                }
                 return;
-            else
-                gameWonOrQuit = true;
+            }
         }
 
         if ( gameWonOrQuit ) {
+            round.Game.DestroyPlayers ( );
             OnGameOver ( );
         }
     }
@@ -42,8 +45,7 @@ public class RoundState : IState {
         IStateTransition transition = new LoadingTransition( round.LoadedTransitionOutroAsset );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
 
-        if ( RaiseStateChangeEvent != null ) {
+        if ( RaiseStateChangeEvent != null )
             RaiseStateChangeEvent ( exitEvent );
-        }
     }
 }
