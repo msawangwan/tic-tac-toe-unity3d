@@ -9,8 +9,6 @@ public enum Marker {
 
 public class TicTacToeBoard {
     public Marker[][] Board { get; set; }
-    //int r; // aka x
-    //int q; // aka y
 
     public TicTacToeBoard ( ) { }
 
