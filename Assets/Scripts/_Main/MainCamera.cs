@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class MainCamera : MonoBehaviour {
-    public static void SetCameraPosition( Grid2D grid ) {
-        Grid2D g = grid;
+    public static void SetCameraPosition( Grid2DComponent grid ) {
+        Grid2DComponent g = grid;
         bool hasBeenSet = false;
         if (!hasBeenSet) {
             // get references

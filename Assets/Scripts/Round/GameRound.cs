@@ -10,7 +10,7 @@ public class GameRound {
 
     public bool IsGameOver { get; private set; }
 
-    private Grid2DData gridData;
+    private Grid2D gridData;
 
     private PlayerData p1Data;
     private PlayerData p2Data;
@@ -53,12 +53,12 @@ public class GameRound {
     }
 
     private void InstantiateGrid ( ) {
-        Grid2DConfiguration gridConfig = DataInstantiator.GetNewInstance( () => new Grid2DConfiguration (3, 3));
+        Grid2DConfiguration gridConfig = DataInstantiator.GetNewInstance( () => new Grid2DConfiguration (3, 3, true));
         gridData = gridConfig.GetGrid2DData ( );
     }
 
     private void InstantiateGridTiles ( ) {
-        Grid2DTiledBoard grid = gridData.GridObject.AddComponent<Grid2DTiledBoard> ( );
+        Grid2DRendererComponent grid = gridData.GridObject.AddComponent<Grid2DRendererComponent> ( );
         grid.LayTilesOnGrid ( );
         LoadedTransitionIntroAsset = grid.DrawTiles ( ); // .34f
         LoadedTransitionOutroAsset = grid.FadeOut ( );

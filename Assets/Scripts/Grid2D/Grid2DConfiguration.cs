@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// An object representation of a 2D Grid and related functions.
-/// 
-/// Has a sister class - Grid2DObjectData, used as a data container for
-/// grid data. Use with a Grid2D Component to create a visual representation
-/// of the 2Dgrid in a Unity3D scene.
+/// Functions for creating a 2D-Grid.
 /// </summary>
 public class Grid2DConfiguration {
+    public int GridWidth { get; private set; }
+    public int GridHeight { get; private set; }
+
     private GameObject grid2DObject;
 
     private Vector2[] vertices;
     private Dictionary<Vector2, GameObject> vertexTable; /* <vertexPosition, vertexGameObject> */
 
-    private Grid2DData gridData;
+    private Grid2D gridData;
 
-    public int GridWidth { get; private set; }
-    public int GridHeight { get; private set; }
+    private bool areVertexInteractable = false;
 
     public Vector2 GridCenterPoint {
         get {
@@ -38,9 +36,11 @@ public class Grid2DConfiguration {
     }
 
     /* Constructor. */
-    public Grid2DConfiguration ( int sizeX, int sizeY ) {
+    public Grid2DConfiguration ( int sizeX, int sizeY, bool vertexInteractable ) {
         GridWidth = sizeX;
         GridHeight = sizeY;
+
+        areVertexInteractable = vertexInteractable;
 
         vertices = new Vector2[GridWidth * GridHeight];
         vertexTable = new Dictionary<Vector2, GameObject> ( );
@@ -49,16 +49,16 @@ public class Grid2DConfiguration {
     }
 
     /* Returns an instance of Grid2DData. */
-    public Grid2DData GetGrid2DData () {
+    public Grid2D GetGrid2DData () {
         Instantiate2DGridObject ( );
-        return new Grid2DData ( grid2DObject, grid2DObject.GetComponent<Grid2D> ( ), vertexTable, GridCenterPoint, GridWidth, GridHeight );
+        return new Grid2D ( grid2DObject, grid2DObject.GetComponent<Grid2DComponent> ( ), vertexTable, GridCenterPoint, GridWidth, GridHeight );
     }
 
     /* Instantiate an instance of the grid as a GameObject
        and instantiate each vertex of the grid as a child GameObject. */
     private void Instantiate2DGridObject() {
         grid2DObject = new GameObject ( "Grid2D" );
-        grid2DObject.AddComponent<Grid2D> ( );
+        grid2DObject.AddComponent<Grid2DComponent> ( );
         
         Grid2DContainer.AttachToTransformAsChild ( grid2DObject );
 
@@ -81,7 +81,11 @@ public class Grid2DConfiguration {
         int boardDimensions = vertices.Length;
         for ( int i = 0; i < boardDimensions; i++ ) {
             GameObject vObj = new GameObject ( "vertex " + i );
-            Grid2DVertex vRef = vObj.AddComponent<Grid2DVertex> ( );
+            Grid2DVertexComponent vRef = vObj.AddComponent<Grid2DVertexComponent> ( );
+
+            if ( areVertexInteractable ) {
+                vObj.gameObject.AddComponent<Grid2DVertexInteractable> ( ).InitOnStart ( );
+            }
 
             vObj.transform.SetParent ( grid2D.transform );
             vObj.transform.position = vertices[i];
@@ -91,31 +95,5 @@ public class Grid2DConfiguration {
 
             vertexTable.Add ( vertices[i], vObj );
         }
-    }
-}
-
-/// <summary>
-/// Related sister class.
-/// 
-/// Small package that holds reference to the current 2D Grid.
-/// </summary>
-public class Grid2DData {
-    public Grid2D GridReference { get; private set; }
-    public GameObject GridObject { get; private set; }
-    public Vector2 CenterPoint { get; private set; }
-    public Dictionary<Vector2, GameObject> VertexTable { get; private set; }
-    public int xDimension { get; private set; }
-    public int yDimension { get; private set; }
-
-    /* Constructor. */
-    public Grid2DData(GameObject gridObject, Grid2D gridReference, Dictionary<Vector2, GameObject> vertexTable, Vector2 centerPoint, int x, int y) {
-        GridObject = gridObject;
-        GridReference = gridReference;
-        VertexTable = vertexTable;
-        CenterPoint = centerPoint;
-        xDimension = x;
-        yDimension = y;
-
-        gridReference.InitOnStart ( this );
     }
 }

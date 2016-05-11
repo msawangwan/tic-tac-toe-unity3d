@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// Currently, AI always has id of 0.
 /// </summary>
 public class PlayerComputer : Player {
-    private Grid2D grid;
+    private Grid2DComponent grid;
 
     public override void NewGameState ( ) {
         base.NewGameState ( );
@@ -78,6 +78,6 @@ public class PlayerComputer : Player {
 
     /* Find grid in the scene. */
     private void GetGridReferenceForAI ( ) {
-        grid = FindObjectOfType<Grid2D> ( );
+        grid = FindObjectOfType<Grid2DComponent> ( );
     }
 }

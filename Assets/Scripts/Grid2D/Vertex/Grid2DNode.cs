@@ -9,7 +9,7 @@ public class Grid2DNode : Grid2DAStarNode {
     }
 }
 
-public abstract class Grid2DAStarNode : PriorityQueueNode {
+public abstract class Grid2DAStarNode {
     public Grid2DAStarNode parent { get; set; }
 
     public float x { get; protected set; } // position of node in the x

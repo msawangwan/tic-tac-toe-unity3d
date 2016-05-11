@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class Grid2DInteractable : MonoBehaviour {
+public class Grid2DVertexInteractable : MonoBehaviour {
     public int OwnerByID { get; private set; }
     public bool IsInteractable { get; private set; }
 
@@ -20,6 +20,5 @@ public class Grid2DInteractable : MonoBehaviour {
 
     public void SetOwner ( int PlayerByID ) {
         OwnerByID = PlayerByID;
-        //Debug.Log ( gameObject.name + " is owned by playerID: " + PlayerByID );
     }
 }
