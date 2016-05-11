@@ -5,7 +5,7 @@ public class TicTacToeEngine {
     public bool IsGameover = false;
     public string GameWinner { get; private set; }
 
-    private Grid2D grid;
+    private Grid2DComponent grid;
     private TicTacToeBoard board;
     private Dictionary<Vector2, GameObject> cells;
 
@@ -16,7 +16,7 @@ public class TicTacToeEngine {
 
     private bool isSearching = false;
 
-    public TicTacToeEngine( Grid2D grid, Player p1, Player p2 ) {
+    public TicTacToeEngine( Grid2DComponent grid, Player p1, Player p2 ) {
         this.grid = grid;
 
         CreateGameBoard ( );
@@ -64,7 +64,7 @@ public class TicTacToeEngine {
                     return;
                 }
             } else if ( p2_O.IsTurnActive == true ) {
-                GameObject clicked = p2_O.ClickHandler<Grid2DInteractable> ( );
+                GameObject clicked = p2_O.ClickHandler<Grid2DVertexInteractable> ( );
 
                 if ( clicked == null ) return;
 

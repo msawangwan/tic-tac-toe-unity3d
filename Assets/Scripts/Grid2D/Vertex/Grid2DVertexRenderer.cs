@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Grid2DTile : MonoBehaviour, IFadeableGameObject {
+public class Grid2DVertexRenderer : MonoBehaviour, IFadeableGameObject {
     public float fadeTime { get; private set; }
 
     private SpriteRenderer sprite;

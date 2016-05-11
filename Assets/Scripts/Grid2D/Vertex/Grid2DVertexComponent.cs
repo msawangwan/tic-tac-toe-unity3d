@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Grid2DVertex : MonoBehaviour {
+public class Grid2DVertexComponent : MonoBehaviour {
     public Grid2DNode vertexNode { get; private set; }
     public Vector2 vertexPos { get; private set; }
 
