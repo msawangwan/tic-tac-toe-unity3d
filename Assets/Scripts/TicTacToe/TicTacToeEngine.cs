@@ -23,8 +23,8 @@ public class TicTacToeEngine {
 
         p1_X = p1 as PlayerComputer;
         p2_O = p2 as PlayerHuman;
-        p1_X.IsTurnActive = true;
-        p2_O.IsTurnActive = false;
+        p1_X.IsTurnActive = false;
+        p2_O.IsTurnActive = true;
     }
 
     public void PlayTicTacToe ( ) {
@@ -37,7 +37,7 @@ public class TicTacToeEngine {
                 TicTacToeMove bestMove = null;
 
                 if ( isSearching == false ) {
-                    bestMove = p1_X.NegaMaxMove ( board ); // call NEGAMAX tree-search
+                    bestMove = p1_X.NegaMaxMove ( board ); // NEGAMAX tree-search
                     isSearching = true;
                 }
 
