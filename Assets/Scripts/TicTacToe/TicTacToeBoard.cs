@@ -23,7 +23,6 @@ public class TicTacToeBoard {
                 cells[i][j] = Marker.Blank;
             }
         }
-
         return cells;
     }
 

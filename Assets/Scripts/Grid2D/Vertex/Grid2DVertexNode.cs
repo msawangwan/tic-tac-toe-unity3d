@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Grid2DNode : Grid2DAStarNode {
+public class Grid2DVertexNode : Grid2DAStarNode {
     /* Constructor. */
-    public Grid2DNode(Vector2 nodePosition) {
+    public Grid2DVertexNode(Vector2 nodePosition) {
         x = nodePosition.x;
         y = nodePosition.y;
     }

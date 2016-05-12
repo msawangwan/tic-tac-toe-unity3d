@@ -9,15 +9,15 @@ using System.Collections.Generic;
 /// </summary>
 
 public class Grid2DComponent : MonoBehaviour {
-    public Grid2D Grid2DData { get; private set; }
+    public Grid2D Grid { get; private set; }
     public Vector2[] Directions { get; private set; } // make static?
 
     public bool HasVertexGameObjects { get; private set; }
 
     /* Use as constructor, call on Component instantiation. 
         Depends on Grid2DConfiguration and Grid2DObjectData. */
-    public void InitOnStart ( Grid2D grid2DData ) {
-        this.Grid2DData = grid2DData;
+    public void InitOnStart ( Grid2D grid ) {
+        this.Grid = grid;
 
         Directions = new Vector2[] {
             new Vector2 (1f,0f),  // right
@@ -30,15 +30,15 @@ public class Grid2DComponent : MonoBehaviour {
     }
 
     public bool InBounds ( Vector2 point ) { // TODO: use lookup table as in IsValid
-        if ( point.x >= 0 && point.x < Grid2DData.xDimension )
-            if ( point.y >= 0 && point.y < Grid2DData.yDimension )
+        if ( point.x >= 0 && point.x < Grid.xDimension )
+            if ( point.y >= 0 && point.y < Grid.yDimension )
                 return true;
         return false;
     }
 
     public bool IsValid ( Vector2 point ) {
-        if (Grid2DData.VertexTable.ContainsKey( point ) ) {
-            if ( !Grid2DData.VertexTable[point].GetComponent<Grid2DVertexInteractable> ( ).IsInteractable ) { // already marked?
+        if (Grid.VertexTable.ContainsKey( point ) ) {
+            if ( !Grid.VertexTable[point].GetComponent<Grid2DVertexComponent> ( ) ) { // already marked?
                 return false;
             } else {
                 return true;

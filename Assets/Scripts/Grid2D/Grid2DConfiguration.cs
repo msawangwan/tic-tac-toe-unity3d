@@ -5,8 +5,8 @@ using System.Collections.Generic;
 /// Functions for creating a 2D-Grid.
 /// </summary>
 public class Grid2DConfiguration {
-    public int GridWidth { get; private set; }
-    public int GridHeight { get; private set; }
+    private int GridWidth { get;  set; }
+    private int GridHeight { get;  set; }
 
     private GameObject grid2DObject;
 
@@ -17,23 +17,7 @@ public class Grid2DConfiguration {
 
     private bool areVertexInteractable = false;
 
-    public Vector2 GridCenterPoint {
-        get {
-            int numCoordinates = vertices.Length;
-            Vector2 sum = new Vector2(0,0);
-
-            foreach ( Vector2 coord in vertices ) {
-                sum += coord;
-            }
-
-            float centerX = sum.x;
-            float centerY = sum.y;
-            centerX = centerX / numCoordinates;
-            centerY = centerY / numCoordinates;
-
-            return new Vector2 ( centerX, centerY );
-        }
-    }
+    private Vector2 GridCenterPoint { get { return new Vector2 ( GridWidth / 2, GridHeight / 2 ); } }
 
     /* Constructor. */
     public Grid2DConfiguration ( int sizeX, int sizeY, bool vertexInteractable ) {
@@ -63,7 +47,7 @@ public class Grid2DConfiguration {
         Grid2DContainer.AttachToTransformAsChild ( grid2DObject );
 
         CalculateVerticies ( );
-        FillVerticies ( grid2DObject );
+        SpawnVerticies ( grid2DObject );
     }
 
     /* Find the position of each vertex. */
@@ -76,7 +60,7 @@ public class Grid2DConfiguration {
     }
 
     /* Fill each vertex of the grid with a GameObject. */
-    private void FillVerticies ( GameObject grid2D ) {
+    private void SpawnVerticies ( GameObject grid2D ) {
 
         int boardDimensions = vertices.Length;
         for ( int i = 0; i < boardDimensions; i++ ) {
@@ -84,7 +68,7 @@ public class Grid2DConfiguration {
             Grid2DVertexComponent vRef = vObj.AddComponent<Grid2DVertexComponent> ( );
 
             if ( areVertexInteractable ) {
-                vObj.gameObject.AddComponent<Grid2DVertexInteractable> ( ).InitOnStart ( );
+                vObj.gameObject.AddComponent<BoxCollider2D> ( );
             }
 
             vObj.transform.SetParent ( grid2D.transform );

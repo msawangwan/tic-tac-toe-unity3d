@@ -11,9 +11,9 @@ public class MainCamera : MonoBehaviour {
             //RectTransform uiCanvas = GameObject.FindGameObjectWithTag(Tags.ui_battle).GetComponent<RectTransform>(); // canvas
             //RectTransform uiImage = GameObject.FindGameObjectWithTag(Tags.ui_battleBottomHUD).GetComponent<RectTransform>(); // bottom ui container (an image element)
             // extract values from references
-            float boardMidpointx = g.Grid2DData.CenterPoint.x;
-            float boardMidpointy = g.Grid2DData.CenterPoint.y;
-            float boardHeight = g.Grid2DData.yDimension;
+            float boardMidpointx = g.Grid.CenterPoint.x;
+            float boardMidpointy = g.Grid.CenterPoint.y;
+            float boardHeight = g.Grid.yDimension;
             //float uiCanvasHeight = uiCanvas.sizeDelta.y;
             //float uiImageHeight = uiImage.sizeDelta.y;
             // calculate positions

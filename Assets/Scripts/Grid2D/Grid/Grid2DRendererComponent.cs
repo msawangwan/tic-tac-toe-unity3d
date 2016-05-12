@@ -9,7 +9,7 @@ public class Grid2DRendererComponent : MonoBehaviour, IFadeableGameObject {
     /* Attaches Tile and Interactable components to each vertex of the grid. */
     public void LayTilesOnGrid ( ) {
         foreach ( Transform v in transform ) {
-            Grid2DVertexRenderer t = v.gameObject.AddComponent<Grid2DVertexRenderer> ( );
+            Grid2DVertexRendererComponent t = v.gameObject.AddComponent<Grid2DVertexRendererComponent> ( );
 
             t.InitOnStart ( );
         }
@@ -18,7 +18,7 @@ public class Grid2DRendererComponent : MonoBehaviour, IFadeableGameObject {
     /* Call this method only after LayTilesOnGrid has been called. */
     public IEnumerable DrawTiles ( ) {
         foreach ( Transform v in transform ) {
-            yield return v.GetComponent<Grid2DVertexRenderer> ( ).FadeIn (  ).GetEnumerator ( );
+            yield return v.GetComponent<Grid2DVertexRendererComponent> ( ).FadeIn (  ).GetEnumerator ( );
             yield return new WaitForSeconds ( .08f );
         }
     }
@@ -28,7 +28,7 @@ public class Grid2DRendererComponent : MonoBehaviour, IFadeableGameObject {
     public IEnumerable FadeOut ( ) {
         while (transform.childCount > 0) {
             foreach ( Transform v in transform ) {
-                yield return v.GetComponent<Grid2DVertexRenderer> ( ).FadeOut ( ).GetEnumerator ( );
+                yield return v.GetComponent<Grid2DVertexRendererComponent> ( ).FadeOut ( ).GetEnumerator ( );
                 yield return new WaitForSeconds ( .47f );
             }
         }
