@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+/// <summary>
+/// Enables the capability to fade parent gameobjects alpha.
+/// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
-public class Grid2DVertexRenderer : MonoBehaviour, IFadeableGameObject {
+public class Grid2DVertexRendererComponent : MonoBehaviour, IFadeableGameObject {
     public float fadeTime { get; private set; }
 
     private SpriteRenderer sprite;

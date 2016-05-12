@@ -7,7 +7,7 @@ public class PlayerHuman : Player {
     public GameObject ClickHandler<T> ( ) where T : Component {
         if ( Input.GetMouseButtonDown ( 0 ) ) {
             T hitComponent = HitComponent<T>() as T;
-            if ( hitComponent != null && hitComponent is Grid2DVertexInteractable ) {
+            if ( hitComponent != null && hitComponent is Grid2DVertexComponent ) {
                 Debug.Log ( "Click ... " );
                 return hitComponent.gameObject;
             }
