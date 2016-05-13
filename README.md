@@ -1,6 +1,6 @@
 #Tic-Tac-Toe (3-in-a-Row)
 
-##Implementated using the Unity3D framework
+##Implemented using the Unity3D framework
 -
 
 ###About
