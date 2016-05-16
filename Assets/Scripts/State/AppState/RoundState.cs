@@ -24,6 +24,10 @@ public class RoundState : IState {
         IsStateExecuting = true;
     }
 
+    private float loadDelay = 3.8f;
+    private float t = 0f;
+    private bool startedDelay = false;
+
     public void ExecuteState ( ) {
         if ( gameWonOrQuit == false ) {
             if ( round.IsGameOver == false ) {
@@ -36,8 +40,19 @@ public class RoundState : IState {
         }
 
         if ( gameWonOrQuit ) {
-            round.Game.DestroyPlayers ( );
-            OnGameOver ( );
+            if ( round.Game.DrawWinningLine ( ) ) {
+                if ( startedDelay == false ) {
+                    t = Time.time + loadDelay;
+                    startedDelay = true;
+                }
+
+                if (Time.time > t) {
+                    round.Game.DestroyPlayers ( );
+                    OnGameOver ( );
+                }
+            } else {
+                return;
+            }
         }
     }
 

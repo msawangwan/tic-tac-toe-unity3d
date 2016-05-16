@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class TicTacToeEngine {
     public bool IsGameover = false;
     public string GameWinner { get; private set; }
+
+    public WinVectors WinningCoordinates { get; private set; }
 
     private Grid2DComponent grid;
     private TicTacToeBoard board;
@@ -34,9 +37,9 @@ public class TicTacToeEngine {
         sfxbank = AudioMasterController.LoadScribbleSFX ( );
     }
 
-    float turnDelay = 1.9f;
-    float t;
-    bool timed = false;
+    private float turnDelay = 1.2f;
+    private float t;
+    private bool timed = false;
 
     public void PlayTicTacToe ( ) {
         if ( IsGameover == false ) {
@@ -72,11 +75,13 @@ public class TicTacToeEngine {
                     p2_O.IsTurnActive = true;
 
                     if ( board.CheckForWinner ( boardState, Marker.X ) ) {
-                        GameWinner = "X won, you lose!";
+                        GameWinner = "You lost!";
+                        WinningCoordinates = board.WinningCoordinates;
                         IsGameover = true;
                     }
                     if ( board.CheckForDraw ( boardState ) ) {
-                        GameWinner = "A draw, that's better than losing.";
+                        GameWinner = "A draw - better than losing.";
+                        WinningCoordinates = null;
                         IsGameover = true;
                     }
 
@@ -98,11 +103,13 @@ public class TicTacToeEngine {
                     clicked.GetComponent<SpriteRenderer> ( ).sprite = Resources.Load<Sprite> ( ResourcePath.o );
 
                     if ( board.CheckForWinner ( boardState, Marker.O ) ) {
-                        GameWinner = "O won, you win!";
+                        GameWinner = "You won!";
+                        WinningCoordinates = board.WinningCoordinates;
                         IsGameover = true;
                     }
                     if ( board.CheckForDraw ( boardState ) ) {
-                        GameWinner = "A draw, that's better than losing.";
+                        GameWinner = "A draw - better than losing.";
+                        WinningCoordinates = null;
                         IsGameover = true;
                     }
 
@@ -118,6 +125,82 @@ public class TicTacToeEngine {
     public void DestroyPlayers() {
         MonoBehaviour.Destroy ( MonoBehaviour.FindObjectOfType<PlayerHuman> ( ).transform.gameObject );
         MonoBehaviour.Destroy ( MonoBehaviour.FindObjectOfType<PlayerComputer> ( ).transform.gameObject );
+    }
+
+    LineRenderer lr;
+
+    Vector3 origin;
+    Vector3 target;
+
+    float counter = 0f;
+    float distance;
+    float drawSpeed = .8f;
+    bool lineInitialised = false;
+
+    public bool DrawWinningLine ( ) {
+        if (WinningCoordinates == null) {
+            return true;
+        }
+
+        if ( lineInitialised == false ) {
+            lr = grid.Grid.GridObject.AddComponent<LineRenderer>();
+
+            Vector2 from = WinningCoordinates.p1;
+            Vector2 to = WinningCoordinates.p3;
+
+            Vector2 heading = to - from;
+
+            float extendedX_p1 = WinningCoordinates.p1.x;
+            float extendedY_p1 = WinningCoordinates.p1.y;
+            float extendedX_p2 = WinningCoordinates.p3.x;
+            float extendedY_p2 = WinningCoordinates.p3.y;
+
+            if ( heading.x == 0.0f ) { // extend vertically
+                extendedY_p1 -= 1;
+                extendedY_p2 += 1;
+            } else if ( heading.y == 0.0f ) { // extend horizontally
+                extendedX_p1 -= 1;
+                extendedX_p2 += 1;
+            } else if (heading.x == 2.0f && heading.y == 2.0f) { // extend in the diagonal
+                extendedX_p1 -= 1;
+                extendedY_p1 -= 1;
+                extendedX_p2 += 1;
+                extendedY_p2 += 1;
+            } else if (heading.x == 2.0f && heading.y == -2.0f) { // extend in the other diagonal
+                extendedX_p1 -= 1;
+                extendedY_p1 += 1;
+                extendedX_p2 += 1;
+                extendedY_p2 -= 1;
+            }
+
+            origin = new Vector2 ( extendedX_p1, extendedY_p1 );
+            target = new Vector2 ( extendedX_p2, extendedY_p2 );
+
+            distance = Vector2.Distance ( origin, target );
+
+            lr.material = Resources.Load<Material> ( ResourcePath.lineMat );
+            lr.SetVertexCount ( 2 );
+            lr.SetWidth ( .3f, .3f );
+            lr.SetPosition ( 0, origin );
+            lr.SetPosition ( 1, target );
+
+            lineInitialised = true;
+        }
+
+        if (counter < distance) {
+            counter += .1f / drawSpeed;
+            float x = Mathf.Lerp(0, distance, counter);
+
+            Vector2 p1 = origin;
+            Vector2 p2 = target;
+            Vector2 pointAlongLine = x * (Vector2)Vector3.Normalize(p2 - p1) + p1;
+
+            lr.SetPosition ( 1, pointAlongLine );
+
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void CreateGameBoard ( ) {

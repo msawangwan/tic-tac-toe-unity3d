@@ -6,6 +6,8 @@ public class GameRound {
     public IEnumerable LoadedTransitionIntroAsset { get; private set; }
     public IEnumerable LoadedTransitionOutroAsset { get; private set; }
 
+    public IEnumerable[] MultipleLoadedTransitionOutroAssets { get; private set; }
+
     public TicTacToeEngine Game { get; set; }
 
     public bool IsGameOver { get; private set; }
@@ -58,9 +60,9 @@ public class GameRound {
     }
 
     private void InstantiateGridTiles ( ) {
-        Grid2DRendererComponent grid = gridData.GridObject.AddComponent<Grid2DRendererComponent> ( );
-        grid.LayTilesOnGrid ( );
-        LoadedTransitionIntroAsset = grid.DrawTiles ( ); // .34f
-        LoadedTransitionOutroAsset = grid.FadeOut ( );
+        Grid2DRendererComponent gridRenderer = gridData.GridObject.AddComponent<Grid2DRendererComponent> ( );
+        gridRenderer.LayTilesOnGrid ( );
+        LoadedTransitionIntroAsset = gridRenderer.DrawTiles ( ); // .34f
+        LoadedTransitionOutroAsset = gridRenderer.FadeOut ( );
     }
 }

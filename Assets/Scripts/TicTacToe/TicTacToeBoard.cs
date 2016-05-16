@@ -7,8 +7,21 @@ public enum Marker {
     O = 2,
 }
 
+public class WinVectors {
+    public Vector2 p1 { get; private set; }
+    public Vector2 p2 { get; private set; }
+    public Vector2 p3 { get; private set; }
+
+    public WinVectors ( Vector2 p1, Vector2 p2, Vector2 p3 ) {
+        this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = p3;
+    }
+}
+
 public class TicTacToeBoard {
     public Marker[][] Board { get; set; }
+    public WinVectors WinningCoordinates;
 
     public TicTacToeBoard ( ) { }
 
@@ -111,6 +124,7 @@ public class TicTacToeBoard {
         if ( board[(int) c1.x][(int) c1.y] == player &&
             board[(int) c2.x][(int) c2.y] == player &&
             board[(int) c3.x][(int) c3.y] == player ) {
+            WinningCoordinates = new WinVectors ( c1, c2, c3 );
             return true;
         }
         return false;
