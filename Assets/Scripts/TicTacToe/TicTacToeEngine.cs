@@ -14,6 +14,9 @@ public class TicTacToeEngine {
     private PlayerComputer p1_X;
     private PlayerHuman p2_O;
 
+    private AudioSource audioplayer;
+    private AudioClip[] sfxbank;
+
     private bool isSearching = false;
 
     public TicTacToeEngine( Grid2DComponent grid, Player p1, Player p2 ) {
@@ -25,7 +28,15 @@ public class TicTacToeEngine {
         p2_O = p2 as PlayerHuman;
         p1_X.IsTurnActive = false;
         p2_O.IsTurnActive = true;
+
+        audioplayer = MonoBehaviour.FindObjectOfType<AudioMasterController> ( ).GetComponent<AudioSource> ( );
+
+        sfxbank = AudioMasterController.LoadScribbleSFX ( );
     }
+
+    float turnDelay = 1.9f;
+    float t;
+    bool timed = false;
 
     public void PlayTicTacToe ( ) {
         if ( IsGameover == false ) {
@@ -34,6 +45,16 @@ public class TicTacToeEngine {
             }
 
             if ( p1_X.IsTurnActive == true ) {
+                if ( timed == false ) {
+                    t = turnDelay + Time.time;
+                    timed = true;
+                }
+                 
+                if ( Time.time < t ) {
+                    return;
+                }
+                timed = false;
+
                 TicTacToeMove bestMove = null;
 
                 if ( isSearching == false ) {
@@ -41,7 +62,8 @@ public class TicTacToeEngine {
                     isSearching = true;
                 }
 
-                if ( bestMove != null ) {
+                if ( bestMove != null ) {                   
+                    FireRandomScribbleSFX ( );
                     boardState[(int) bestMove.Cell.x][(int) bestMove.Cell.y] = Marker.X;
 
                     cells[bestMove.Cell].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite> ( ResourcePath.x );
@@ -70,6 +92,7 @@ public class TicTacToeEngine {
 
                 Vector2 m = clicked.transform.position;
                 if ( boardState[(int) m.x][(int) m.y] == Marker.Blank ) { //move success
+                    FireRandomScribbleSFX ( );
                     boardState[(int) m.x][(int) m.y] = Marker.O;
 
                     clicked.GetComponent<SpriteRenderer> ( ).sprite = Resources.Load<Sprite> ( ResourcePath.o );
@@ -110,5 +133,10 @@ public class TicTacToeEngine {
                 cells.Add ( cell, grid.Grid2DData.VertexTable[cell] );
             }
         }       
+    }
+
+    private void FireRandomScribbleSFX() {
+        int rand = UnityEngine.Random.Range(0, sfxbank.Length);
+        audioplayer.PlayOneShot ( sfxbank[rand] );
     }
 }
