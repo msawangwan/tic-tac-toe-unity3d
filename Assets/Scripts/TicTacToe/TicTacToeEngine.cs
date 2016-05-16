@@ -86,7 +86,7 @@ public class TicTacToeEngine {
                     return;
                 }
             } else if ( p2_O.IsTurnActive == true ) {
-                GameObject clicked = p2_O.ClickHandler<Grid2DVertexInteractable> ( );
+                GameObject clicked = p2_O.ClickHandler<Grid2DVertexComponent> ( );
 
                 if ( clicked == null ) return;
 
@@ -130,7 +130,7 @@ public class TicTacToeEngine {
         for ( int i = 0; i < boardState.Length; i++ ) {
             for ( int j = 0; j < boardState[i].Length; j++ ) {
                 Vector2 cell = new Vector2 ( i, j );
-                cells.Add ( cell, grid.Grid2DData.VertexTable[cell] );
+                cells.Add ( cell, grid.Grid.VertexTable[cell] );
             }
         }       
     }
