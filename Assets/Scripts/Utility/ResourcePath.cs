@@ -17,6 +17,9 @@ public class ResourcePath {
     public const string x = "TicTacToe/x_128x128";
     public const string o = "TicTacToe/o_128x128";
 
+    //Material
+    public const string lineMat = "Materials/line-material";
+
     //Audio
     public const string mainTheme = "Audio/Music/menu-theme";
     public const string playTheme = "Audio/Music/play-theme";
