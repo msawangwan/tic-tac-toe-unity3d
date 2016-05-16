@@ -24,17 +24,20 @@ public class MainMenu : UserInterfaceMenu, IUIEvent {
                     IState nextState = new RoundLoadState ( loadTime );
                     IStateTransition transition = new MenuExitTransition ( menuObject );
                     StateBeginExitEvent newRoundState = new StateBeginExitEvent ( nextState, transition );
+                    audioplayer.PlayOneShot ( btnClick );
                     RaiseUIEvent ( newRoundState );
                 } );
             } else if ( btn.CompareTag ( TagsUI.settingsMenuBtn ) ) { // btn - toggle settings menu
                 btn.onClick.RemoveAllListeners ( );
                 btn.onClick.AddListener ( ( ) => {
+                    audioplayer.PlayOneShot ( btnClick );
                     Debug.Log ( "[MainMenu][OnToggleSettingsMenu] Settings menu not yet implemented ... " );
                 } );
             } else if (btn.CompareTag(TagsUI.exitApp)) {
                 btn.onClick.RemoveAllListeners ( );
                 btn.onClick.AddListener ( ( ) => {
-                    //Application.Quit ( );
+                    audioplayer.PlayOneShot ( btnClick );
+                    Application.Quit ( );
                     Debug.Log ( "[MainMenu][MapButtons] You're in the editor, you can't quit! Just toggle the play button !" );
                 } );
             }

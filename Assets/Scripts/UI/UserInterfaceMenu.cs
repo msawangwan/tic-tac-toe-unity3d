@@ -10,12 +10,19 @@ public abstract class UserInterfaceMenu : IUserInterface {
     protected Canvas uiCanvasReference;
     protected Button[] menuButtons;
 
+    protected AudioSource audioplayer;
+    protected AudioClip btnClick;
+
     protected bool isWaitingForInput;
 
     public IUIEvent buttonEvent;         // child classes should implement this interface AND init this reference using the 'this' keyword
 
     public UserInterfaceMenu ( ) {
         uiCanvasReference = MonoBehaviour.FindObjectOfType<Canvas> ( );
+        audioplayer = MonoBehaviour.FindObjectOfType<AudioMasterController> ( ).GetComponent<AudioSource> ( );
+
+        btnClick = Resources.Load<AudioClip> ( ResourcePath.btn2 );
+
         isWaitingForInput = true;
     }
 

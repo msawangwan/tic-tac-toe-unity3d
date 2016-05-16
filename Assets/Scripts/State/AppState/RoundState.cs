@@ -8,10 +8,13 @@ public class RoundState : IState {
     private GameRound round;
     private bool gameWonOrQuit;
 
+    private MusicMasterController musicplayer;
+
     /* Constructor. */
     public RoundState( GameRound newRound ) {
         gameWonOrQuit = false;
         round = newRound;
+        musicplayer = MonoBehaviour.FindObjectOfType<MusicMasterController> ( );
     }
 
     public void EnterState ( ) {
@@ -44,6 +47,8 @@ public class RoundState : IState {
         IState nextState = new RoundEndState( round );
         IStateTransition transition = new LoadingTransition( round.LoadedTransitionOutroAsset );
         StateBeginExitEvent exitEvent = new StateBeginExitEvent(nextState, transition);
+
+        musicplayer.MusicCheck ( true );
 
         if ( RaiseStateChangeEvent != null )
             RaiseStateChangeEvent ( exitEvent );
