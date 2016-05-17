@@ -18,8 +18,14 @@ public class TicTacToeEngine {
     private PlayerHuman p2_O;
 
     private AudioSource audioplayer;
-    private AudioClip[] sfxbank;
 
+    private AudioClip sfxvictorymusic;
+    private AudioClip sfxgameover;
+    private AudioClip sfxwinner;
+
+    private AudioClip[] sfxscribblebank;
+
+    private float zeroedVol;
     private bool isSearching = false;
 
     public TicTacToeEngine( Grid2DComponent grid, Player p1, Player p2 ) {
@@ -32,9 +38,16 @@ public class TicTacToeEngine {
         p1_X.IsTurnActive = false;
         p2_O.IsTurnActive = true;
 
-        audioplayer = MonoBehaviour.FindObjectOfType<AudioMasterController> ( ).GetComponent<AudioSource> ( );
+        audioplayer = MonoBehaviour.FindObjectOfType<SFXMasterController> ( ).GetComponent<AudioSource> ( );
+        zeroedVol = audioplayer.volume;
 
-        sfxbank = AudioMasterController.LoadScribbleSFX ( );
+        sfxvictorymusic = Resources.Load<AudioClip> ( ResourcePath.onWinSoundClip );
+        sfxgameover = Resources.Load<AudioClip> ( ResourcePath.sfxGameOver );
+        sfxwinner = Resources.Load<AudioClip> ( ResourcePath.sfxWinner );
+
+        sfxscribblebank = SFXMasterController.LoadScribbleSFX ( );
+
+        SFXMasterController.PlayReadyClip ( );
     }
 
     private float turnDelay = 1.2f;
@@ -136,13 +149,24 @@ public class TicTacToeEngine {
     float distance;
     float drawSpeed = .8f;
     bool lineInitialised = false;
+    bool audioplayed = false;
 
     public bool DrawWinningLine ( ) {
         if (WinningCoordinates == null) {
+            if ( audioplayed == false ) {
+                audioplayer.volume = .34f;
+                audioplayer.PlayOneShot ( sfxgameover );
+                audioplayed = true;
+            }
             return true;
         }
 
+        
+
         if ( lineInitialised == false ) {
+            audioplayer.volume = .34f;
+            audioplayer.PlayOneShot ( sfxwinner );
+
             lr = grid.Grid.GridObject.AddComponent<LineRenderer>();
 
             Vector2 from = WinningCoordinates.p1;
@@ -184,6 +208,8 @@ public class TicTacToeEngine {
             lr.SetPosition ( 0, origin );
             lr.SetPosition ( 1, target );
 
+
+            audioplayer.PlayOneShot ( sfxvictorymusic );
             lineInitialised = true;
         }
 
@@ -199,6 +225,7 @@ public class TicTacToeEngine {
 
             return false;
         } else {
+            audioplayer.volume = zeroedVol;
             return true;
         }
     }
@@ -219,7 +246,7 @@ public class TicTacToeEngine {
     }
 
     private void FireRandomScribbleSFX() {
-        int rand = UnityEngine.Random.Range(0, sfxbank.Length);
-        audioplayer.PlayOneShot ( sfxbank[rand] );
+        int rand = UnityEngine.Random.Range(0, sfxscribblebank.Length);
+        audioplayer.PlayOneShot ( sfxscribblebank[rand] );
     }
 }

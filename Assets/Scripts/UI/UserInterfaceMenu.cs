@@ -19,7 +19,7 @@ public abstract class UserInterfaceMenu : IUserInterface {
 
     public UserInterfaceMenu ( ) {
         uiCanvasReference = MonoBehaviour.FindObjectOfType<Canvas> ( );
-        audioplayer = MonoBehaviour.FindObjectOfType<AudioMasterController> ( ).GetComponent<AudioSource> ( );
+        audioplayer = MonoBehaviour.FindObjectOfType<SFXMasterController> ( ).GetComponent<AudioSource> ( );
 
         btnClick = Resources.Load<AudioClip> ( ResourcePath.btn2 );
 

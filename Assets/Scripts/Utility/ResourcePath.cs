@@ -48,4 +48,30 @@ public class ResourcePath {
         };
         return paths;
     }
+
+    public const string blip1 = "Audio/SFX/blip-1";
+    public const string blip2 = "Audio/SFX/blip-2";
+    public const string blip3 = "Audio/SFX/blip-3";
+    public const string blip4 = "Audio/SFX/blip-4";
+    public const string blip5 = "Audio/SFX/blip-5";
+    public const string blip6 = "Audio/SFX/blip-6";
+
+    public static List<string> GetBlipFilepaths() {
+        List<string> paths = new List<string>() {
+            blip1,
+            blip2,
+            blip3,
+            blip4,
+            blip5,
+            blip6,
+        };
+        return paths;
+    }
+
+    public const string onWinSoundClip = "Audio/SFX/sfx-victory-delayed";
+    public const string sfxReady = "Audio/SFX/Announcer/Ready";
+    public const string sfxGameOver = "Audio/SFX/Announcer/GameOver";
+    public const string sfxWinner = "Audio/SFX/Announcer/Winner";
+    public const string sfxContinue = "Audio/SFX/Announcer/Continue";
+    public const string sfxNoMercy = "Audio/SFX/Announcer/ShowNoMercy";
 }

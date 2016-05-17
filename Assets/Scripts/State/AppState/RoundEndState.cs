@@ -14,7 +14,8 @@ public class RoundEndState : IState {
     }
 
     public void EnterState ( ) {
-        menu.MakeActiveInScene ( );       
+        menu.MakeActiveInScene ( );
+        SFXMasterController.PlayContinueClip ( );
     }
     
     public void ExecuteState ( ) { if ( IsStateExecuting ) { } return; }

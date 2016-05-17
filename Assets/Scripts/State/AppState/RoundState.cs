@@ -24,7 +24,7 @@ public class RoundState : IState {
         IsStateExecuting = true;
     }
 
-    private float loadDelay = 3.8f;
+    private float loadDelay = 3.2f;
     private float t = 0f;
     private bool startedDelay = false;
 
